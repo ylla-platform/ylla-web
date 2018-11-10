@@ -1,0 +1,31 @@
+/* 
+    Main CSS For the Ylla App.
+*/
+
+/* Global */
+body, html, #root {
+	margin: 0 !important;
+	height: 100%;
+	background-color: #EEEEEE;
+	overflow: hidden;
+}
+
+button.layers__icon {
+  background: #FBEA21;
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  z-index: 20;
+}
+
+button.layers__icon:hover svg {
+  fill: #fff;
+}
+
+button.layers__icon:hover {
+  background: #313131;
+}
+
+*:focus {
+  outline: none;
+}

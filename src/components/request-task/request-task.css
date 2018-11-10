@@ -1,0 +1,21 @@
+.request__header {
+  padding: 2rem 2rem 0;
+  position: relative;
+}
+
+.request__header-title {
+  border-bottom: 1px solid #B3B3B3;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  margin: 0;
+  padding-bottom: 2rem;
+  text-align: center;
+}
+
+.request__close {
+  cursor: pointer;
+  padding: 2rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+}

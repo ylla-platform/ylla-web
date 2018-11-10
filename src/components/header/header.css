@@ -1,0 +1,143 @@
+.header {
+  background: #FBEA21;
+  display: block;
+  padding: 1rem;
+  position: relative;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.header__container {
+  margin: 0 auto;
+  max-width: 1045px;
+  position: relative;
+  width: 100%;
+}
+
+.header__logo {
+  display: inline-block;
+  height: 40px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.header__internal {
+  display: inline-block;
+  width: calc(100% - 60px);
+}
+
+.header__nav,
+.header__nav--secondary {
+  display: inline-block;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.header__nav--secondary {
+  float: right;
+}
+
+.header__nav li,
+.header__nav--secondary li {
+  display: inline-block;
+  margin: 0 0 0 1rem;
+}
+
+.header__seperator {
+  font-size: 2rem;
+}
+
+.header button {
+  background: none;
+  border: none;
+  color: #313131;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin: 0;
+  padding: 1rem;
+  outline: none;
+  text-transform: uppercase;
+}
+
+.header .header__button {
+  border: 2px solid #313131;
+  border-radius: 17px;
+  display: inline-block;
+  padding: 0.6rem 2rem;
+  vertical-align: middle;
+}
+
+.header__menu-button {
+  position: absolute;
+  right:0;
+  top: 0;
+  display: none;
+}
+
+.header__menu-button span,
+.header__menu-button svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+.header__menu-button svg {
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width:640px) {
+  .header__container {
+    text-align: center;
+  }
+
+  .header__internal {
+    background: #F9F9F9;
+    border-right: 10px solid #FBEA22;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transform: translateX(-100%);
+    transition: 0.3s ease-out transform;
+    width: calc(100% - 50px);
+  }
+
+  .header__internal.active {
+    transform: translateX(0);
+  }
+
+  .header__seperator {
+    pointer-events: none;
+    transform: rotate(90deg);
+  }
+
+  .header button,
+  .header__nav,
+  .header__nav--secondary {
+    width: 100%;
+    line-height: 2;
+  }
+
+  .header__nav li,
+  .header__nav--secondary li {
+    display: block;
+  }
+
+  .header__nav--secondary {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    padding: 1rem 2rem 1rem 1rem;
+  }
+
+  .header .header__menu-button {
+    display: inline;
+    line-height: 1.5;
+    width: auto;
+  }
+}
+
