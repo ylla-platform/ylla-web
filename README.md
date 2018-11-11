@@ -1,3 +1,4 @@
-Ylla Client
+ylla-web
 ===========
 
+The yl.la web client.
