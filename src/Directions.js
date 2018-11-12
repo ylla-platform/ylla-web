@@ -20,7 +20,7 @@ class Directions extends Component {
 		}
 	}
 	context: { map: Map; };
-	// 
+	//
 	static contextTypes = { map: PropTypes.object.isRequired };
 
 	// componentWillReceiveProps
@@ -45,11 +45,11 @@ class Directions extends Component {
 		}
 	}
 
-	// componentDidMount: 
+	// componentDidMount:
 	componentDidMount = () => {
 		const { map } = this.context;
 		let directions = new MapboxDirections({
-			accessToken: 'pk.eyJ1IjoiY2FydG9jb25zdWx0bHRkIiwiYSI6ImNqNHBmcG94ejIzaG4zM3NleGh5cmdrNXoifQ.ZzHjlwcCe_HfWhSXUZLZ6w',
+			accessToken: 'pk.eyJ1IjoieWxsYS1hcHAiLCJhIjoiY2pvZW42enI0MzEwbTNrczF2cnZkYmVqNSJ9.rc0szy0Z7qJZRHBbsYlsxw',
 			interactive: false,
 			controls: {
 				instructions: false,
@@ -62,7 +62,7 @@ class Directions extends Component {
 		this.setState({ directions: directions });
 	}
 
-	// render: 
+	// render:
 	render() {
 		return null;
 	}

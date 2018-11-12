@@ -10,16 +10,16 @@ import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 // Class: Geocoder
 class Geocoder extends Component {
-    // 
+    //
     context: { map: Map; };
-    // 
+    //
     static contextTypes = { map: PropTypes.object.isRequired };
     // componentDidMount
     componentDidMount = () => {
         const { map } = this.context;
         map.addControl(
             new MapboxGeocoder({
-                accessToken: "pk.eyJ1IjoiY2FydG9jb25zdWx0bHRkIiwiYSI6ImNqNHBmcG94ejIzaG4zM3NleGh5cmdrNXoifQ.ZzHjlwcCe_HfWhSXUZLZ6w"
+                accessToken: "pk.eyJ1IjoieWxsYS1hcHAiLCJhIjoiY2pvZW42enI0MzEwbTNrczF2cnZkYmVqNSJ9.rc0szy0Z7qJZRHBbsYlsxw"
             })
         );
     }

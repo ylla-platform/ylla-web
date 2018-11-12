@@ -25,7 +25,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 // Custom Mapbox plugin controls
 import Directions from './Directions';
 
-// 
+//
 const styles = theme => ({
 	margin: {
 		margin: theme.spacing.unit * 2
@@ -52,9 +52,9 @@ const styles = theme => ({
 	},
 });
 
-// 
+//
 const Map = ReactMapboxGl({
-	accessToken: '',
+	accessToken: '', // do we need key here?
 	minZoom: 7,
 	maxZoom: 18,
 	scrollZoom: true,
@@ -63,10 +63,10 @@ const Map = ReactMapboxGl({
 	attributionControl: true
 });
 
-// 
+//
 const map_url = '';
 
-// 
+//
 const bounds = [
 	[46, 28],
 	[49, 30]
@@ -94,7 +94,7 @@ class TaskMap extends Component {
 		return addresses;
 	}
 
-	// constructor: 
+	// constructor:
 	constructor(props) {
 		super(props);
 		setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.2/mapbox-gl-rtl-text.js');
@@ -115,7 +115,7 @@ class TaskMap extends Component {
 		};
 	}
 
-	// componentWillReceiveProps: 
+	// componentWillReceiveProps:
 	componentWillReceiveProps = (nextProps) => {
 		let filter = ['in', 'type'];
 		let poi_icons = [];
@@ -158,7 +158,7 @@ class TaskMap extends Component {
 		}
 	}
 
-	// clusterMarker: 
+	// clusterMarker:
 	clusterTasks = (coordinates, count) => (
 		<Marker coordinates={coordinates}>
 			<Badge badgeContent={count}  >
@@ -187,7 +187,7 @@ class TaskMap extends Component {
 		</Marker>
 	);
 
-	// handleMapClick: 
+	// handleMapClick:
 	handleMapClick = (map, e) => {
 		var bbox = [[e.point.x - 100, e.point.y - 100], [e.point.x + 100, e.point.y + 100]];
 		let layers = [];
@@ -202,7 +202,7 @@ class TaskMap extends Component {
 		if (features_to_display.length > 0) this.props.viewFeatures(features_to_display);
 	}
 
-	// updateLanguage: 
+	// updateLanguage:
 	updateLanguage = (language) => {
 		if (this.map && this.map.state && this.map.state.map && this.map.state.map.loaded()) {
 			this.map.state.map.setLayoutProperty('poi-scalerank1', 'text-field', ['get', 'name_' + language]);
@@ -229,7 +229,7 @@ class TaskMap extends Component {
 		}
 	}
 
-	// render: 
+	// render:
 	render() {
 		const { classes } = this.props;
 		let poi_text_layout = {
@@ -415,5 +415,5 @@ class TaskMap extends Component {
 	}
 }
 
-// 
+//
 export default withStyles(styles)(TaskMap);
