@@ -54,7 +54,7 @@ const styles = theme => ({
 
 //
 const Map = ReactMapboxGl({
-	accessToken: '', // do we need key here?
+	accessToken: 'pk.eyJ1IjoieWxsYS1hcHAiLCJhIjoiY2pvZW42enI0MzEwbTNrczF2cnZkYmVqNSJ9.rc0szy0Z7qJZRHBbsYlsxw', // do we need key here?
 	minZoom: 7,
 	maxZoom: 18,
 	scrollZoom: true,
