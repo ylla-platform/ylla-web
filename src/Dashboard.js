@@ -538,7 +538,7 @@ class Dashboard extends Component {
 	// Password Reset Process
 	//////////////////////////
 
-	// resetPasswordDialog: 
+	// resetPasswordDialog:
 	resetPasswordDialog = () => {
 		let url = window.location.href;
 		if (url.includes('token')) {
@@ -584,7 +584,7 @@ class Dashboard extends Component {
 	// Chat functions (TalkJS)
 	////////////////////////////
 
-	// chatConsumer: 
+	// chatConsumer:
 	chatConsumer = (user) => {
 		this.state.consumers.forEach(consumer => {
 			if (user.indexOf(consumer.id) !== -1) this.setState({ chat_user: consumer, content_drawer: true, content_drawer_screen: 'chat' });
@@ -621,16 +621,16 @@ class Dashboard extends Component {
 	// getAgents:
 	getAgents = () => agents.getAgents(response => this.setState({ agents: response.data.agents || [] }))
 
-	// getCategories: 
+	// getCategories:
 	getCategories = () => categories.getCategories(categories => this.setState({ categories: categories || [] }))
 
-	// getReferenceData: 
+	// getReferenceData:
 	getReferenceData = () => referencedata.getReferenceData(referencedata => this.setState({ referencedata: referencedata || [] }))
 
-	// getConsumers: 
+	// getConsumers:
 	getConsumers = () => consumers.getConsumers(this.state.user.username, response => this.setState({ consumers: response.data.consumers || [] }))
 
-	// getProviders: 
+	// getProviders:
 	getProviders = () => providers.getProviders(response => this.setState({ providers: response.data.providers || [] }))
 
 	// getServices: retrieves the service data
@@ -767,10 +767,10 @@ class Dashboard extends Component {
 	// Agent Administration. (Agents do not register but are created by providers)
 	//////////////////////////////////////////////////////////////////////////////
 
-	// addAgent: 
+	// addAgent:
 	addAgent = () => this.setState({ agent_edit_dialog_open: true });
 
-	// chatAgent: 
+	// chatAgent:
 	chatAgent = (agentdata) => {
 		this.state.agents.forEach(agent => {
 			if (agentdata.indexOf(agent.id) !== -1) this.setState({ chat_user: agent, content_drawer: true, content_drawer_screen: 'chat' });
@@ -795,7 +795,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// toggleAgentActive: 
+	// toggleAgentActive:
 	toggleAgentActive = () => {
 		this.setState({ agent_active: !this.state.agent_active });
 		let agent = this.state.user;
@@ -807,7 +807,7 @@ class Dashboard extends Component {
 	// Service editing
 	/////////////////////////////////////////////////////////////////////////////////
 
-	// editServiceStatus: 
+	// editServiceStatus:
 	editServiceStatus = (data, anchor) => {
 		var services = [];
 		this.state.services.forEach(s => {
@@ -816,7 +816,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_services: services, service_status_menu_open: true, service_status_menu_anchor: anchor });
 	}
 
-	// editServiceStatuses: 
+	// editServiceStatuses:
 	editServiceStatuses = (status) => {
 		var payload = [];
 		var self = this;
@@ -830,7 +830,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// createService: 
+	// createService:
 	createServiceType = (service) => {
 		var self = this;
 		services.editService(service, self.state.web_token, response => {
@@ -839,10 +839,10 @@ class Dashboard extends Component {
 		});
 	}
 
-	// addService: 
+	// addService:
 	addService = (service_function) => this.setState({ current_selected_services: [{ service_function: service_function }], service_edit_dialog_open: true });
 
-	// editService: 
+	// editService:
 	editService = (data, anchor) => {
 		var services = [];
 		this.state.services.forEach((i, t) => {
@@ -869,7 +869,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// deleteService: 
+	// deleteService:
 	deleteService = (data, anchor) => { }
 
 	// saveService
@@ -906,7 +906,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_questions: questions, question_status_menu_open: true, question_status_menu_anchor: anchor });
 	}
 
-	// editQuestionStatuses: 
+	// editQuestionStatuses:
 	editQuestionStatuses = (status) => {
 		var payload = [];
 		var self = this;
@@ -932,10 +932,10 @@ class Dashboard extends Component {
 		this.setState({ current_selected_questions: questions, question_edit_dialog_open: true });
 	}
 
-	// deleteQuestion: 
+	// deleteQuestion:
 	deleteQuestion = (data, anchor) => { }
 
-	// saveQuestion: 
+	// saveQuestion:
 	saveQuestion = (data) => {
 		var self = this;
 		services.editServiceQuestion(data, self.state.web_token, response => {
@@ -963,7 +963,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_referencedata: referencedataitems, referencedata_status_menu_open: true, referencedata_status_menu_anchor: anchor });
 	}
 
-	// editQuestionStatuses: 
+	// editQuestionStatuses:
 	editReferenceDataStatuses = (status) => {
 		let payload = [];
 		let self = this;
@@ -989,7 +989,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_referencedata: referencedata, reference_data_edit_dialog_open: true });
 	}
 
-	// saveReferenceDataItem: 
+	// saveReferenceDataItem:
 	saveReferenceDataItem = (data) => {
 		let self = this;
 		referencedata.editReferenceDataItem(data, self.state.web_token, response => {
@@ -1016,7 +1016,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_categories: categories, category_status_menu_open: true, category_status_menu_anchor: anchor });
 	}
 
-	// editCategoryStatuses: 
+	// editCategoryStatuses:
 	editCategoryStatuses = (status) => {
 		var payload = [];
 		var self = this;
@@ -1042,10 +1042,10 @@ class Dashboard extends Component {
 		this.setState({ current_selected_categories: categories, category_edit_dialog_open: true });
 	}
 
-	// deleteCategory: 
+	// deleteCategory:
 	deleteCategory = (data) => { }
 
-	// saveCategory: 
+	// saveCategory:
 	saveCategory = (data) => {
 		var self = this;
 		categories.editCategory(data, self.state.web_token, response => {
@@ -1054,7 +1054,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// handleSetCategoryStatus: 
+	// handleSetCategoryStatus:
 	handleSetCategoryStatus = (event) => {
 		this.editCategoryStatuses(event.target.firstChild.nodeValue);
 		this.setState({ category_status_menu_open: false });
@@ -1073,7 +1073,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_agents: agents, agent_status_menu_open: true, agent_status_menu_anchor: anchor });
 	}
 
-	// editAgentStatuses: 
+	// editAgentStatuses:
 	editAgentStatuses = (status) => {
 		// For this call we need to pass a set of task ids and statuses
 		var payload = [];
@@ -1098,7 +1098,7 @@ class Dashboard extends Component {
 	// Provider editing
 	/////////////////////////////////////////////////////////////////////////////////
 
-	// chatProvider: 
+	// chatProvider:
 	chatProvider = (providerdata) => {
 		this.state.providers.forEach(provider => {
 			if (providerdata.indexOf(provider.id) !== -1) this.setState({ chat_user: provider, content_drawer: true, content_drawer_screen: 'chat' });
@@ -1173,7 +1173,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// viewTask: 
+	// viewTask:
 	viewTask = (data) => {
 		var tasks = [];
 		this.state.tasks.forEach(function (i, t) {
@@ -1182,7 +1182,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_tasks: tasks, task_view_drawer: true });
 	}
 
-	// editTaskAgent: 
+	// editTaskAgent:
 	editTaskAgent = (data, anchor) => {
 		var tasks = [];
 		this.state.tasks.forEach(function (i, t) {
@@ -1191,7 +1191,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_tasks: tasks, task_agent_menu_open: true, task_agent_menu_anchor: anchor });
 	}
 
-	// editTaskAgents: 
+	// editTaskAgents:
 	editTaskAgents = (agent) => {
 		// For this call we need to pass a set of task ids and statuses
 		var payload = [];
@@ -1206,7 +1206,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// cancelTasks: 
+	// cancelTasks:
 	cancelTasks = (data) => {
 		var statuses = [];
 		var self = this;
@@ -1238,7 +1238,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// editTaskStatus: 
+	// editTaskStatus:
 	editTaskStatus = (data, anchor) => {
 		var tasks = [];
 		this.state.tasks.forEach(function (i, t) {
@@ -1247,7 +1247,7 @@ class Dashboard extends Component {
 		this.setState({ current_selected_tasks: tasks, task_status_menu_open: true, task_status_menu_anchor: anchor });
 	}
 
-	// isValidStatus: 
+	// isValidStatus:
 	isValidStatus = (status) => {
 		let found = false;
 		if (status === 'Cancelled') {
@@ -1274,7 +1274,7 @@ class Dashboard extends Component {
 		return found;
 	}
 
-	// editTaskStatuses: 
+	// editTaskStatuses:
 	editTaskStatuses = (status) => {
 		// For this call we need to pass a set of task ids and statuses
 		var statuses = [];
@@ -1298,7 +1298,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// editTaskRating: 
+	// editTaskRating:
 	editTaskRating = (rating) => {
 		var self = this;
 		tasks.editTaskRating(rating, response => {
@@ -1332,13 +1332,13 @@ class Dashboard extends Component {
 		this.setState({ post_request_drawer: true, current_page_view: 'map' })
 	}
 
-	// launchRequestProcess: 
+	// launchRequestProcess:
 	launchRequestProcess = (request_function, request_title) => {
 		this.closeDrawers();
 		this.setState({ task_request_drawer: true, task_request_screen: request_function, task_request_screen_title: request_title, current_page_view: 'map', request_progress: true, landing_desktop: false });
 	}
 
-	// launchRequestProcess: 
+	// launchRequestProcess:
 	launchRequestProcessService = (request_function, request_title, service) => {
 		this.closeDrawers();
 		this.setState({ task_request_drawer: true, task_request_screen: request_function, task_request_screen_title: request_title, current_page_view: 'map', request_progress: true, landing_desktop: false, current_service: service, mega_menu: false });
@@ -1350,7 +1350,7 @@ class Dashboard extends Component {
 		this.setState({ task_request_drawer: true, content_drawer: false, content_drawer_screen: '', task_request_screen: service.service_function, task_request_screen_title: 'Request', current_provider: provider, current_service: service, request_progress: true });
 	}
 
-	// launchMegaMenu: 
+	// launchMegaMenu:
 	launchMegaMenu = (request_function) => {
 		this.setState({ mega_menu: true, mega_menu_request_function: request_function });
 	}
@@ -1383,7 +1383,7 @@ class Dashboard extends Component {
 	// Viewing a provider
 	/////////////////////////////////////////////////////////
 
-	// viewProvider: 
+	// viewProvider:
 	viewProvider = (data, provider_view_allow_request) => {
 		var providers = [];
 		this.state.providers.forEach(function (i, t) {
@@ -1431,6 +1431,7 @@ class Dashboard extends Component {
 								</Button> : null}
 							{!this.state.user.user_type || this.state.user.user_type === 'consumer' ?
 								<span>
+                  <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onMouseOver={() => this.launchMegaMenu('findapro')} onClick={() => this.launchRequestProcess('findapro', 'Find A Pro')}>Find a pro</Button>
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.hireRunner()}>Hire a runner</Button>
 									<span className={classes.headerSeparator}>|</span>
@@ -2596,14 +2597,14 @@ class Dashboard extends Component {
 						</IconButton>
 					]}
 				/>
-				{this.state.landing_desktop && isWidthUp('md', this.props.width) ? 
+				{this.state.landing_desktop && isWidthUp('md', this.props.width) ?
 					<LandingDesktop
 						open={this.state.landing_desktop}
 						close={() => this.setState({ landing_desktop: false })}
 						launchRequestProcess={(request_function, request_title) => this.launchRequestProcess(request_function, request_title)}
 						hireRunner={() => this.hireRunner()}
 					/> : null}
-				{this.state.mega_menu && isWidthUp('md', this.props.width) ? 
+				{this.state.mega_menu && isWidthUp('md', this.props.width) ?
 					<MegaMenu
 						open={this.state.mega_menu}
 						categories={this.state.categories.filter(category => { return category.status === 'Active' })}

@@ -1,4 +1,4 @@
-/* 
+/*
     Main CSS For the Ylla App.
 */
 
@@ -29,3 +29,15 @@ button.layers__icon:hover {
 *:focus {
   outline: none;
 }
+
+.button.blue {
+  background: #1DA1F2;
+  color: #fff;
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+  text-decoration: none;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
