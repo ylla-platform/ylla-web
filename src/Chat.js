@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 
 const uuidv1 = require('uuid/v1');
 
-// Styles: 
+// Styles:
 const styles = theme => ({
 	root: {
 		width: '100%',
@@ -35,7 +35,7 @@ const styles = theme => ({
 		textTransform: 'uppercase',
 		letterSpacing: '1px',
 		textAlign: 'center',
-		margin: 'auto', 
+		margin: 'auto',
 		color:'black'
 	},
 });
@@ -67,12 +67,12 @@ class Chat extends Component {
 			const me = new Talk.User({
 				id: id,
 				name: name,
-				email: 'dave.rowe@cartoconsult.co.uk',
+				email: 'anthony@profullstack.com',
 				configuration: configuration
 			});
 
 			const talkSession = new Talk.Session({
-				appId: "",
+				appId: "tH5OQCYj",
 				me: me
 			});
 
@@ -88,7 +88,7 @@ class Chat extends Component {
 				const other = new Talk.User({
 					id: self.props.chat_user.id,
 					name: other_name,
-					email: 'dave.rowe@cartoconsult.co.uk'
+					email: 'anthony@profullstack.com'
 				});
 
 				var conversation = talkSession.getOrStartConversation(other);
@@ -129,5 +129,5 @@ class Chat extends Component {
 	}
 }
 
-// 
+//
 export default withStyles(styles)(Chat);
