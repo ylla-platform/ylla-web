@@ -263,7 +263,7 @@ class TaskMap extends Component {
 						id='buildings_source'
 						tileJsonSource={{
 							type: 'vector',
-							url: ''
+							url: 'mapbox://mapbox.mapbox-streets-v7'
 						}}
 					/> : ''}
 				{this.state.show_buildings ?
@@ -271,7 +271,7 @@ class TaskMap extends Component {
 						id='3d-buildings'
 						type='fill-extrusion'
 						sourceId='buildings_source'
-						sourceLayer='buildingscombined'
+						sourceLayer='building'
 						paint={{
 							'fill-extrusion-color': '#FFFFFF',
 							'fill-extrusion-height': { 'type': 'identity', 'property': 'height' },
