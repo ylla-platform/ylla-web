@@ -54,7 +54,7 @@ const styles = theme => ({
 
 //
 const Map = ReactMapboxGl({
-	accessToken: 'pk.eyJ1IjoieWxsYS1hcHAiLCJhIjoiY2pvZW42enI0MzEwbTNrczF2cnZkYmVqNSJ9.rc0szy0Z7qJZRHBbsYlsxw', // do we need key here?
+	accessToken: 'pk.eyJ1IjoieWxsYS1hcHAiLCJhIjoiY2pvZW42enI0MzEwbTNrczF2cnZkYmVqNSJ9.rc0szy0Z7qJZRHBbsYlsxw',
 	minZoom: 7,
 	maxZoom: 18,
 	scrollZoom: true,
@@ -64,7 +64,7 @@ const Map = ReactMapboxGl({
 });
 
 //
-const map_url = '';
+const map_url = 'mapbox://styles/mapbox/light-v9';
 
 //
 const bounds = [
