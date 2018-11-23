@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 // Import React Stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
