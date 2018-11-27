@@ -6,3 +6,4 @@ build/
 sslcert/
 .env
 .env.sh
+.vscode

@@ -64,7 +64,8 @@ const Map = ReactMapboxGl({
 });
 
 //
-const map_url = 'mapbox://styles/mapbox/light-v9';
+// const map_url = 'mapbox://styles/mapbox/light-v9';
+const map_url = 'mapbox://styles/ylla-app/cjp050twx0yiq2rmymzjknwlf';
 
 //
 const bounds = [
@@ -110,7 +111,7 @@ class TaskMap extends Component {
 			fitBounds: [],
 			center: [47.9774, 29.3759],
 			zoom: [17],
-			pitch: [90],
+			pitch: [60],
 			bearing: [0]
 		};
 	}
@@ -263,7 +264,7 @@ class TaskMap extends Component {
 						id='buildings_source'
 						tileJsonSource={{
 							type: 'vector',
-							url: 'mapbox://mapbox.mapbox-streets-v7'
+							url: 'mapbox://ylla-app.47hwx2ld'
 						}}
 					/> : ''}
 				{this.state.show_buildings ?
@@ -271,7 +272,7 @@ class TaskMap extends Component {
 						id='3d-buildings'
 						type='fill-extrusion'
 						sourceId='buildings_source'
-						sourceLayer='building'
+						sourceLayer='buildingscombined'
 						paint={{
 							'fill-extrusion-color': '#FFFFFF',
 							'fill-extrusion-height': { 'type': 'identity', 'property': 'height' },
