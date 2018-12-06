@@ -433,6 +433,20 @@ class ProfileAddress extends React.Component {
 		});
 	}
 
+	// setHouse
+	setHouse = (house) => {
+		this.setState({
+			house: house
+		});
+		this.setParentAddress(this.state.location, this.state.address, {
+			governorate: this.state.governorate,
+			neighbourhood: this.state.neighbourhood,
+			block: this.state.block,
+			street: this.state.street,
+			house: house
+		});
+	}
+
 	// render:
 	render() {
 		const { classes } = this.props;
