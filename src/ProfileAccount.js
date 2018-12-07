@@ -189,6 +189,7 @@ class ProfileAccount extends Component {
 						id="txt-date"
 						label="Birthday"
 						margin="normal"
+						value={this.state.date_of_birth}
 						type="date"
 						error={this.state.date_of_birth_invalid}
 						InputProps={{
