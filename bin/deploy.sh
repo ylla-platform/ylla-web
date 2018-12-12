@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+. $HOME/.bashrc
 args=(-azvP --delete --exclude=node_modules --exclude=.idea --exclude=.git)
-hosts=(ylladev ylladevfrankfurt) # tornado lightning thunder tundra jefferson
+hosts=(ylladevfrankfurt yllafrankfurt) # tornado lightning thunder tundra jefferson
 dry=() #add --dry-run to enable testing
 user=ubuntu
 name=ylla
