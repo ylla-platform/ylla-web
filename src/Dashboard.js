@@ -1432,7 +1432,7 @@ class Dashboard extends Component {
 							{!this.state.user.user_type || this.state.user.user_type === 'consumer' ?
 								<span>
                   <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>&nbsp;&nbsp;&nbsp;
-                  <a href="http://docs.yl.la" className="button blue">API Docs</a>
+                  {/*<a href="http://docs.yl.la" className="button blue">API Docs</a>*/}
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onMouseOver={() => this.launchMegaMenu('findapro')} onClick={() => this.launchRequestProcess('findapro', 'Find A Pro')}>Find a pro</Button>
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.hireRunner()}>Hire a runner</Button>
 									<span className={classes.headerSeparator}>|</span>
