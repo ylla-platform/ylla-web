@@ -32,14 +32,19 @@ class LandingDesktop extends React.Component {
 	// constructor:
 	constructor(props) {
 		super(props);
+		var ec = this.props.services.length > 0 ? true: false;
 		this.state = {
 			// Dialog
 			open: this.props.open,
+			enableclick: ec
 		};
 	}
 
 	// componentWillReceiveProps: set the provider on receiving a state update from the parent
 	componentWillReceiveProps = (nextProps) => {
+		if(nextProps.services.length > 0){
+			this.state.enableclick = true;
+		}
 		this.setState({
 			open: nextProps.open
 		});
@@ -61,7 +66,7 @@ class LandingDesktop extends React.Component {
 						<img alt="Landing Options" src={'./landing-desktop.png'} usemap="#image-map" className={classes.landingImage} />
 						<map name="image-map">
 							<area title="Close" href="#" shape="rect" coords="761,11,785,37" target="" alt="Close" onClick={(e) => { e.preventDefault(); this.props.close() }} />
-							<area title="Book a Professional" href="#" shape="rect" coords="18,50,391,263" target="" alt="Book a Professional" onClick={(e) => { e.preventDefault(); this.props.launchRequestProcess('findapro', 'Find A Pro') }} />
+							<area title="Book a Professional" href="#" shape="rect" coords="18,50,391,263" target="" alt="Book a Professional" onClick={(e) => {  e.preventDefault(); this.state.enableclick ? this.props.launchRequestProcess('findapro', 'Find A Pro'):null; }} />
 							<area title="Hire a Runner" href="#" shape="rect" coords="409,49,783,263" target="" alt="Hire a Runner" onClick={(e) => { e.preventDefault(); this.props.hireRunner() }} />
 							<area title="Book a Service" href="#" shape="rect" coords="18,281,259,495" target="" alt="Book a Service" onClick={(e) => { e.preventDefault(); this.props.launchRequestProcess('book', 'Book') }} />
 							<area title="Reserve" href="#" shape="rect" coords="277,282,521,497" target="" alt="Reserve" onClick={(e) => { e.preventDefault(); this.props.launchRequestProcess('reserve', 'Reserve') }} />

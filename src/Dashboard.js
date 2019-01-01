@@ -119,6 +119,7 @@ import * as referencedata from './actions/referencedata';
 import * as services from './actions/services';
 import * as tasks from './actions/tasks';
 import * as talk from './actions/talk';
+import './components/app-search/app-search.css'
 
 const menu_drawer_width = 190;
 
@@ -350,6 +351,7 @@ class Dashboard extends Component {
 				// By default we show the landing desktop until it's dismissed
 				landing_desktop: true,
 				mega_menu: false,
+				menu_enter: '',
 				mega_menu_request_function: '',
 				// Used to pass login and registration progress indicators.
 				login_progress: false,
@@ -1335,7 +1337,7 @@ class Dashboard extends Component {
 	// launchRequestProcess:
 	launchRequestProcess = (request_function, request_title) => {
 		this.closeDrawers();
-		this.setState({ task_request_drawer: true, task_request_screen: request_function, task_request_screen_title: request_title, current_page_view: 'map', request_progress: true, landing_desktop: false });
+		this.setState({ task_request_drawer: true, task_request_screen: request_function, task_request_screen_title: request_title, current_page_view: 'map', request_progress: true, landing_desktop: false , mega_menu: false });
 	}
 
 	// launchRequestProcess:
@@ -1392,6 +1394,11 @@ class Dashboard extends Component {
 		this.setState({ current_selected_providers: providers, content_drawer: true, content_drawer_screen: 'providers', provider_view_allow_request: provider_view_allow_request });
 	}
 
+	handleOpen = () => {
+		var uid = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+	 	this.state.services.length > 0 && !this.state.request_progress? this.setState({mega_menu: true, menu_enter: uid }): this.setState({ mega_menu: false }) ; 
+	 }
+
 	// render()
 	render() {
 		const { classes } = this.props;
@@ -1431,9 +1438,20 @@ class Dashboard extends Component {
 								</Button> : null}
 							{!this.state.user.user_type || this.state.user.user_type === 'consumer' ?
 								<span>
-                  <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>&nbsp;&nbsp;&nbsp;
-                  <a href="http://docs.yl.la" className="button blue">API Docs</a>
-									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onMouseOver={() => this.launchMegaMenu('findapro')} onClick={() => this.launchRequestProcess('findapro', 'Find A Pro')}>Find a pro</Button>
+			                  <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>&nbsp;&nbsp;&nbsp;
+			                  {this.state.username === "" ? <a href="http://docs.yl.la" className="button blue">APIs</a> : null} 
+									<div className={classes.search} class="menu">
+        			<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={this.state.services.length > 0?() => this.launchRequestProcess('findapro', 'Find A Pro'):null} onMouseOver={() => this.handleOpen()}>FIND A PRO</Button>
+						{this.state.mega_menu && isWidthUp('md', this.props.width) ?
+							<MegaMenu
+								open={this.state.mega_menu}
+								menuenter={this.state.menu_enter}
+								categories={this.state.categories.filter(category => { return category.status === 'Active' })}
+								services={this.state.services.filter((s) => { return (s.service_function === 'findapro' && s.status === 'Active') })}
+								request={this.launchRequestProcessService}
+								close={() => this.setState({ mega_menu: false, mega_menu_request_function: '' })}
+							/> : null}</div>
+
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.hireRunner()}>Hire a runner</Button>
 									<span className={classes.headerSeparator}>|</span>
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('book', 'Book')}>Book</Button>
@@ -2601,18 +2619,12 @@ class Dashboard extends Component {
 				{this.state.landing_desktop && isWidthUp('md', this.props.width) ?
 					<LandingDesktop
 						open={this.state.landing_desktop}
+						services={this.state.services}
 						close={() => this.setState({ landing_desktop: false })}
 						launchRequestProcess={(request_function, request_title) => this.launchRequestProcess(request_function, request_title)}
 						hireRunner={() => this.hireRunner()}
 					/> : null}
-				{this.state.mega_menu && isWidthUp('md', this.props.width) ?
-					<MegaMenu
-						open={this.state.mega_menu}
-						categories={this.state.categories.filter(category => { return category.status === 'Active' })}
-						services={this.state.services.filter((s) => { return (s.service_function === self.state.mega_menu_request_function && s.status === 'Active') })}
-						request={this.launchRequestProcessService}
-						close={() => this.setState({ mega_menu: false, mega_menu_request_function: '' })}
-					/> : null}
+
 			</div>
 		);
 	}

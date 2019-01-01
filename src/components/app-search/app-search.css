@@ -25,6 +25,34 @@
   display: block;
 }
 
+.menu {
+  position: relative;
+  display: inline;
+  padding-bottom: 1rem; 
+  margin-left: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  user-select: none;
+}
+.menu__box {
+  text-align:left;
+  width:750px;
+  background: #F9F9F9;
+  border-bottom: 10px solid #FBEA22;
+  bottom: 0;
+  display: none;
+  padding: 2rem;
+  position: absolute;
+  transform: translateY(100%);
+ }
+
+.menu:hover .menu__box {
+  display: block;
+}
+
+
 .search__box input {
   border: 1px solid #313131;
   border-radius: 4px;

@@ -11,7 +11,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 // Our helpers
 import * as serviceHelper from './actions/services';
-
+import './components/app-search/app-search.css';
 // Styles
 const styles = theme => ({
 	dialog: {
@@ -54,7 +54,7 @@ const styles = theme => ({
 		overflowY: 'hidden'
 	},
 	serviceHeading: {
-		fontSize: '0.7rem',
+		fontSize: '0.8rem',
 		fontFamily: "'Montserrat', sans-serif",
 		letterSpacing: '1px',
 		cursor: 'pointer'
@@ -86,21 +86,24 @@ class MegaMenu extends React.Component {
 
 	// componentWillReceiveProps: set the provider on receiving a state update from the parent
 	componentWillReceiveProps = (nextProps) => {
-		this.setState({
-			open: nextProps.open
+		
+		if(this.props.menuenter!=nextProps.menuenter){
+			this.setState({
+			open: nextProps.open,
+			selected_category: '',
+			selected_category_title: ''
 		});
+		}
+		
 	}
+
+	
 
 	// render: 
 	render() {
 		const { classes } = this.props;
 		return (
-			<Modal
-				open={this.state.open}
-				className={classes.dialog}
-				BackdropProps={{ invisible: true }}
-				onClose={() => this.props.close()}
-			>
+			 <div class="menu__box">
 				<div className={classes.container}>
 					{this.state.selected_category !== '' ?
 						<div className={classes.header}>
@@ -114,7 +117,7 @@ class MegaMenu extends React.Component {
 							</Typography>
 						</div> : null}
 					<div className={classes.columns}>
-						{Object.keys(this.state.services_grouped).map((key) => { // Show categories
+						{Object.keys(this.state.services_grouped).sort().map((key) => { // Show categories
 							let title = '';
 							this.props.categories.forEach(cat => {
 								if (cat.system_name === key) title = cat.title;
@@ -133,7 +136,7 @@ class MegaMenu extends React.Component {
 												{this.props.services
 													.filter(s => { // Show those that are selected
 														return s.categories.indexOf(this.state.selected_category) !== -1
-													})
+													}).sort((a, b) => { return a.title.localeCompare(b.title) })
 													.map(service => { // Show any services
 														return (
 															<Typography
@@ -149,7 +152,8 @@ class MegaMenu extends React.Component {
 						})}
 					</div>
 				</div>
-			</Modal>
+				</div>
+			
 		);
 	}
 }

@@ -679,7 +679,7 @@ class RequestTask extends Component {
 				<div className={classes.content}>
 					{this.state.stage === 1 ? // Stage 1: List categories and services
 						<div>
-							{Object.keys(this.state.services_grouped).map((key, i) => { // Show categories
+							{Object.keys(this.state.services_grouped).sort().map((key, i) => { // Show categories
 								let title = '';
 								this.props.categories.forEach(cat => {
 									if (cat.system_name === key) title = cat.title;
@@ -695,7 +695,7 @@ class RequestTask extends Component {
 										{this.state.selected_category !== '' && this.state.selected_category === key ?
 											(
 												<div>
-													{Object.keys(this.state.services_grouped[this.state.selected_category])
+													{Object.keys(this.state.services_grouped[this.state.selected_category]).sort()
 														.map((key, i) => { // Show any groupings
 															return (key !== 'default' ?
 																<Typography
@@ -708,7 +708,7 @@ class RequestTask extends Component {
 														.filter(s => {
 															return s.categories.indexOf(this.state.selected_category) !== -1
 																&& (!s.grouping || s.grouping === '')
-														})
+														}).sort((a, b) => { return a.title.localeCompare(b.title) })
 														.map(service => { // Show any services
 															return (
 																<Typography
@@ -722,7 +722,7 @@ class RequestTask extends Component {
 															return s.categories.indexOf(this.state.selected_category) !== -1
 																&& s.grouping === this.state.selected_grouping
 																&& s.grouping !== ''
-														})
+														}).sort((a, b) => { return a.title.localeCompare(b.title) })
 														.map(service => { // Show any services where the group is selected
 															return (
 																<Typography
