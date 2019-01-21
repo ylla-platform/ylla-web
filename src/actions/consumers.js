@@ -99,7 +99,10 @@ export function getConsumerColumns() {
 
 // 
 export function getConsumer(consumer, callback) {
-	return callback();
+	var get_url = '/api/consumers/getconsumer';
+	axios.get(get_url, consumer)
+		.then(function (response) { callback(response); })
+		.catch(function () { callback(null); });
 }
 
 // 

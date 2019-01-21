@@ -19,7 +19,6 @@ import TextField from '@material-ui/core/TextField';
 // Actions
 import * as geocoderActions from './actions/geocoder';
 import * as kuwaitActions from './actions/kuwait';
-
 // Axios for making requests
 import axios from 'axios';
 
@@ -165,6 +164,12 @@ const styles = theme => ({
 	},
 	textFieldFormLabel: {
 		fontSize: 18,
+	},
+	center1 :{
+	  position: 'absolute',
+	  left: '10%',
+	  top: '45%',
+	  textAlign: 'center'
 	}
 });
 
@@ -198,15 +203,77 @@ class ProfileAddress extends React.Component {
 
 	// componentWillReceiveProps:
 	componentWillReceiveProps = (nextProps) => {
+			
+		let nh = [];
+		let bk = [];
+		let st = []; 
+
+		let rerun = true; 
+		if( nextProps.address == this.state.address && nextProps.governorate == this.state.governorate &&
+			nextProps.neighbourhood == this.state.neighbourhood && nextProps.block == this.state.block && 
+			nextProps.street == this.state.street && nextProps.house == this.state.house && 
+			(this.state.neighbourhoods.length != 0 || this.state.streets.length != 0 || this.state.blocks.length != 0  ))  {
+			rerun =false; 
+		}
+
+
+		if(nextProps.governorate && rerun){     
+ 
+			this.state.governorates.forEach(gov => {
+			if (gov.governorate === nextProps.governorate) {
+				kuwaitActions.getNeighbourhoods(gov.gov_no, neighbourhoods => {
+					nh = neighbourhoods;
+					if(nextProps.neighbourhood){
+						nh.forEach(nhood => {
+							if (nhood.neighbourhood === nextProps.neighbourhood) {
+								kuwaitActions.getBlocks(nhood.nhood_no, blocks => {
+									bk = blocks;
+									if(nextProps.block){
+										let nhood_no = '';
+										let gov_no = '';
+										nh.forEach(nhood => {
+											if (nhood.neighbourhood === nextProps.neighbourhood) nhood_no = nhood.nhood_no;
+										});
+										this.state.governorates.forEach(gov => {
+											if (gov.governorate === nextProps.governorate) gov_no = gov.gov_no;
+										});
+										kuwaitActions.getStreets(gov_no, nhood_no, nextProps.block, streets => {
+											st = streets;
+											this.setTextFields(nh,bk,st,nextProps);
+										});
+									}else{
+										this.setTextFields(nh,bk,st,nextProps);
+									}
+								})
+							}
+						});
+					}else{
+						this.setTextFields(nh,bk,st,nextProps);
+					}
+				})
+			}
+		}); 
+		}
+		else if(rerun){
+			this.setTextFields(nh,bk,st,nextProps);
+		}
+	}
+
+	setTextFields = (nh,bk,st,nextProps) => {
+
 		this.setState({
 			address: (nextProps.address ? nextProps.address : ''),
-			governorate: (nextProps.governorate ? nextProps.governorate : ''),
+			governorate: (nextProps.governorate ? nextProps.governorate: ''),
 			neighbourhood: (nextProps.neighbourhood ? nextProps.neighbourhood : ''),
 			block: (nextProps.block ? nextProps.block : ''),
 			street: (nextProps.street ? nextProps.street : ''),
 			house: (nextProps.house ? nextProps.house : ''),
-			location: (nextProps.location ? nextProps.location : [])
+			location: (nextProps.location ? nextProps.location : []),
+			neighbourhoods: nh,
+			blocks: bk,
+			streets: st
 		});
+
 	}
 
 	// componentDidMount: 
@@ -639,6 +706,7 @@ class ProfileAddress extends React.Component {
 							/>
 						</FormControl>
 					</div> : null}
+					
 			</div>
 		);
 	}

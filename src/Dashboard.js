@@ -60,6 +60,8 @@ import TextFieldsIcon from '@material-ui/icons/TextFields';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 // Sub pages
 import Analytics from './Analytics';
@@ -121,6 +123,7 @@ import * as tasks from './actions/tasks';
 import * as talk from './actions/talk';
 import './components/app-search/app-search.css'
 
+
 const menu_drawer_width = 190;
 
 // Styles
@@ -135,11 +138,17 @@ const styles = theme => ({
 		}
 	},
 	appBarToolbar: {
-		margin: '0 auto',
-		maxWidth: '1200px',
+		// margin: '0 auto',
+		// maxWidth: '1200px',
 		textAlign: 'center',
 		position: 'relative',
 		width: '100%'
+	},
+	fabs : {
+		width: '40px',
+   	 	height: '40px',
+    	float: 'right',
+    	marginTop: '5px'
 	},
 	headerInternal: {
 		display: 'inline-block',
@@ -188,6 +197,12 @@ const styles = theme => ({
 		verticalAlign: 'middle',
 		marginLeft: '1rem'
 	},
+	grow: {
+    	flexGrow: 1
+  	},
+  	rights: {
+  		float:'right'
+  	},
 	appBarButton: {
 		background: 'none',
 		border: 'none',
@@ -195,9 +210,22 @@ const styles = theme => ({
 		cursor: 'pointer',
 		fontFamily: "'Montserrat', sans-serif",
 		fontWeight: 700,
-		letterSpacing: '1.5px',
+		fontSize: '1rem',
 		margin: 0,
 		padding: '1rem',
+		outline: 'none',
+		textTransform: 'inherit'
+	},
+	browseTasks: {
+		background: 'none',
+		border: 'none',
+		color: '#313131',
+		cursor: 'pointer',
+		fontFamily: "'Montserrat', sans-serif",
+		fontWeight: 700,
+		marginRight: '20px',
+		marginLeft: '15px',
+		padding: '0.1rem',
 		outline: 'none',
 	},
 	appBarButtonOutline: {
@@ -503,14 +531,35 @@ class Dashboard extends Component {
 				show_password2: false,
 				show_menu: false,
 				// Notifications
-				task_notification: false
+				task_notification: false,
+				search: false
 			};
 		}
 
 	}
+
+
+	savestate = () => {
+	  this.setState({profile_menu_open: false,profile_menu_anchor: null });
+	  localStorage.setItem('localstate', JSON.stringify(this.state,this.replacer));
+	}
+
+	componentWillUnmount = () => {
+	  this.savestate();
+      window.removeEventListener('beforeunload', this.savestate);
+	}
+
+	componentWillMount = () => {
+	  const rehydrate = JSON.parse(localStorage.getItem('localstate'));
+	  if(rehydrate){
+	  	this.setState(rehydrate);
+	  }
+	  localStorage.setItem('localstate', null);
+	}
 	// componentDidMount: When the dashboard is mounted
 	// Main method to set up the state and retrieve reference data.
 	componentDidMount = () => {
+		window.addEventListener('beforeunload', this.savestate);
 		let location_interval_id = setInterval(this.logLocation, 10000);
 		this.setState({ location_interval_id: location_interval_id });
 
@@ -596,8 +645,9 @@ class Dashboard extends Component {
 	// getUserConversations: Gets the current user conversations (messages waiting).
 	getUserConversations = () => {
 		if (this.state.user.id) {
+			this.getAgents();
 			talk.getConversations(this.state.user.id, true, this.state.web_token, conversations => {
-				if (conversations.length > 0) {
+				if (conversations!=null && conversations.length > 0) {
 					this.setState({ message_tooltip: 'Messages available', message_count: conversations.length.toString() || '0' });
 				} else {
 					this.setState({ message_tooltip: 'No new messages', message_count: '0' });
@@ -658,9 +708,18 @@ class Dashboard extends Component {
 
 	// logLocation: logs the current location to a web service
 	logLocation = () => {
-		map.logLocation(this.state.user, this.state.web_token, locations => {
-			this.setState({ current_location: locations.current_location, live_locations: locations.live_locations });
-		});
+		// map.logLocation(this.state.user, this.state.web_token, locations => {
+		// 	this.setState({ current_location: locations.current_location, live_locations: locations.live_locations });
+		// });
+	}
+
+	replacer = (key,value) => 
+	{
+	    if (key=="services"){
+	    	if(value.length > 50 ) return [];
+	    } 
+	    if (key=="questions") return [];
+	    return value;
 	}
 
 	////////////////////////////////////
@@ -672,8 +731,8 @@ class Dashboard extends Component {
 		this.setState({ login_progress: true });
 		let self = this;
 		authentication.authenticate(data, response => {
-			if (response.data.success === false) self.setState({ snackbar_open: true, snackbar_message: 'Invalid login', login_progress: false });
-			if (response.data.success === true) {
+			if (response!= null && response.data.success === false) self.setState({ snackbar_open: true, snackbar_message: 'Invalid login', login_progress: false });
+			if (response!= null && response.data.success === true) {
 				let keys = {};
 				this.state.categories.forEach(category => {
 					let selected = false;
@@ -691,9 +750,12 @@ class Dashboard extends Component {
 					agent_active: response.data.user.active,
 					username: data.username,
 					login_progress: false,
-					web_token: response.data.token
+					web_token: response.data.token,
+					profile_menu_open: false, 
+					profile_menu_anchor: null
 				});
-				sessionStorage.setItem('state', JSON.stringify(self.state));
+				sessionStorage.setItem('state', JSON.stringify(self.state,this.replacer));
+
 				self.getTasks();
 				if (response.data.user.user_type === 'administrator') self.getQuestions();
 				self.getUserConversations();
@@ -711,7 +773,8 @@ class Dashboard extends Component {
 	// logout: Logs the user out and clears state.
 	logout = () => {
 		sessionStorage.removeItem('state');
-		this.setState({ user: {}, current_page_view: 'map', tasks: [], profile_menu_open: false });
+		this.setState({ user: {}, current_page_view: 'map', tasks: [], profile_menu_open: false, content_drawer: false, agent_drawer: false });
+		localStorage.setItem('localstate', null);
 	}
 
 	// register: Registers the user in the system and logs them in.
@@ -722,6 +785,7 @@ class Dashboard extends Component {
 		var responseAction = function (response) {
 			if (response.data.success) {
 				self.setState({ current_page_view: 'map', snackbar_open: true, snackbar_message: 'Account Created!', register_progress: false });
+				self.getAgents();
 				// Then login
 				self.login({ username: data.username, password: data.password });
 
@@ -730,7 +794,7 @@ class Dashboard extends Component {
 			}
 		};
 		if (data.user_type === 'consumer') consumers.addConsumer(data, responseAction);
-		if (data.user_type === 'agent') agents.addAgent(data, responseAction);
+		if (data.user_type === 'agent') agents.addAgent(data, self.state.web_token, responseAction);
 		if (data.user_type === 'provider') providers.addProvider(data, responseAction);
 	}
 
@@ -748,6 +812,7 @@ class Dashboard extends Component {
 					self.getAgents();
 				} else {
 					self.setState({ user: user, snackbar_open: true, snackbar_message: 'Profile record updated' });
+					self.getProviders();
 				}
 			}
 		});
@@ -799,10 +864,27 @@ class Dashboard extends Component {
 
 	// toggleAgentActive:
 	toggleAgentActive = () => {
-		this.setState({ agent_active: !this.state.agent_active });
-		let agent = this.state.user;
-		agent.active = !this.state.agent_active;
-		this.editUser(agent);
+
+		// var toggle = false ; 
+		// if(!this.state.agent_active && agents.getAgentAvailability(this.state.user) == 'inactive'){
+		//  if (window.confirm('Do you want to override your casual ?')) {
+		//  	toggle = true; 
+		//  }
+		// }else{
+		// 	toggle = true; 
+		// }
+		// if(toggle){
+			this.setState({ agent_active: !this.state.agent_active });
+			this.getAgents();
+			let cagent = this.state.user;
+			this.state.agents.forEach(agent => {
+				if (cagent.id === agent.id) {
+					cagent.status = agent.status; 
+					cagent.active = !this.state.agent_active;
+					this.editUser(cagent);
+				}
+			});
+		// }
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////
@@ -1199,8 +1281,11 @@ class Dashboard extends Component {
 		var payload = [];
 		var self = this;
 		this.state.current_selected_tasks.forEach(function (i, t) {
-			var agent_update = { id: i.id, agent_id: agent || '' };
-			payload.push(agent_update);
+			if(i.status){
+				var agent_update = { id: i.id, agent_id: agent || '' };
+				payload.push(agent_update);
+
+			}
 		});
 		tasks.editTaskAgents(payload, response => {
 			self.getTasks();
@@ -1310,9 +1395,17 @@ class Dashboard extends Component {
 	}
 
 	// handleSetAgent
-	handleSetTaskAgent = (agent_id, event) => {
-		this.editTaskAgents(agent_id);
-		this.setState({ task_agent_menu_open: false });
+	handleSetTaskAgent = (agent_id, evefnt) => {
+		if(agent_id == null){
+			if(window.confirm('Are you sure ?')){
+				this.editTaskAgents(agent_id);
+				this.setState({ task_agent_menu_open: false });
+			}
+		}
+		else{
+			this.editTaskAgents(agent_id);
+			this.setState({ task_agent_menu_open: false });
+		}
 	}
 
 	// handleSetTaskStatus: setting a new status
@@ -1349,12 +1442,27 @@ class Dashboard extends Component {
 	// launchRequestProcessProvider:
 	launchRequestProcessProvider = (provider, service) => {
 		this.closeDrawers();
-		this.setState({ task_request_drawer: true, content_drawer: false, content_drawer_screen: '', task_request_screen: service.service_function, task_request_screen_title: 'Request', current_provider: provider, current_service: service, request_progress: true });
+		let cur_service = {} ; 
+		if (this.state.services) {
+			var len = this.state.services.length; 
+			for (var i = 0; i < len; ++i) {
+				if(this.state.services[i].system_name === service){
+					cur_service = this.state.services[i]; 
+					break;
+				}
+			}
+		}
+		this.setState({ task_request_drawer: true, content_drawer: false, content_drawer_screen: '', task_request_screen: cur_service.service_function, task_request_screen_title: 'Request', current_provider: provider, current_service: cur_service, request_progress: true });
 	}
 
 	// launchMegaMenu:
 	launchMegaMenu = (request_function) => {
 		this.setState({ mega_menu: true, mega_menu_request_function: request_function });
+	}
+
+	// launchSearchMenu:
+	launchSearchMenu = () => {
+		this.setState({ search: true });
 	}
 
 	//////////////////////////////////////////////////////////////////
@@ -1391,7 +1499,7 @@ class Dashboard extends Component {
 		this.state.providers.forEach(function (i, t) {
 			if (data.indexOf(i.id) !== -1) providers.push(i);
 		});
-		this.setState({ current_selected_providers: providers, content_drawer: true, content_drawer_screen: 'providers', provider_view_allow_request: provider_view_allow_request });
+		this.setState({ current_selected_providers: providers, content_drawer: true, content_drawer_screen: 'providers', provider_view_allow_request: provider_view_allow_request, search:false });
 	}
 
 	handleOpen = () => {
@@ -1412,7 +1520,8 @@ class Dashboard extends Component {
 		return (
 			<div className={classes.root}>
 				<AppBar position="absolute"   className={classes.appBar} elevation={0}>
-					<Toolbar className={classes.appBarToolbar}>
+					<Toolbar variant="dense" className={classes.appBarToolbar}>
+						
 						{this.state.user && this.state.user.user_type ? // If we have any user we show the application menu.
 							<IconButton className={classes.menuButton}   aria-label="Menu" onClick={(e) => this.setState({ menu_drawer: !this.state.menu_drawer })}>
 								<MenuIcon />
@@ -1425,24 +1534,21 @@ class Dashboard extends Component {
 							</svg>
 						</Button>
 						<div className={classNames(classes.headerInternal, (this.state.show_menu ? classes.headerInternalActive : null))}>
+							
+							
+
 							{this.state.user && this.state.user.user_type === 'provider' ? // For providers we show their name
 								<Button className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.setState({ current_page_view: 'profile', tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })}>
 									{this.state.user.name}
 								</Button> : null}
-							{this.state.user && this.state.user.user_type &&
-								this.state.user.user_type === 'provider' ? // Provider option to manually create task
-								<Button
-									className={classNames(classes.appBarButton, classes.fullWidth)}
-									onClick={() => this.setState({ content_drawer: true, content_drawer_screen: 'createtask', current_page_view: 'map' })}>
-									New task
-								</Button> : null}
-							{!this.state.user.user_type || this.state.user.user_type === 'consumer' ?
+
+							
 								<span>
-			                  <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>&nbsp;&nbsp;&nbsp;
-			                  {this.state.username === "" ? <a href="http://docs.yl.la" className="button blue">APIs</a> : null} 
+			                 { /* <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>&nbsp;&nbsp;&nbsp;
+			                  {this.state.username === "" ? <a href="http://docs.yl.la" className="button blue">API</a> : null} */ }
 									<div className={classes.search} class="menu">
-        			<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={this.state.services.length > 0?() => this.launchRequestProcess('findapro', 'Find A Pro'):null} onMouseOver={() => this.handleOpen()}>FIND A PRO</Button>
-						{this.state.mega_menu && isWidthUp('md', this.props.width) ?
+        						<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={this.state.services.length > 0?() => this.launchRequestProcess('findapro', 'Find A Pro'):null} onMouseOver={() => this.handleOpen()}>Find a pro</Button>
+							{this.state.services.length > 0 && this.state.mega_menu && isWidthUp('md', this.props.width) ?
 							<MegaMenu
 								open={this.state.mega_menu}
 								menuenter={this.state.menu_enter}
@@ -1453,29 +1559,20 @@ class Dashboard extends Component {
 							/> : null}</div>
 
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.hireRunner()}>Hire a runner</Button>
-									<span className={classes.headerSeparator}>|</span>
+									{ /*<span className={classes.headerSeparator}>|</span>
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('book', 'Book')}>Book</Button>
 									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('reserve', 'Reserve')}>Reserve</Button>
-									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('order', 'Order Food')}>Food</Button>
-								</span> : null}
-							<AppSearch
-								agents={this.state.agents}
-								providers={this.state.providers}
-								services={this.state.services}
-								updateMapLocation={this.handleGoTo}
-								updateMapLocationWithPin={(destination) => this.setState({ map_location: destination, map_pin: destination })}
-								viewProvider={(data) => this.viewProvider(data, true)}
-								selectService={(service, service_function) => this.setState({ current_service: service, service_function: service_function, task_request_drawer: true, task_request_screen: service_function })}
-							/>
+									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('order', 'Order Food')}>Food</Button> */}
+								</span> 
+							 
+							
+
 							{!this.state.user.user_type ?
 								<Button className={classNames(classes.appBarButtonOutline, classes.fullWidth)} onClick={(event) => this.setState({ showRegistrationDrawer: !this.state.showRegistrationDrawer, show_menu: false })}>Sign In</Button>
 								: null}
 							{this.state.user && this.state.user.user_type && // All users except administrators see posts
 								this.state.user.user_type !== 'administrator' ?
-								<Tooltip id="tooltip-icon" title="See posts" placement="bottom">
-									<IconButton
-										onClick={(e) => this.setState({ posts_drawer: true, tasks_drawer: false, current_page_view: 'map' })}>
-										<Badge
+										<Badge className={classNames(classes.browseTasks, classes.fullWidth, classes.margin)} onClick={(e) => this.setState({ posts_drawer: true, tasks_drawer: false, current_page_view: 'map' })}
 											color={(this.state.post_notification ? 'error' : 'primary')}
 											badgeContent={
 												this.state.tasks
@@ -1487,55 +1584,23 @@ class Dashboard extends Component {
 													})
 													.length
 											}
-											className={classes.margin}>
-											<LocalActivityIcon />
-										</Badge>
-									</IconButton>
-								</Tooltip> : null}
-							{this.state.route_legs && this.state.route_legs.length > 0 ? // Navigation notification
-								<Tooltip id="tooltip-icon" title="Navigation Instructions" placement="bottom">
-									<IconButton
-										onClick={() => this.setState({ navigation_drawer: true })}>
-										<NavigationIcon />
-									</IconButton>
-								</Tooltip> : null}
-							{this.state.user && this.state.user.user_type === 'consumer' ? // Show consumers a badge of their orders.
-								<Tooltip id="tooltip-icon" title="Orders" placement="bottom">
-									<IconButton
-										onClick={() => this.setState({ order_notification: false, tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })}>
-										<Badge color={(this.state.order_notification ? 'error' : 'primary')} badgeContent={this.state.tasks.filter(task => { return task.provider_id && task.providerid !== '' && task.provider_id !== '0' }).length} className={classes.margin}>
-											<ShoppingBasketIcon />
-										</Badge>
-									</IconButton>
-								</Tooltip> : null}
-							{this.state.user && this.state.user.user_type &&
-								this.state.user.user_type === 'provider' ? // Show providers an icon to see their agents
-								<Tooltip id="tooltip-icon" title="See agents" placement="bottom">
-									<IconButton
-										onClick={() => this.setState({ agent_drawer: true, consumer_drawer: false, current_page_view: 'map' })}>
-										<Badge color="primary" badgeContent={this.state.agents.filter(agent => { return agent.provider_id === self.state.user.id }).length} className={classes.margin}>
-											<SupervisorAccountIcon />
-										</Badge>
-									</IconButton>
-								</Tooltip> : null}
-							{this.state.user && this.state.user.user_type && // Providers and agents see tasks and customer notification
+											>
+											Browse posts
+										</Badge>: null}
+					{this.state.user && this.state.user.user_type && // Providers and agents see tasks and customer notification
 								(this.state.user.user_type === 'provider' || this.state.user.user_type === 'agent') ?
 								<span>
-									<Tooltip id="tooltip-icon" title="See Tasks" placement="bottom">
-										<IconButton
-											onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })}>
-											<Badge
+											<Badge className={classNames(classes.browseTasks, classes.fullWidth, classes.margin)} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })}
 												color={(this.state.task_notification ? 'error' : 'primary')}
 												badgeContent={
 													this.state.tasks
 														.filter(task => { return task.provider_id && task.provider_id !== '' && task.provider_id !== '0' })
 														.length
 												}
-												className={classes.margin}>
-												<EventIcon />
+												>
+												Orders
 											</Badge>
-										</IconButton>
-									</Tooltip>
+										
 									<Tooltip id="tooltip-icon" title="See customers" placement="bottom">
 										<IconButton
 											onClick={() => this.setState({ consumer_drawer: true, agent_drawer: false, current_page_view: 'map' })}>
@@ -1547,7 +1612,30 @@ class Dashboard extends Component {
 											</Badge>
 										</IconButton>
 									</Tooltip>
-								</span> : null}
+								</span> : null}										
+							{this.state.route_legs && this.state.route_legs.length > 0 ? // Navigation notification
+								<Tooltip id="tooltip-icon" title="Navigation Instructions" placement="bottom">
+									<IconButton
+										onClick={() => this.setState({ navigation_drawer: true })}>
+										<NavigationIcon />
+									</IconButton>
+								</Tooltip> : null}
+							{this.state.user && this.state.user.user_type === 'consumer' ? // Show consumers a badge of their orders.
+								<Badge onClick={() => this.setState({ order_notification: false, tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} className={classNames(classes.browseTasks, classes.fullWidth, classes.margin)} color={(this.state.order_notification ? 'error' : 'primary')} badgeContent={this.state.tasks.filter(task => { return task.provider_id && task.providerid !== '' && task.provider_id !== '0' }).length} >
+											Orders
+										</Badge>
+									 : null}
+							{this.state.user && this.state.user.user_type &&
+								this.state.user.user_type === 'provider' ? // Show providers an icon to see their agents
+								<Tooltip id="tooltip-icon" title="See agents" placement="bottom">
+									<IconButton
+										onClick={() => this.setState({ agent_drawer: true, consumer_drawer: false, current_page_view: 'map' })}>
+										<Badge color="primary" badgeContent={this.state.agents.filter(agent => { return agent.provider_id === self.state.user.id }).length} className={classes.margin}>
+											<SupervisorAccountIcon />
+										</Badge>
+									</IconButton>
+								</Tooltip> : null}
+		
 							{this.state.user && this.state.user.user_type ? // All users see the logout and chat icons
 								<span>
 									<Tooltip id="tooltip-icon" title={this.state.message_tooltip} placement="bottom">
@@ -1569,25 +1657,58 @@ class Dashboard extends Component {
 												<MapIcon />
 											</IconButton>
 										</Tooltip> : null}
-									<Tooltip id="tooltip-icon" title="Profile" placement="bottom">
-										<IconButton
-											onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })}
-										>
-											<AccountCircleIcon />
-										</IconButton>
-									</Tooltip>
+
+									
 								</span> : null}
 							{this.state.user && this.state.user.user_type === 'agent' ? // Agent can go off duty
 								<FormControlLabel
 									control={
 										<Switch
-											checked={!this.state.agent_active}
+											checked={this.state.agent_active}
 											onChange={() => this.toggleAgentActive()}
-											value={!this.state.agent_active}
+											value={this.state.agent_active}
 										/>
 									}
-									label="Off duty"
+									label="On duty"
 								/> : null}
+
+							
+							{this.state.user && this.state.user.user_type ?
+								<Tooltip id="tooltip-icon" title="Profile" placement="bottom">
+										<IconButton className={classes.rights}
+											onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })}
+										>
+											<AccountCircleIcon />
+										</IconButton>
+									</Tooltip> : null }
+
+								<label onClick={this.state.services.length > 0?() => this.launchSearchMenu():null} class="search__icon">
+									<svg width="20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 32 32">
+									    <path d="M13.151 1.251c6.65.127 12.435 6.619 11.485 13.389-.778 5.545-6.013 10.11-11.636 10.11-5.582 0-10.848-4.498-11.636-10.11C.45 8.126 5.826 1.385 12.849 1.251h.302zm-.258 3.5c-5.437.103-9.884 6.527-7.329 11.822 1.807 3.742 6.698 5.644 10.551 4.067 4.178-1.71 6.376-7.21 4.232-11.391-1.365-2.661-4.21-4.441-7.24-4.498h-.214z"/>
+									    <path d="M23.083 21.252c.406.029.782.186 1.089.449 2.074 1.972 4.048 4.045 6.072 6.068 1.161 1.221-.438 4.229-2.417 2.53-2.074-1.972-4.048-4.045-6.072-6.068-.967-1.017-.5-3.023 1.328-2.979z"/>
+									</svg>
+								</label>
+							{this.state.search ?
+							<AppSearch
+								open={this.state.search}
+								agents={this.state.agents}
+								providers={this.state.providers}
+								services={this.state.services}
+								updateMapLocation={this.handleGoTo}
+								updateMapLocationWithPin={(destination) => this.setState({ map_location: destination, map_pin: destination })}
+								viewProvider={(data) => this.viewProvider(data, true)}
+								selectService={(service, service_function) => this.setState({ current_service: service, service_function: service_function, task_request_drawer: true, task_request_screen: service_function })}
+								close={() => this.setState({ search: false})}
+							/>:null}
+
+							{this.state.user && this.state.user.user_type &&
+								this.state.user.user_type === 'provider' ? // Provider option to manually create task
+								<Tooltip id="tooltip-icon" title="Create Order" placement="bottom">
+										<Fab onClick={() => this.setState({ content_drawer: true, content_drawer_screen: 'createtask', current_page_view: 'map' })} className={classes.fabs} color="primary" aria-label="Add">
+					            			<AddIcon />
+					          			</Fab>
+									</Tooltip>
+								: null}
 						</div>
 					</Toolbar>
 				</AppBar>
@@ -2166,7 +2287,7 @@ class Dashboard extends Component {
 							goToTaskList={() => { this.setState({ tasks_drawer: false, agent_drawer: false, consumer_drawer: false, current_page_view: 'tasks' }) }}
 						/>
 					</Drawer> : null}
-				{this.state.user && this.state.user.user_type === 'consumer' && this.state.posts_drawer ? // Posts drawer on the right hand side
+				{this.state.user && (this.state.user.user_type === 'consumer' || this.state.user.user_type === 'agent' ) && this.state.posts_drawer ? // Posts drawer on the right hand side
 					<Drawer
 						anchor="left"
 						variant="persistent"
@@ -2266,10 +2387,11 @@ class Dashboard extends Component {
 							department={this.state.current_provider_department}
 							providers={this.state.providers.filter(provider => provider.status === 'Active')}
 							close={() => this.setState({ current_service: {}, current_provider: {}, task_request_drawer: false, request_progress: false })}
+							setNullProvider={() => this.setState({  current_provider: {}})}
 							chat={(user) => this.setState({ chat_user: user, content_drawer: true, content_drawer_screen: 'chat' })}
 							goto={this.handleGoTo}
 							navigate={this.handleNavigate}
-							viewProvider={(data) => this.viewProvider(data, false)}
+							viewProvider={(data) => this.viewProvider(data, true)}
 							createTask={(data) => this.addTask(data)}
 							updateMapLocation={this.handleGoTo}
 							updateMapBounds={(bounds) => this.setState({ map_bounds: bounds })} />
@@ -2388,7 +2510,7 @@ class Dashboard extends Component {
 					categories={this.state.categories}
 					category={this.state.current_selected_categories.length > 0 ? this.state.current_selected_categories[0] : {}}
 					categoryEditDialogClose={() => this.setState({ category_edit_dialog_open: false })}
-					saveCategory={(event, data) => this.saveCategory(data)}
+					saveCategory={(data) => this.saveCategory(data)}
 				/>
 				<Broadcast
 					open={this.state.broadcast_dialog_open}
@@ -2433,7 +2555,7 @@ class Dashboard extends Component {
 					{this.isValidStatus('Completed') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Completed</MenuItem> : null}
 					{this.isValidStatus('Declined') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Declined</MenuItem> : null}
 					{this.isValidStatus('Failed') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Failed</MenuItem> : null}
-					{this.isValidStatus('Cancelled') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Completed</MenuItem> : null}
+					{this.isValidStatus('Cancelled') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Cancelled</MenuItem> : null}
 					{this.state.referencedata
 						.filter(dataitem => {
 							return dataitem.type === 'task_status'
@@ -2505,7 +2627,11 @@ class Dashboard extends Component {
 					open={this.state.task_agent_menu_open}
 					onClose={() => this.setState({ task_agent_menu_open: false })}
 				>
-					<MenuItem onClick={self.handleSetTaskAgent.bind(this, null)}>Unassign task</MenuItem>
+					
+					{this.state.current_selected_tasks.length>0 
+						&& (this.state.current_selected_tasks[0].status !== "Completed") ? 
+					<MenuItem onClick={self.handleSetTaskAgent.bind(this, null)}>Unassign Task</MenuItem> :null}
+
 					{
 						this.state.agents
 							.filter(agent => {

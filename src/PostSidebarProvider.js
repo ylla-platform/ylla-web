@@ -102,7 +102,7 @@ class PostSidebarProvider extends Component {
 			task_actions_menu_anchor: null,
 			task_filter_menu: false,
 			task_filter_menu_anchor: null,
-			task_filter: 'My Interests',
+			task_filter: 'All',
 			selected_task: {},
 			bid_dialog_open: false,
 			bid_amount: '',
@@ -151,7 +151,7 @@ class PostSidebarProvider extends Component {
 					<MenuItem onClick={this.handleSortMenu.bind(this, 'price')}>Price</MenuItem>
 					<MenuItem onClick={this.handleSortMenu.bind(this, 'neighbourhood')}>Neighbourhood</MenuItem>
 				</Menu>
-				<Menu // Menu used to filter tasks
+				{ /* <Menu // Menu used to filter tasks
 					id="menu-taskfilter"
 					anchorEl={this.state.task_filter_menu_anchor}
 					open={this.state.task_filter_menu}
@@ -159,7 +159,7 @@ class PostSidebarProvider extends Component {
 				>
 					<MenuItem onClick={(e) => this.setState({ task_filter: 'All', task_filter_menu: false })}>All</MenuItem>
 					<MenuItem onClick={(e) => this.setState({ task_filter: 'My Interests', task_filter_menu: false })}>My interests</MenuItem>
-				</Menu>
+				</Menu> */ }
 				<Menu // Menu used for actions
 					id="menu-taskactions"
 					anchorEl={this.state.task_actions_menu_anchor}
@@ -193,9 +193,9 @@ class PostSidebarProvider extends Component {
 						<Button   className={classes.button} onClick={(e) => this.setState({ task_sort_menu: true, task_sort_menu_anchor: e.currentTarget })}>
 							<SortIcon className={classes.leftIcon} />Sort
 						</Button>
-						<Button   className={classes.button} onClick={(e) => this.setState({ task_filter_menu: true, task_filter_menu_anchor: e.currentTarget })}>
+						{ /* <Button   className={classes.button} onClick={(e) => this.setState({ task_filter_menu: true, task_filter_menu_anchor: e.currentTarget })}>
 							<FilterListIcon className={classes.leftIcon} />{this.state.task_filter}
-						</Button>
+						</Button> */}
 						{this.state.tasks
 							.sort((a, b) => {
 								if (this.state.task_sort === 'due_date') return (a.date < b.date);

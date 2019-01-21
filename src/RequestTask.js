@@ -270,7 +270,7 @@ class RequestTask extends Component {
 	// checkProviderDistance: If the provider distance is under the acepted distance return true.
 	checkProviderDistance = (provider) => {
 		let accepted_distance = providerHelper.getProviderAcceptedDistance(provider);
-		return (accepted_distance === 0 || accepted_distance <= provider.distance);
+		return (accepted_distance === 0 || accepted_distance >= provider.distance);
 	}
 
 	/////////////////////////////////////////////////////
@@ -291,10 +291,14 @@ class RequestTask extends Component {
 
 	// selectProvider: Stage 2. Select the provider and set it in state
 	selectProvider = (provider) => {
+		
+		// ------------------------ added by narayan , we have removed step 8 as suggested by Raed.
+			this.selectAddress(provider)
+		// ------------------------------------------
 		let stage = 6;
 
 		if (!this.state.service.date_required) {
-			stage = 8;
+			stage = 9; //stage = 8;
 			if (this.state.service.agent_required_by === 'consumer') stage = 7;
 		}
 
@@ -318,7 +322,7 @@ class RequestTask extends Component {
 		let stage = 6;
 
 		if (!this.state.service.date_required) {
-			stage = 8;
+			stage = 9; //stage = 8;
 			if (this.state.service.agent_required_by === 'consumer') stage = 7;
 		}
 
@@ -336,7 +340,7 @@ class RequestTask extends Component {
 
 	// selectProduct: Stage 5. Select product options.
 	selectProduct = () => {
-		let stage = 8;
+		let stage = 9; //stage = 8;
 
 		if (this.state.service.agent_required_by === 'consumer') stage = 7;
 		if (this.state.service.date_required) stage = 6;
@@ -405,19 +409,19 @@ class RequestTask extends Component {
 
 	// selectTimeslot: Stage 6. Confirm the date and time selected
 	selectTimeslot = () => {
-		let stage = 8;
+		let stage = 9; //stage = 8;
 		if (this.state.service.agent_required_by === 'consumer') stage = 7;
 		this.setState({ stage: stage });
 	}
 
 	// selectAgent: Stage 7. Select the agent and set in state.
 	selectAgent = (agent) => {
-		this.setState({ agent_id: agent.id, agent: agent, stage: 8 });
+		this.setState({ agent_id: agent.id, agent: agent, stage: 9 }); //stage = 8; 
 	}
 
 	// selectAddress: Stage 8.
-	selectAddress = (type) => {
-		if (type === 'custom') {
+	selectAddress = (provider) => {
+		if (this.state.preferred_location === 'custom') {
 			this.setState({
 				address: this.state.custom_address,
 				location: this.state.custom_location,
@@ -425,15 +429,15 @@ class RequestTask extends Component {
 				neighbourhood: this.state.custom_neighbourhood,
 				block: this.state.custom_block,
 				street: this.state.custom_street,
-				house: this.state.custom_house,
-				stage: 9
+				house: this.state.custom_house
+				// stage: 9
 			});
 		}
-		if (type === 'provider') {
-			this.setState({ address: this.state.provider.addresses[0].address, location: this.state.provider.addresses[0].location, stage: 9 });
+		if (this.state.preferred_location === 'provider' && provider.addresses.length > 0) {
+			this.setState({ address: provider.addresses[0].address, location: provider.addresses[0].location}); //, stage: 9
 		}
-		if (type === 'consumer') {
-			this.setState({ address: this.props.user.address, location: this.props.user.location, stage: 9 });
+		if (this.state.preferred_location === 'consumer') {
+			this.setState({ address: this.props.user.address, location: this.props.user.location }); //, stage: 9
 		}
 	}
 
@@ -464,29 +468,31 @@ class RequestTask extends Component {
 	// back: go back between steps
 	back = () => {
 
+		let stage = 2; 
+
 		if (this.state.stage === 2) { // Move from providers to services
-			this.setState({ stage: 1 });
+			stage = 1; 	
 		}
 
 		if (this.state.stage === 3) { // Move from filter to providers
-			this.setState({ stage: 2 });
+			stage = 2; 
 		}
 
 		if (this.state.stage === 4) { // Move from department to providers
-			this.setState({ stage: 2 });
+			stage = 2; 
 		}
 
 		if (this.state.stage === 5) { // Move from product questions to department or providers
 
-			let stage = 2;
+			stage = 2;
 			if (this.state.provider.departments &&
 				this.state.provider.departments.length) stage = 4;
 
-			this.setState({ stage: stage });
+			
 		}
 
 		if (this.state.stage === 6) { // Move from timeslot to product questions, or department, or providers
-			let stage = 2;
+			stage = 2;
 
 			if (this.state.provider.departments &&
 				this.state.provider.departments.length) stage = 4;
@@ -497,13 +503,11 @@ class RequestTask extends Component {
 			});
 
 			if (product_questions) stage = 5;
-
-			this.setState({ stage: stage });
 		}
 
 		if (this.state.stage === 7) { // Move from agent to timeslot
 			// Normally we'll go back to the timeslot
-			let stage = 6;
+			stage = 6;
 			if (!this.state.service.date_required) stage = 2;
 			if (this.state.provider.departments &&
 				this.state.provider.departments.length) stage = 4;
@@ -513,14 +517,14 @@ class RequestTask extends Component {
 			});
 			if (product_questions) stage = 5;
 
-			this.setState({ stage: stage });
+		
 		}
 
-		if (this.state.stage === 8) { // Move from location to agent or timeslot
+		if (this.state.stage === 9) { // Move from location confirmation to agent or timeslot
 
 			// Normally we'll go back to the timeslot
 
-			let stage = 6;
+			stage = 6;
 			if (!this.state.service.date_required) stage = 2;
 
 			if (this.state.provider.departments &&
@@ -535,12 +539,16 @@ class RequestTask extends Component {
 			if (product_questions) stage = 5;
 
 			if (this.state.service.agent_required_by === 'consumer') stage = 7;
-			this.setState({ stage: stage });
+			
 		}
-
-		if (this.state.stage === 9) { // Move from confirmation to location
-			this.setState({ stage: 8 });
+		if(stage == 2 || stage == 1){
+			this.setState({ stage: stage, provider:{} });
+			this.props.setNullProvider();
 		}
+		else{this.setState({ stage: stage });}
+		// if (this.state.stage === 9) { // Move from confirmation to location
+		// 	this.setState({ stage: 8 });
+		// }
 
 	}
 
@@ -638,6 +646,19 @@ class RequestTask extends Component {
 			provider.distance = providerHelper.getProviderDistance(provider, location);
 		});
 		this.setState({ location_filter: location, address_filter: address, providers: providers });
+	}
+
+	// componentWillReceiveProps: set the provider on receiving a state update from the parent
+	componentWillReceiveProps = (nextProps) => {
+		
+		if(Object.keys(this.state.provider).length === 0 &&  Object.keys(nextProps.provider).length !== 0){
+			if(this.state.preferred_location != "" ){
+				this.setState({provider : nextProps.provider,stage : 4});
+			}
+			else{
+				this.setState({provider : nextProps.provider});
+			}
+		}
 	}
 
 	// render: render the component
@@ -741,7 +762,7 @@ class RequestTask extends Component {
 						</div> : null}
 					{this.state.stage === 2 ? // Stage 2: Select a provider
 						<div>
-							<ProfileAddress // Show an address control for address searching.
+							{ /*<ProfileAddress // Show an address control for address searching.
 								setAddress={this.handleSetAddressFilter}
 								updateMapLocation={this.props.updateMapLocation}
 								updateMapBounds={this.props.updateMapBounds}
@@ -754,10 +775,12 @@ class RequestTask extends Component {
 								house={''}
 								current_location={this.state.location_filter}
 								allow_autodetect={true}
-								governorate_lookup={false}
+									governorate_lookup={false}
 							/>
-							<Divider />
-							{this.state.service.location.map(location_option => {
+							<Divider /> */}
+
+
+							{this.state.service.location == null ? null: this.state.service.location.map(location_option => {
 								return <FormControlLabel
 									classes={{
 										label: classes.radioLabel
@@ -773,6 +796,40 @@ class RequestTask extends Component {
 									label={this.state.service.location_terms && this.state.service.location_terms[location_option] ? this.state.service.location_terms[location_option] : location_option} />
 							})}
 							<Divider />
+							{this.state.service.location.indexOf('custom') !== -1
+								&& this.state.preferred_location === 'custom' ?
+								<div>
+									<ProfileAddress
+										setAddress={this.handleSetAddress}
+										updateMapLocation={this.props.updateMapLocation}
+										updateMapBounds={this.props.updateMapBounds}
+										location={this.state.custom_location}
+										address={this.state.custom_address}
+										governorate={this.state.custom_governorate}
+										neighbourhood={this.state.custom_neighbourhood}
+										block={this.state.custom_block}
+										street={this.state.custom_street}
+										house={this.state.custom_house}
+										current_location={this.props.current_location}
+										allow_autodetect={true}
+										governorate_lookup={true}
+									/>
+									<br />
+								</div>
+								: null}
+							<Divider />
+ 							
+
+							{ Object.keys(this.state.provider).length !== 0 ?  // narayan when provider is known already , this happens when there us direct select of Provider 
+								<div>
+									<ProviderCardDetail
+										provider={this.state.provider}
+									/> <Divider />
+									<Button disabled={this.state.preferred_location == ""} variant="outlined" fullWidth onClick={() => this.selectProvider(this.state.provider)}>Continue</Button>
+									<br />
+								</div>	: null}
+
+							{ Object.keys(this.state.provider).length === 0 ? <div> 
 							<Button className={classes.button} onClick={() => this.setState({ stage: 3 })}>
 								<FilterIcon className={classes.leftIcon} />Filter
 							</Button>
@@ -822,6 +879,7 @@ class RequestTask extends Component {
 													distance={provider.distance}
 													next_available={provider.next_available}
 													chat={this.props.chat}
+													preferred_location = {this.state.preferred_location}
 												/> : null}
 											{this.state.service.provider_card === 'image' ? // Optional image card
 												<ProviderCardImage
@@ -834,9 +892,11 @@ class RequestTask extends Component {
 													distance={provider.distance}
 													next_available={provider.next_available}
 													chat={this.props.chat}
+													preferred_location = {this.state.preferred_location}
 												/> : null}
 										</div>)
-								})}
+								})} </div>: ''}
+
 						</div> : ''}
 					{this.state.stage === 3 ? // Stage 3 (Optional): Question Filter
 						<RequestTaskQuestions
@@ -846,6 +906,12 @@ class RequestTask extends Component {
 						/> : null
 					}
 					{this.state.stage === 4 ? // Stage 4 (Optional): Select a department
+						
+						<div>
+							<ProviderCardDetail
+								provider={this.state.provider}
+							/> 
+						<Divider />
 						<FormControl className={classes.formControl}>
 							<TextField
 								fullWidth
@@ -874,7 +940,7 @@ class RequestTask extends Component {
 									return <MenuItem key={department} value={department}>{department}</MenuItem>
 								})}
 							</TextField>
-						</FormControl> : null}
+						</FormControl> </div>: null}
 					{this.state.stage === 5 ? // Stage 5: Provider product questions.
 						<div>
 							{self.state.service.fields // Questions that the provider has provided answers for
@@ -978,8 +1044,13 @@ class RequestTask extends Component {
 						</div> : null}
 					{this.state.stage === 6 ? // Stage 6: Date Screen
 						<div>
+							
 							{this.state.date === '' ?
 								<div>
+								<ProviderCardDetail
+									provider={this.state.provider}
+								/> 
+									<Divider />
 									<FormControl className={classes.formControl}>
 										<TextField
 											fullWidth
@@ -1009,15 +1080,22 @@ class RequestTask extends Component {
 										</TextField>
 									</FormControl>
 								</div> : null}
+
+
+
 							<br />
 							{self.state.invalid_date ? <Typography variant="body2">No timeslots on that date. Please try again.</Typography> : null}
+							
+
 							{this.state.date !== ''
 								&& this.state.service.start_time_required
 								&& this.state.start === '' ?
 								<div>
-									<ListSubheader component="div" disableSticky>{'Select a time'}</ListSubheader>
+								<ProviderCardDetail
+										provider={this.state.provider}
+									/> 
 									<Divider />
-									<br />
+									<ListSubheader component="div" disableSticky>{'Select a time'}</ListSubheader>
 									<FormControl className={classes.formControl}>
 										<TextField
 											fullWidth
@@ -1046,9 +1124,18 @@ class RequestTask extends Component {
 											})}
 										</TextField>
 									</FormControl>
-									{self.state.invalid_start ? <Typography variant="body2">Unfortunately the provider is not available at that time. Please try again.</Typography> : null}
-									{this.state.start !== ''
+									{self.state.invalid_start ? <Typography variant="body2">Unfortunately the provider is not available at that time. Please try again.</Typography> : null} 
+								</div> : null}
+
+
+									{this.state.start !== '' && this.state.end === ''
 										&& this.state.service.end_time_required ?
+									<div>
+										<ProviderCardDetail
+										provider={this.state.provider}
+											/> 
+										<Divider />
+										<ListSubheader component="div" disableSticky>{'Select a time'}</ListSubheader>
 										<FormControl className={classes.formControl}>
 											<TextField
 												fullWidth
@@ -1076,17 +1163,20 @@ class RequestTask extends Component {
 													return <MenuItem value={time}>{time}</MenuItem>
 												})}
 											</TextField>
-										</FormControl> : ''}
-								</div> : ''}
+										</FormControl> 
 							{self.state.invalid_end ? <Typography variant="body2">Unfortunately the provider is not available at that time. Please try again.</Typography> : null}
 							<br />
+							</div> : ''}
+							
 							{this.state.date !== '' // Once all complete show a confirmation
 								&& (this.state.start !== '' || !this.state.service.start_time_required)
 								&& (this.state.end !== '' || !this.state.service.end_time_required) ?
 								<div>
+									<ProviderCardDetail
+										provider={this.state.provider}
+									/> <Divider />
 									<ListSubheader component="div" disableSticky>{'Check Slot'}</ListSubheader>
-									<Divider />
-									<br />
+									
 									<Typography variant="headline">{this.state.start + (this.state.end !== '' ? (' to ' + this.state.end) : '') + ' ' + moment(this.state.date).format('DD/MM/YYYY')}</Typography>
 									<br />
 									{this.state.location && this.state.location.length === 2
@@ -1100,9 +1190,11 @@ class RequestTask extends Component {
 									<br />
 									<br />
 									<Button variant="outlined" fullWidth onClick={() => this.selectTimeslot()}>Continue</Button>
-								</div> : null
-							}
-						</div> : null}
+								</div> : null}
+
+
+						</div> : null } 
+
 					{this.state.stage === 7 ? // Stage 7: Agent Selection ?
 						<div>
 							{this.props.agents
@@ -1149,7 +1241,7 @@ class RequestTask extends Component {
 								})}
 						</div> : ''
 					}
-					{this.state.stage === 8 ? // Stage 8: Location selection
+					{/* {this.state.stage === 8 ? // Stage 8: Location selection
 						<div>
 							<ListSubheader>Check where you want it</ListSubheader>
 							<Divider />
@@ -1242,7 +1334,8 @@ class RequestTask extends Component {
 									</Card>
 									<Button variant="flat" size="large" fullWidth onClick={() => this.selectAddress('provider')}>Continue</Button>
 								</div> : null}
-							{this.state.service.location.indexOf('custom') !== -1
+							
+							 {this.state.service.location.indexOf('custom') !== -1
 								&& this.state.preferred_location === 'custom' ?
 								<div>
 									<ProfileAddress
@@ -1263,11 +1356,16 @@ class RequestTask extends Component {
 									<br />
 									<Button variant="flat" size="large" fullWidth onClick={() => this.selectAddress('custom')}>Continue</Button>
 								</div>
-								: null}
+								: null} 
+
 						</div> : null
-					}
+					}*/}
 					{this.state.stage === 9 ? // Stage 9. Confirmation
 						<div>
+							<ProviderCardDetail
+								provider={this.state.provider}
+							/> 
+							<Divider />
 							<ListSubheader component="div" disableSticky>Final location</ListSubheader>
 							<Divider />
 							<br />

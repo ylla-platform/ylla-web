@@ -2,25 +2,25 @@
 import axios from 'axios';
 
 // get a specific user by id
-export function getUser(id, callback) {
-	let get_url = 'api/talk/getuser';
-	axios.get(get_url, { params: { userid: id } })
-		.then(response => { callback(response); })
-		.catch(error => { callback(null); });
-}
+// export function getUser(id, callback) {
+// 	let get_url = 'api/talk/getuser';
+// 	axios.get(get_url, { params: { userid: id } })
+// 		.then(response => { callback(response); })
+// 		.catch(error => { callback(null); });
+// }
 
 // create or edit a user
-export function updateUser(id, data, callback) {
-	let edit_url = 'api/talk/updateuser';
-	axios.put(edit_url, {
-		params: {
-			userid: id,
-			userdata: data
-		}
-	})
-		.then(function (response) { callback(response); })
-		.catch(function () { callback(null); });
-}
+// export function updateUser(id, data, callback) {
+// 	let edit_url = 'api/talk/updateuser';
+// 	axios.put(edit_url, {
+// 		params: {
+// 			userid: id,
+// 			userdata: data
+// 		}
+// 	})
+// 		.then(function (response) { callback(response); })
+// 		.catch(function () { callback(null); });
+// }
 
 // get conversations of a specific user
 export function getConversations(id, unread, token, callback) {

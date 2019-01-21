@@ -133,8 +133,8 @@ class AgentSidebar extends Component {
 				>
 					<MenuItem onClick={this.handleAgentActionsMenu.bind(this, 'profile')}>Agent profile</MenuItem>
 					<MenuItem onClick={this.handleAgentActionsMenu.bind(this, 'chat')}>Chat with agent</MenuItem>
-					<MenuItem onClick={this.handleAgentActionsMenu.bind(this, 'phone')}>Phone agent</MenuItem>
-					<MenuItem onClick={this.handleAgentActionsMenu.bind(this, 'navigate')}>Navigate to agent</MenuItem>
+					{/*<MenuItem onClick={this.handleAgentActionsMenu.bind(this, 'phone')}>Phone agent</MenuItem>
+					<MenuItem onClick={this.handleAgentActionsMenu.bind(this, 'navigate')}>Navigate to agent</MenuItem> */}
 				</Menu>
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
@@ -217,6 +217,7 @@ class AgentSidebar extends Component {
 											avatar={
 												<Avatar
 													aria-label={agent.first_name + ' ' + agent.last_name}
+													src={agent.avatar && agent.avatar.id !== '' ? '/api/images/getimage?id=' + agent.avatar.id : null}
 													className={
 														RegExp("^([a-hA-H])").test(agent.first_name.substring(0, 1)) ? classes.avatar1 : classes.avatar2
 													}>
@@ -225,7 +226,7 @@ class AgentSidebar extends Component {
 											}
 											action={
 												<div>
-													<Badge className={classes.margin} badgeContent={agent.tasks.length || 0}   onClick={() => this.props.setAgentFilter(agent.id)}>
+													<Badge className={classes.margin} badgeContent={ agent.tasks ? agent.tasks.length : 0}   onClick={() => this.props.setAgentFilter(agent.id)}>
 														<IconButton aria-label="Tasks">
 															<ListIcon />
 														</IconButton>
@@ -243,7 +244,7 @@ class AgentSidebar extends Component {
 												</div>
 											}
 											title={agent ? (agent.first_name + ' ' + agent.last_name) : ''}
-											subheader={(agent && agent.phone ? agent.phone + '. ' : '') + (agent.last_logged_in ? 'Seen ' + moment(agent.last_logged_in).fromNow() : null)}
+											subheader={agent && agent.phone ? <a href={'tel:' + agent.phone}> {agent.phone}</a>: ''}
 										/>
 										<CardActions className={classes.actions} disableActionSpacing>
 										</CardActions>

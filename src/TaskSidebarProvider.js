@@ -213,7 +213,7 @@ class TaskSidebarProvider extends Component {
 				</Menu>
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
-						<Typography variant="title" className={classes.title} color="inherit">Tasks</Typography>
+						<Typography variant="title" className={classes.title} color="inherit">Orders</Typography>
 						<IconButton
 							color="inherit"
 							aria-label="Menu"
@@ -238,7 +238,7 @@ class TaskSidebarProvider extends Component {
 						label={<Badge className={classes.padding}   badgeContent={
 							this.state.tasks
 								.filter(task => {
-									if (!task.agent_id || task.agent_id === '0') return true;
+									if ((!task.agent_id || task.agent_id === '0') && !task.date_completed) return true;
 									return false;
 								}).length
 						}>Unassigned</Badge>}
@@ -303,7 +303,14 @@ class TaskSidebarProvider extends Component {
 											onClick={() => this.props.viewTask([task.id])}
 											avatar={
 												<div>
-													<Avatar onClick={(e) => { this.props.editTaskAgent(e, [task.id]); e.stopPropagation() }} aria-label="agent initials" className={classes.avatar}>{(task.agent_id && task.agent) ? (task.agent.first_name ? task.agent.first_name.substring(0, 1) : '') + (task.agent ? task.agent.last_name.substring(0, 1) : '') : <AddIcon />}</Avatar>
+													<Avatar 
+													onClick={(e) => { this.props.editTaskAgent(e, [task.id]); e.stopPropagation() }} 
+													aria-label="agent initials" 
+													className={classes.avatar}
+													src={(task.agent  && task.agent_id && task.agent.avatar && task.agent.avatar.id !== '' ) ? '/api/images/getimage?id=' + task.agent.avatar.id : null}
+													>
+													{ (task.agent_id && task.agent) ? (task.agent.avatar ? '':(task.agent.first_name ? task.agent.first_name.substring(0, 1) : '') + (task.agent.last_name ? task.agent.last_name.substring(0, 1):'')) : <AddIcon />  } 
+													</Avatar>
 												</div>
 											}
 											action={

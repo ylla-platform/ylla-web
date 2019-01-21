@@ -208,8 +208,13 @@ export function checkProviderMatchServiceAnswers(provider, service, answers) {
 	let match = true;
 	questions.forEach(question => {
 		if (prov_answers && prov_answers[question.title]) {
-			if (answers[question.title]
-				&& prov_answers[question.title].indexOf(answers[question.title]) === -1) {
+			let a = prov_answers[question.title]; 
+			let b = answers[question.title]; 
+			if(Array.isArray(b)){
+				b=b[0];
+			}
+			let i = a.indexOf(b); 
+			if ( b && ( i < 0)) {
 				match = false;
 			}
 		}

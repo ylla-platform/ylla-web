@@ -38,7 +38,7 @@ class ProfileNotifications extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			notification_orderstatus: (this.props.user.notification_orderstatus ? this.props.user.notification_orderstatus : true),
+			notification_orderstatus: this.props.user.notification_orderstatus
 		};
 	}
 	// handleEditUserClick: 

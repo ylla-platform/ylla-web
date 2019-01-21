@@ -69,6 +69,7 @@ class ProfileAccount extends Component {
 			new_password_invalid: false,
 			new_password: '',
 			old_password: '',
+			emailError: false
 		};
 	}
 
@@ -107,6 +108,33 @@ class ProfileAccount extends Component {
 		this.setState({ old_password: '', new_password: '', new_password_invalid: false });
 		this.props.updatePassword(old_password, new_password);
 	}
+
+	handleChangeEmail = (event) => {
+      this.validateEmail(event.target.value);
+  	};
+
+  	validateEmail = (email) => {
+	    const pattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
+	    const result = pattern.test(email);
+	    if (result === true) {
+	      this.setState({
+	        emailError: false,
+	        email: email
+	      })
+	    } else {
+	      this.setState({
+	        email: email,
+	        emailError: true
+	      })
+	    }
+ 	}
+
+ 	onPhoneChange= (e) => {
+      const re = /^[0-9\b]{0,8}$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({phone: e.target.value})
+      }
+   }
 
 	// render
 	render() {
@@ -213,6 +241,7 @@ class ProfileAccount extends Component {
 						label="Phone"
 						margin="normal"
 						type="text"
+						value={this.state.phone}
 						InputProps={{
 							name: 'txt-phone',
 							id: 'txt-phone',
@@ -226,14 +255,17 @@ class ProfileAccount extends Component {
 							shrink: true,
 							className: classes.textFieldFormLabel,
 						}}
-						onChange={(event) => this.setState({ phone: event.target.value })}
+						onChange={(event) => this.onPhoneChange(event)}
 					/>
 					<TextField
 						fullWidth
 						id="txt-email"
-						type="text"
+						type="email"
 						label="Email"
 						value={this.state.email}
+						error={this.state.emailError}
+						autoComplete="email"
+          				helperText={this.state.emailError?"Please enter valid email":""}
 						margin="normal"
 						InputProps={{
 							name: 'txt-email',
@@ -248,12 +280,12 @@ class ProfileAccount extends Component {
 							shrink: true,
 							className: classes.textFieldFormLabel,
 						}}
-						onChange={(event) => this.setState({ email: event.target.value })}
+						onChange={(event) => {this.handleChangeEmail(event)}}
 					/>
 					<br />
 					<Divider />
 					<Tooltip id="tooltip-icon" title="Check your fields and click to save profile details" placement="bottom">
-						<Button fullWidth   onClick={this.handleEditUserClick}>Save</Button>
+						<Button fullWidth   disabled={this.state.email.length!=0 && this.state.emailError} onClick={this.handleEditUserClick}>Save</Button>
 					</Tooltip>
 					<ListSubheader>Password</ListSubheader>
 					<Divider />

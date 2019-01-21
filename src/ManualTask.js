@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-
+import * as agents from './actions/agents';
 // Address selection
 import ProfileAddress from './ProfileAddress';
 import { ListSubheader } from '@material-ui/core';
@@ -205,7 +205,7 @@ class ManualTask extends Component {
 			<div className={classes.root}>
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
-						<Typography variant="title" color="inherit" className={classes.title}>Create Task</Typography>
+						<Typography variant="title" color="inherit" className={classes.title}>Create Order</Typography>
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={() => this.props.close()}>
 							<svg width='20'
 								fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 28 28">
@@ -320,7 +320,7 @@ class ManualTask extends Component {
 					/>
 				</FormControl>
 				<br />
-				<ListSubheader>Task Location</ListSubheader>
+				<ListSubheader>Order Location</ListSubheader>
 				<Divider />
 				<ProfileAddress
 					setAddress={this.handleSetAddress}
@@ -354,7 +354,7 @@ class ManualTask extends Component {
 							<em>Unassigned</em>
 						</MenuItem>
 						{this.props.agents
-							.filter(agent => { return agent.provider_id === this.props.provider_id })
+							.filter(agent => { return (agents.getAgentAvailability(agent) !== 'inactive') && agent.provider_id === this.props.provider_id })
 							.map((agent, i) => {
 								return <MenuItem value={agent.id} key={i}>{agent.first_name + ' ' + agent.last_name}</MenuItem>
 							})};

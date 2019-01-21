@@ -161,9 +161,11 @@ export function setAgentsFromAgentsTasksAndProviders(agents, providers, tasks, s
 		agent.tasks = [];
 		if (tasks) {
 			tasks.forEach(task => {
-				if (task && task.agent === agent.id && task.status !== 'Active') agent.completed_tasks = agent.completed_tasks + 1;
-				if (task && task.agent === agent.id && task.status === 'Active') agent.current_tasks = agent.current_tasks + 1;
-				agent.tasks.push(task);
+				if (task.agent_id === agent.id && task.status !== 'Active') agent.completed_tasks = agent.completed_tasks + 1;
+				if (task.agent_id === agent.id && task.status === 'Active') agent.current_tasks = agent.current_tasks + 1;
+				if (task.agent_id === agent.id){
+					agent.tasks.push(task);
+				}
 			});
 		}
 	});

@@ -37,7 +37,7 @@ button.layers__icon:hover {
   border-radius: .5rem;
   text-decoration: none;
   font-family: sans-serif;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   font-weight: 700;
 }
 

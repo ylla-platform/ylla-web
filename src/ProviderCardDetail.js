@@ -41,10 +41,32 @@ const styles = theme => ({
 
 // Class: ProviderCardDetail.
 class ProviderCardDetail extends Component {
+	
+	// constructor: call super, set up state, and handler bindings
+	constructor(props) {
+		super(props);
+		this.state = {
+			preferred_location : this.props.preferred_location
+		};
+	}
+
+	// componentWillReceiveProps: set the provider on receiving a state update from the parent
+	componentWillReceiveProps = (nextProps) => {
+		
+		if(this.props.preferred_location!= nextProps.preferred_location){
+			this.setState({
+				preferred_location : nextProps.preferred_location
+			});
+		}
+		
+	}
+
+ 
 	// render:
 	render() {
 		const { classes, provider } = this.props;
 		return (
+			{Object.keys(provider).length > 0 ?
 			<Card className={classes.card} key={provider.id} elevation={0}>
 				<CardHeader
 					classes={{
@@ -65,10 +87,10 @@ class ProviderCardDetail extends Component {
 				/>
 				{this.props.selectMoreInfo ?
 					<CardActions className={classes.actions} disableActionSpacing>
-						{this.props.user && this.props.user.user_type ? <Button size="large" className={classes.orderButton} onClick={this.props.selectProvider.bind(this, provider.id)}>Order</Button> : null}
+						{this.props.user && this.props.user.user_type ? <Button size="large" disabled={this.state.preferred_location == ""} className={classes.orderButton} onClick={this.props.selectProvider.bind(this, provider.id)}>Order</Button> : null}
 						<Button size="large" colour="default" variant="outlined" onClick={this.props.selectMoreInfo.bind(this, provider.id)}>More info</Button>
 					</CardActions> : null}
-			</Card>
+			</Card>:null}
 		);
 	}
 }

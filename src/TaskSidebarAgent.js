@@ -206,7 +206,7 @@ class TaskSidebarAgent extends Component {
 				</Menu>
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
-						<Typography variant="title" className={classes.title} color="inherit">My Tasks</Typography>
+						<Typography variant="title" className={classes.title} color="inherit">Orders</Typography>
 						<IconButton
 							color="inherit"
 							aria-label="Menu"

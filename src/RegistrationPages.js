@@ -158,7 +158,7 @@ const page_titles = {
 	'login': 'Login',
 	'registerprovider': 'Business Account',
 	'registerconsumer': 'Customer Account',
-	'registerrunner': 'Tasker Account',
+	'registerrunner': 'Runner Account',
 	'options': 'Register',
 }
 
@@ -276,7 +276,7 @@ class RegistrationPages extends React.Component {
 											<MenuItem value="consumer">I'm a customer</MenuItem>
 											<MenuItem value="business">I own a business</MenuItem>
 											<MenuItem value="professional">I'm a professional</MenuItem>
-											<MenuItem value="tasker">I work as a tasker</MenuItem>
+											<MenuItem value="tasker">I work as a runner</MenuItem>
 										</TextField>
 									</FormControl>
 									<br />
@@ -432,7 +432,7 @@ class RegistrationPages extends React.Component {
 					</div> : null}
 				{this.state.current_page === 'registerrunner' ?
 					<RegisterTasker
-						register={this.props.registerRunner}
+						register={this.props.register}
 						selected_category={this.state.category_selection}
 						register_progress={this.props.register_progress}
 						referencedata={this.props.referencedata}

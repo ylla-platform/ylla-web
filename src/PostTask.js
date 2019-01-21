@@ -139,7 +139,7 @@ class PostTask extends Component {
 	handleSubmitClick = (event) => {
 
 		// Validation
-		if (this.state.category === '') return null;
+		// if (this.state.category === '') return null;
 		if (this.state.title === '') return null;
 		if (this.state.description === '') return null;
 		if (this.state.price === '') return null;
@@ -175,19 +175,19 @@ class PostTask extends Component {
 	}
 
 	// handleAddTag: 
-	handleAddTag = () => {
+	/* handleAddTag = () => {
 		let tag = this.state.current_tag;
 		let tags = this.state.tags;
 		if (tags.indexOf(tag) === -1) tags.push(tag);
 		this.setState({ tags: tags, current_tag: '' });
-	}
+	} 
 
 	// handleDeleteTag: 
 	handleDeleteTag = (tag, event) => {
 		let tags = this.state.tags;
 		if (tags.indexOf(tag) !== -1) tags.splice(tags.indexOf(tag), 1);
 		this.setState({ tags: tags });
-	}
+	}*/
 
 	render() {
 		const { classes } = this.props;
@@ -210,7 +210,7 @@ class PostTask extends Component {
 					{!this.props.user.user_type ? 
 						<Typography variant="body2" gutterBottom>You must be logged in to complete this process</Typography> 
 					: null}
-					{this.state.tags.map((tag, i) => {
+					{/* {this.state.tags.map((tag, i) => {
 						return (
 							<Chip
 								key={'chp-' + i}
@@ -221,7 +221,7 @@ class PostTask extends Component {
 						);
 					})}
 					<br />
-					<FormControl fullwidth className={classes.formControl}>
+					 <FormControl fullwidth className={classes.formControl}>
 						<InputLabel
 							shrink={true}
 							htmlFor="txt-tag">Tag e.g. queuing</InputLabel>
@@ -268,7 +268,7 @@ class PostTask extends Component {
 									return <MenuItem value={category.system_name}>{category.title}</MenuItem>
 								})}
 						</TextField>
-					</FormControl>
+					</FormControl>  */}
 					<FormControl fullwidth className={classes.formControl}>
 						<InputLabel
 							shrink={true}

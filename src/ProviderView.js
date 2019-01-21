@@ -136,8 +136,13 @@ class ProviderView extends Component {
 		};
 	}
 
-	triggerWeblink = (url) => window.open(url);
+	triggerWeblink = (url) => {
 
+		if(!url.startsWith("https") && !url.startsWith("http")){
+		  	url = 'https://'+url; 
+		}
+		window.open(url);
+	}
 	// render: 
 	render() {
 		const { classes, provider } = this.props;
@@ -189,8 +194,10 @@ class ProviderView extends Component {
 				<Typography variant="subheading" className={classes.subHeading}>Contact details</Typography>
 				<div className={classes.halfColumn}>
 					<Typography variant="body2" className={classes.smallText}><PhoneIcon className={classes.smallText} /> {provider.phone}</Typography>
-					<Typography variant="body2" className={classes.smallText} onClick={() => this.triggerWeblink('mailto:' + provider.email)}><AlternateEmailIcon className={classes.smallText} />{'Email'}</Typography>
-					<Typography variant="body2" className={classes.smallText} onClick={() => this.triggerWeblink(provider.website)}><WebIcon className={classes.smallText} />{'Visit website'}</Typography>
+					{/* {	provider.email!=null && provider.email.length!=0 && provider.email.includes('@') && provider.email.includes('.') ? 
+    						<Typography variant="body2" className={classes.smallText}><AlternateEmailIcon className={classes.smallText} /><a href={'mailto:' + provider.email} >{'Email'}</a> </Typography>
+    					: null 	}
+					{(provider.website == "" || provider.website === null) ? null:<Typography variant="body2" className={classes.smallText} onClick={() => this.triggerWeblink(provider.website)}><WebIcon className={classes.smallText} />{'Visit website'}</Typography>} */}
 				</div>
 				<div className={classes.halfColumn}>
 					<Typography variant="body2" className={classes.smallText}>
@@ -208,7 +215,7 @@ class ProviderView extends Component {
 						.filter(service => (provider.services && provider.services.indexOf(service.system_name) !== -1))
 						.map(service => {
 							return (
-								<div key={'div-service-' + service.system_name}>
+								<div key={'div-service-' + service.system_name}> 
 									<ProviderOpeningHours
 										provider={provider}
 										service_name={service.system_name}

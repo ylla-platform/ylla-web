@@ -181,7 +181,7 @@ class ServiceEdit extends React.Component {
 		service.end_time_required = this.state.end_time_required;
 		service.price_description = this.state.price_description;
 		service.agent_term = this.state.agent_term;
-		service.date_term = this.state.time_term;
+		service.date_term = this.state.date_term;
 		service.start_time_term = this.state.start_time_term;
 		service.end_time_term = this.state.end_time_term;
 		service.title = this.state.title;
@@ -425,7 +425,7 @@ class ServiceEdit extends React.Component {
 								margin="dense"
 								id="txt-timeterm"
 								label="Start time description"
-								value={this.state.time_term}
+								value={this.state.start_time_term}
 								onChange={(event) => this.setState({ start_time_term: event.target.value })}
 								type="text"
 								InputProps={{

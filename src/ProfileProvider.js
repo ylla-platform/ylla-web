@@ -289,6 +289,63 @@ class ProfileProvider extends Component {
 		Object.keys(this.state.category_keys).forEach(category => {
 			if (this.state.category_keys[category].selected) categories.push(category);
 		});
+		let addresses = this.state.addresses;
+		
+		if( this.state.edit_address_index == -1){
+
+			if( this.state.governorate!="" || this.state.block!="" || this.state.street!="" || this.state.neighbourhood !="" ){
+				// generate new name for address 
+				if(this.state.address == "" ){
+					var d = new Date();
+  					var n = d.getTime();
+					this.state.address = 'new_address'+n; 
+				}
+				addresses.push({
+					address: this.state.address,
+					governorate: this.state.governorate,
+					neighbourhood: this.state.neighbourhood,
+					block: this.state.block,
+					street: this.state.street,
+					house: this.state.house,
+					location: this.state.location,
+					public: this.state.address_public,
+					address_distance: this.state.address_distance
+				});
+			}
+		}
+		else if(this.state.edit_address_index != -1){
+			let idx = this.state.edit_address_index;
+				addresses[idx] = {
+					address: this.state.address,
+					governorate: this.state.governorate,
+					neighbourhood: this.state.neighbourhood,
+					block: this.state.block,
+					street: this.state.street,
+					house: this.state.house,
+					location: this.state.location,
+					public: this.state.address_public,
+					address_distance: this.state.address_distance
+				};
+		}
+
+		// clear the fields in UI		
+
+		this.setState({
+			addresses: addresses,
+			edit_address: false,
+			edit_address_index: -1,
+			address: '',
+			governorate: '',
+			neighbourhood: '',
+			block: '',
+			street: '',
+			house: '',
+			location: [],
+			address_public: false,
+			address_distance: '0',
+		});
+
+
 		let user = this.props.user;
 		user.description = this.state.description;
 		user.departments = this.state.departments;
@@ -331,7 +388,7 @@ class ProfileProvider extends Component {
 		});
 	}
 	// handleAddAddress: 
-	handleAddAddress = () => {
+	/* handleAddAddress = () => {
 		let addresses = this.state.addresses;
 		addresses.push({
 			address: this.state.address,
@@ -358,7 +415,7 @@ class ProfileProvider extends Component {
 			address_public: false,
 			address_distance: '0'
 		});
-	}
+	} 
 	// handleEditAddress: 
 	handleEditAddress = () => {
 		let addresses = this.state.addresses;
@@ -388,7 +445,7 @@ class ProfileProvider extends Component {
 			address_public: false,
 			address_distance: '0'
 		});
-	}
+	} */
 	// handeDeleteAddress: 
 	handeDeleteAddress = (idx, event) => {
 		let addresses = this.state.addresses;
@@ -798,7 +855,8 @@ class ProfileProvider extends Component {
 							</div>
 						</ExpansionPanelDetails>
 					</ExpansionPanel>
-					<ExpansionPanel expanded={expanded === 'social'} onChange={this.handleExpansionChange('social')}>
+					
+					{/* <ExpansionPanel expanded={expanded === 'social'} onChange={this.handleExpansionChange('social')}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 							<Typography className={classes.heading}>Social media</Typography>
 						</ExpansionPanelSummary>
@@ -867,7 +925,8 @@ class ProfileProvider extends Component {
 								</Tooltip>
 							</div>
 						</ExpansionPanelDetails>
-					</ExpansionPanel>
+					</ExpansionPanel> */}
+
 					<ExpansionPanel expanded={expanded === 'categories'} onChange={this.handleExpansionChange('categories')}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 							<Typography className={classes.heading}>Category and Services</Typography>
@@ -1010,10 +1069,7 @@ class ProfileProvider extends Component {
 									}}
 								/>
 								<br />
-								<Divider />
-								{this.state.edit_address ? <Button   onClick={this.handleEditAddress}>Edit Address</Button> : null}
-								{!this.state.edit_address ? <Button   onClick={this.handleAddAddress}>Add Address</Button> : null}
-								<br />
+
 								<Divider />
 								<Tooltip id="tooltip-icon" title="Check your fields and click to save profile details" placement="bottom">
 									<Button fullWidth   onClick={this.handleEditUserClick}>Save</Button>
