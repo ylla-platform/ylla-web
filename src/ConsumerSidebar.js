@@ -28,7 +28,32 @@ const styles = theme => ({
 		width: '100%',
 		height: '100%',
 		zIndex: 100
-	},
+	},agents: {
+    backgroundColor: 'white',
+     "&:hover": {
+        backgroundColor:"white"
+    },
+    color: 'black',
+    borderColor: 'black',
+    borderTopRightRadius: '0px',
+    borderBottomRightRadius: '0px',
+    borderTopLeftRadius: '0px',
+    borderBottomLeftRadius: '0px',
+    width: '150px'
+  },
+  cus: {
+    backgroundColor: '#FF7F50',
+     "&:hover": {
+        backgroundColor:"#FF7F50"
+    },
+    color: 'white',
+    borderColor: 'black',
+    borderTopRightRadius: '0px',
+    borderBottomRightRadius: '0px',
+    borderTopLeftRadius: '0px',
+    borderBottomLeftRadius: '0px',
+    width: '150px'
+  },
 	appBar: {
 		textAlign: 'center',
 		borderBottom: '1px solid #B3B3B3',
@@ -184,7 +209,12 @@ class ConsumerSidebar extends Component {
 				</Menu>
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
-						<Typography variant="title" color="inherit" className={classes.title}>Customers</Typography>
+						<Button onClick={() => this.props.openagents()}  variant="outlined" className={classes.agents} >
+			          Agents
+					 </Button>
+			        <Button variant="outlined" className={classes.cus} >
+			          Customers
+					</Button>
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={() => this.props.close()}>
 							<svg width='20'
 								fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 28 28">

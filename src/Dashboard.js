@@ -108,6 +108,7 @@ import TaskSidebarProvider from './TaskSidebarProvider';
 import TaskSidebarAgent from './TaskSidebarAgent';
 import TaskSidebarConsumer from './TaskSidebarConsumer';
 import TaskView from './TaskView';
+import Avatar from '@material-ui/core/Avatar';
 
 // actions
 import * as administrators from './actions/administrators';
@@ -144,12 +145,173 @@ const styles = theme => ({
 		position: 'relative',
 		width: '100%'
 	},
+	switchs: {
+	    marginTop: "-8px",
+	    marginLeft: "-55px"
+  	},
 	fabs : {
-		width: '40px',
-   	 	height: '40px',
-    	float: 'right',
-    	marginTop: '5px'
+		width: '32px',
+   	 	height: '32px',
+    	marginLeft: '-35px',
+    	minHeight: '30px',
+    	position: 'relative',
+    	zIndex: 1,
+    	color: '#2D9CDB'
 	},
+	signup: {
+		backgroundColor: 'white',
+	    "&:hover": {
+        	backgroundColor:"white"
+    	},		
+	    color : 'green',
+	    borderColor: 'green',
+	    borderTopRightRadius: '0px',
+	    borderBottomRightRadius: '0px'
+  	}, 
+  	joinaspro: {
+	    color: 'white',
+	    borderColor: 'green',
+	    backgroundColor: 'green',
+	    "&:hover": {
+        	backgroundColor:"green"
+    	},
+	    borderTopRightRadius: '18px',
+	    borderBottomRightRadius: '18px',
+	    borderTopLeftRadius: '0px',
+	    borderBottomLeftRadius: '0px',
+	     width: '180px'
+  	},
+  	explore: {
+	    color: '#7F4095',
+	    borderColor: '#7F4095',
+	    backgroundColor: 'white',
+	    "&:hover": {
+        	backgroundColor:"white"
+    	},	    
+	    borderTopRightRadius: "18px",
+	    borderBottomRightRadius: "18px",
+	    borderTopLeftRadius: "18px",
+	    borderBottomLeftRadius: "18px",
+	    width: '180px',
+	    marginLeft: "-35px"
+  	},
+ 	hirearunner: {
+	    color: 'white',
+	    borderColor: '#7F4095',
+	    backgroundColor: '#7F4095',
+	    "&:hover": {
+        	backgroundColor:"#7F4095"
+    	},    
+	 	borderTopRightRadius: "18px",
+	    borderBottomRightRadius: "18px",
+	    borderTopLeftRadius: "18px",
+	    borderBottomLeftRadius: "18px",
+	    width: '180px',
+	    marginLeft: "-35px"
+  	},
+  	cfloat: {
+  		display: 'inline-flex',
+	    float:'left',
+	    marginTop: '10px',
+	    marginLeft:'5%'
+  	}, 
+  	findapro: {
+	    color: 'white',
+	    backgroundColor: '#FF7F50',
+	    "&:hover": {
+        	backgroundColor:"#FF7F50"
+    	},    
+	    width: '180px',
+	    borderTopRightRadius: "18px",
+	    borderBottomRightRadius: "18px",
+	    borderTopLeftRadius: "18px",
+	    borderBottomLeftRadius: "18px",
+  	},
+  	hello: {
+	    color: '#2D9CDB',
+	    borderColor: '#2D9CDB',
+	    backgroundColor: 'white',
+	    "&:hover": {
+        	backgroundColor:"white"
+    	},	    
+	    borderTopLeftRadius: '20px',
+	    borderBottomLeftRadius: '20px',
+	    width: '180px',
+	    marginLeft: '-35px'
+  	},
+   mytasks: {
+	    color: "white",
+	    borderColor: "#2D9CDB",
+	    backgroundColor: "#2D9CDB",
+	    "&:hover": {
+        	backgroundColor:"#2D9CDB"
+    	},		    
+	    borderTopRightRadius: "18px",
+	    borderBottomRightRadius: "18px",
+	    borderTopLeftRadius: "18px",
+	    borderBottomLeftRadius: "18px",
+	    width: "180px",
+	    marginLeft: "-35px"
+  	},
+  	numberCircle1: {
+	    borderRadius: "50%",
+	    behavior: "url(PIE.htc)" /* remove if you don't care about IE8 */,
+	    width: "35px",
+	    height: "35px",
+	    padding: "8px",
+	    background: "white",
+	    border: "2px solid #2D9CDB",
+	    color: "#2D9CDB",
+	    textAlign: "center",
+	    font: "16px Arial, sans-serif",
+	    float: "left",
+	    position: 'relative',
+	    zIndex: 1
+  	},
+   	numberCircle2: {
+	    borderRadius: "50%",
+	    behavior: "url(PIE.htc)" /* remove if you don't care about IE8 */,
+	    width: "35px",
+	    height: "35px",
+	    padding: "8px",
+	    background: "#7F4095",
+	    border: "2px solid white",
+	    color: "white",
+	    textAlign: "center",
+	    font: "16px Arial, sans-serif",
+	    float: "left",
+	    position: 'relative',
+	    zIndex: 1,
+	    marginTop: '1px'
+  	},  
+  	numberCircle3: {
+	    borderRadius: "50%",
+	    behavior: "url(PIE.htc)" /* remove if you don't care about IE8 */,
+		width: "35px",
+	    height: "35px",
+	    padding: "8px",
+	    background: "white",
+	    border: "2px solid purple",
+	    color: "purple",
+	    textAlign: "center",
+	    font: "16px Arial, sans-serif",
+	    float: "left",
+	    position: 'relative',
+	    zIndex: 1,
+	    marginTop: '1px'
+  	},
+ 	account: {
+      fontSize: '35px',
+      color: '#2D9CDB',
+      width: 35,
+   	  height: 35,
+   	  position: 'relative',
+   	  zIndex: 1
+  },
+   leftmargin: {
+    marginLeft: "-35px"
+  },
+    		    
 	headerInternal: {
 		display: 'inline-block',
 		width: 'calc(100% - 60px)',
@@ -201,7 +363,8 @@ const styles = theme => ({
     	flexGrow: 1
   	},
   	rights: {
-  		float:'right'
+  		float:'right',
+  		padding: '1rem'
   	},
 	appBarButton: {
 		background: 'none',
@@ -262,7 +425,7 @@ const styles = theme => ({
 		'&:hover': {
 			backgroundColor: fade(theme.palette.common.white, 0.25),
 		},
-		marginLeft: 0,
+		marginLeft: '50px',
 		width: '100%',
 		[theme.breakpoints.up('sm')]: {
 			marginLeft: theme.spacing.unit,
@@ -480,6 +643,7 @@ class Dashboard extends Component {
 				tasks: [],
 				current_selected_tasks: [],
 				tasks_drawer: false,
+				client_tasks_drawer: false,
 				posts_drawer: false,
 				// Current service data
 				current_service_data: {},
@@ -532,7 +696,8 @@ class Dashboard extends Component {
 				show_menu: false,
 				// Notifications
 				task_notification: false,
-				search: false
+				search: false,
+				menu_type: ''
 			};
 		}
 
@@ -569,19 +734,21 @@ class Dashboard extends Component {
 		this.getReferenceData();
 		this.getProviders();
 		this.getServices();
+		this.getTasks();
+		let check_task_interval_id = setInterval(this.getTasks, 60000);
+		this.setState({ check_task_interval_id: check_task_interval_id });		
 
 		this.resetPasswordDialog();
 
 		if (this.state.user.user_type) {
-			this.getTasks();
+			
 			if (this.state.user.user_type === 'administrator') this.getQuestions();
 			this.getUserConversations();
 			this.getConsumers();
 			// Get user conversations every minute
 			let check_message_interval_id = setInterval(this.getUserConversations, 10000);
 			this.setState({ check_message_interval_id: check_message_interval_id });
-			let check_task_interval_id = setInterval(this.getTasks, 60000);
-			this.setState({ check_task_interval_id: check_task_interval_id });
+
 		}
 	}
 
@@ -700,7 +867,7 @@ class Dashboard extends Component {
 	getQuestions = () => services.getQuestions(questions => this.setState({ questions: questions }))
 
 	// getTasks: gets the list of tasks and then updates state
-	getTasks = () => tasks.getTasks(this.state.user, response => this.setState({ tasks: response.data.tasks || [] }))
+	getTasks = () => tasks.getTasks(this.state.user.user_type? this.state.user: {} , response => this.setState({ tasks: response.data.tasks || [] }))
 
 	////////////////////////////
 	// Live Location Logging
@@ -773,7 +940,7 @@ class Dashboard extends Component {
 	// logout: Logs the user out and clears state.
 	logout = () => {
 		sessionStorage.removeItem('state');
-		this.setState({ user: {}, current_page_view: 'map', tasks: [], profile_menu_open: false, content_drawer: false, agent_drawer: false });
+		this.setState({ task_view_drawer: false, tasks_drawer: false, client_tasks_drawer: false, user: {}, current_page_view: 'map',  profile_menu_open: false, content_drawer: false, agent_drawer: false, current_service: {}, current_provider: {}, task_request_drawer: false });
 		localStorage.setItem('localstate', null);
 	}
 
@@ -1316,7 +1483,7 @@ class Dashboard extends Component {
 		});
 	}
 
-	// editTaskProvider
+	// editTaskProvider // narayan changed this for runner in backend
 	editTaskProvider = (task_id, provider_id, price) => {
 		const self = this;
 		tasks.editTaskProvider(task_id, provider_id, price, response => {
@@ -1325,13 +1492,23 @@ class Dashboard extends Component {
 		});
 	}
 
+	// editTaskStatus: // added by narayan refactor later TODO
+	editTaskStatusFromConsumer = (data, anchor, type) => {
+		var tasks = [];
+		this.state.tasks.forEach(function (i, t) {
+			if (data.indexOf(i.id) !== -1) tasks.push(i);
+		});
+		this.setState({ current_selected_tasks: tasks, task_status_menu_open: true, menu_type : type, task_status_menu_anchor: anchor });
+	}
+
+
 	// editTaskStatus:
 	editTaskStatus = (data, anchor) => {
 		var tasks = [];
 		this.state.tasks.forEach(function (i, t) {
 			if (data.indexOf(i.id) !== -1) tasks.push(i);
 		});
-		this.setState({ current_selected_tasks: tasks, task_status_menu_open: true, task_status_menu_anchor: anchor });
+		this.setState({ current_selected_tasks: tasks, task_status_menu_open: true, menu_type : '', task_status_menu_anchor: anchor });
 	}
 
 	// isValidStatus:
@@ -1535,84 +1712,146 @@ class Dashboard extends Component {
 						</Button>
 						<div className={classNames(classes.headerInternal, (this.state.show_menu ? classes.headerInternalActive : null))}>
 							
-							
+						    {!this.state.user.user_type ? 
+						    	<div className={classes.cfloat}>
+						      <Button variant="outlined" className={classes.signup} onClick={(event) => this.setState({ showRegistrationDrawer: !this.state.showRegistrationDrawer, show_menu: false })}>
+						        SIGN UP
+						      </Button>
+						      <Button variant="contained" color="primary" className={classes.joinaspro} onClick={(event) => this.setState({ showRegistrationDrawer: !this.state.showRegistrationDrawer, show_menu: false })}>
+						        JOIN AS A PRO 
+						      </Button>
+						    </div>	: null}
 
-							{this.state.user && this.state.user.user_type === 'provider' ? // For providers we show their name
-								<Button className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.setState({ current_page_view: 'profile', tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })}>
-									{this.state.user.name}
-								</Button> : null}
+							{this.state.user && this.state.user.user_type ?
+							<div className={classes.cfloat}>
+												
+									{ this.state.user.avatar && this.state.user.avatar.id !== ''  ?
+									<Avatar
+										aria-label="agent initials" 
+										className={classes.account}
+										onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })}
+										src={'/api/images/getimage?id=' + this.state.user.avatar.id }
+									>
+									</Avatar> : '' }
+									{ this.state.user.logo && this.state.user.logo.id !== ''  ?
+									<Avatar
+										aria-label="agent initials" 
+										className={classes.account}
+										onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })}
+										src={'/api/images/getimage?id=' + this.state.user.logo.id }
+									>
+									</Avatar> : '' }
+									{ !this.state.user.avatar && !this.state.user.logo  ?
+									 <AccountCircleIcon onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })} 
+									className={classes.account} /> : '' }
 
-							
-								<span>
-			                 { /* <a href="http://tokensale.yl.la" className="button blue">Token Sale</a>&nbsp;&nbsp;&nbsp;
-			                  {this.state.username === "" ? <a href="http://docs.yl.la" className="button blue">API</a> : null} */ }
-									<div className={classes.search} class="menu">
-        						<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={this.state.services.length > 0?() => this.launchRequestProcess('findapro', 'Find A Pro'):null} onMouseOver={() => this.handleOpen()}>Find a pro</Button>
-							{this.state.services.length > 0 && this.state.mega_menu && isWidthUp('md', this.props.width) ?
-							<MegaMenu
-								open={this.state.mega_menu}
-								menuenter={this.state.menu_enter}
-								categories={this.state.categories.filter(category => { return category.status === 'Active' })}
-								services={this.state.services.filter((s) => { return (s.service_function === 'findapro' && s.status === 'Active') })}
-								request={this.launchRequestProcessService}
-								close={() => this.setState({ mega_menu: false, mega_menu_request_function: '' })}
-							/> : null}</div>
+							        <Button onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })} variant="outlined" className={classes.hello} >
+							             {this.state.user.user_type == "provider" ? this.state.user.name.substring(0, 8) : 'Hello, '+this.state.user.first_name.substring(0, 8)  }
+									</Button>
+							        
+										{this.state.user.user_type === 'provider' ?
+												<div className={classes.leftmargin}>
+													<div className={classes.numberCircle1}>{this.state.tasks.filter(task => { return task.consumer_id && task.consumer_id == this.state.user.id }).length}</div>
+													<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
+								        				My Tasks
+													</Button>
+													
+												</div>
+											: null}
+											{ this.state.user.user_type === 'agent' ?
+												<div className={classes.leftmargin}>
+													<div className={classes.numberCircle1}>{this.state.tasks.filter(task => { return task.agent_id && task.agent_id == this.state.user.id }).length}</div>
+													<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
+								        				Client Orders
+													</Button>
+													
+												</div>
+											: null}
+									{ this.state.user.user_type === 'consumer' ? // Show consumers a badge of their orders.
+												<div className={classes.leftmargin}>
+													<div className={classes.numberCircle1}>{this.state.tasks.filter(task => { return task.consumer_id && task.consumer_id == this.state.user.id }).length}</div>
+													<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ order_notification: false, tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
+								        				My Tasks
+													</Button>
+										
+												</div>: null}	
+							    </div>: null }
 
-									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.hireRunner()}>Hire a runner</Button>
-									{ /*<span className={classes.headerSeparator}>|</span>
-									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('book', 'Book')}>Book</Button>
-									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('reserve', 'Reserve')}>Reserve</Button>
-									<Button disabled={this.state.request_progress} className={classNames(classes.appBarButton, classes.fullWidth)} onClick={() => this.launchRequestProcess('order', 'Order Food')}>Food</Button> */}
-								</span> 
-							 
-							
+								<span className={classes.cfloat}>
+							     	<div>
 
-							{!this.state.user.user_type ?
-								<Button className={classNames(classes.appBarButtonOutline, classes.fullWidth)} onClick={(event) => this.setState({ showRegistrationDrawer: !this.state.showRegistrationDrawer, show_menu: false })}>Sign In</Button>
-								: null}
-							{this.state.user && this.state.user.user_type && // All users except administrators see posts
-								this.state.user.user_type !== 'administrator' ?
-										<Badge className={classNames(classes.browseTasks, classes.fullWidth, classes.margin)} onClick={(e) => this.setState({ posts_drawer: true, tasks_drawer: false, current_page_view: 'map' })}
-											color={(this.state.post_notification ? 'error' : 'primary')}
-											badgeContent={
-												this.state.tasks
-													.filter(task => !task.provider_id || task.provider_id === '0' || task.provider_id === '')
+							     	<div className={classes.numberCircle2}> {this.state.tasks
 													.filter(task => {
-														if (this.state.user.user_type === 'consumer' && task.status !== 'Cancelled') return true;
+														if (task.status !== 'Cancelled') return true;
 														if (task.status !== 'Cancelled' && this.state.user.categories && this.state.user.categories.indexOf(task.category) !== -1) return true;
 														return false;
 													})
-													.length
-											}
-											>
-											Browse posts
-										</Badge>: null}
-					{this.state.user && this.state.user.user_type && // Providers and agents see tasks and customer notification
-								(this.state.user.user_type === 'provider' || this.state.user.user_type === 'agent') ?
-								<span>
-											<Badge className={classNames(classes.browseTasks, classes.fullWidth, classes.margin)} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })}
-												color={(this.state.task_notification ? 'error' : 'primary')}
-												badgeContent={
-													this.state.tasks
-														.filter(task => { return task.provider_id && task.provider_id !== '' && task.provider_id !== '0' })
-														.length
-												}
-												>
-												Orders
-											</Badge>
-										
-									<Tooltip id="tooltip-icon" title="See customers" placement="bottom">
-										<IconButton
-											onClick={() => this.setState({ consumer_drawer: true, agent_drawer: false, current_page_view: 'map' })}>
-											<Badge
-												color="primary"
-												badgeContent={this.state.consumers.length}
-												className={classes.margin}>
-												<PeopleIcon />
-											</Badge>
-										</IconButton>
-									</Tooltip>
-								</span> : null}										
+													.length }</div>
+
+
+											<Button onClick={(e) => this.setState({ posts_drawer: true, tasks_drawer: false, client_tasks_drawer: false, current_page_view: 'map' })} variant="outlined" className={classes.explore} >
+								        	EXPLORE
+											</Button>
+								
+
+								        <Button disabled={this.state.request_progress} onClick={() => this.hireRunner()} variant="contained" color="primary" className={classes.hirearunner} >
+								        	HIRE A RUNNER
+										</Button>	
+								  	</div>							
+								 	<div className={classes.search} class="menu">
+       									<Button 
+       										disabled={this.state.request_progress} variant="contained" color="primary" className={classes.findapro} 
+       										onClick={this.state.services.length > 0?() => this.launchRequestProcess('findapro', 'Find A Pro'):null} 
+       										onMouseOver={() => this.handleOpen()}
+       										>
+          									FIND A PRO
+										</Button>
+										{this.state.services.length > 0 && this.state.mega_menu && isWidthUp('md', this.props.width) ?
+											<MegaMenu
+												open={this.state.mega_menu}
+												menuenter={this.state.menu_enter}
+												categories={this.state.categories.filter(category => { return category.status === 'Active' })}
+												services={this.state.services.filter((s) => { return (s.service_function === 'findapro' && s.status === 'Active') })}
+												request={this.launchRequestProcessService}
+												close={() => this.setState({ mega_menu: false, mega_menu_request_function: '' })}
+											/> : null
+										}
+									</div>
+								</span> 
+
+								{ this.state.user && this.state.user.user_type && this.state.user.user_type === 'provider' ? 
+								
+								<span className={classes.cfloat}>
+									<div className={classes.numberCircle3}>{this.state.agents.filter(agent => { return agent.provider_id === self.state.user.id }).length}</div>
+								 	<Button onClick={() => this.setState({ agent_drawer: true, consumer_drawer: false, current_page_view: 'map' })} variant="outlined" className={classes.hirearunner}>
+						          		Agents
+						          	</Button>
+								
+								 <Button onClick={() => this.setState({ client_tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} variant="outlined" className={classes.explore}>
+						          	Client Orders 
+						          </Button>
+						          
+		            			 </span>: null }  
+		            			
+		            			{ this.state.user && this.state.user.user_type &&  this.state.user.user_type === 'agent' ? 
+
+		            			<span className={classes.cfloat}>
+									<div className={classes.numberCircle3}> {this.state.consumers.length} </div>
+								 	<Button onClick={() => this.setState({ consumer_drawer: true, agent_drawer: false,  current_page_view: 'map' })} variant="outlined" className={classes.hirearunner}>
+						          		Customers
+						        	</Button>
+						        	<Button variant="outlined" color="primary" className={classes.explore} >  On Duty </Button>
+						        	</span>: null}
+
+								{ this.state.user && this.state.user.user_type &&  this.state.user.user_type === 'agent' ? 
+						        	
+						        <Switch className={classes.switchs}
+									hecked={this.state.agent_active}
+									onChange={() => this.toggleAgentActive()}
+									value={this.state.agent_active}
+								/>	: null}
+
+
 							{this.state.route_legs && this.state.route_legs.length > 0 ? // Navigation notification
 								<Tooltip id="tooltip-icon" title="Navigation Instructions" placement="bottom">
 									<IconButton
@@ -1620,36 +1859,23 @@ class Dashboard extends Component {
 										<NavigationIcon />
 									</IconButton>
 								</Tooltip> : null}
-							{this.state.user && this.state.user.user_type === 'consumer' ? // Show consumers a badge of their orders.
-								<Badge onClick={() => this.setState({ order_notification: false, tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} className={classNames(classes.browseTasks, classes.fullWidth, classes.margin)} color={(this.state.order_notification ? 'error' : 'primary')} badgeContent={this.state.tasks.filter(task => { return task.provider_id && task.providerid !== '' && task.provider_id !== '0' }).length} >
-											Orders
-										</Badge>
-									 : null}
-							{this.state.user && this.state.user.user_type &&
-								this.state.user.user_type === 'provider' ? // Show providers an icon to see their agents
-								<Tooltip id="tooltip-icon" title="See agents" placement="bottom">
-									<IconButton
-										onClick={() => this.setState({ agent_drawer: true, consumer_drawer: false, current_page_view: 'map' })}>
-										<Badge color="primary" badgeContent={this.state.agents.filter(agent => { return agent.provider_id === self.state.user.id }).length} className={classes.margin}>
-											<SupervisorAccountIcon />
-										</Badge>
-									</IconButton>
-								</Tooltip> : null}
-		
+
 							{this.state.user && this.state.user.user_type ? // All users see the logout and chat icons
-								<span>
+								<span className={classes.rights}>
 									<Tooltip id="tooltip-icon" title={this.state.message_tooltip} placement="bottom">
-										<IconButton
-											onClick={() => this.setState({ content_drawer: true, content_drawer_screen: 'chat' })}
-										>
 											<Badge
 												color={(this.state.message_count > 0 ? 'error' : 'primary')}
 												badgeContent={this.state.message_count}
 												className={classes.margin}
 											>
-												<ChatIcon />
+										<label onClick={() => this.setState({ content_drawer: true, content_drawer_screen: 'chat' })} >
+											<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M12.5905 15.8431L12.4601 15.75H12.2999H7.92826L9.64276 14.25H16.2499C17.2167 14.25 17.9999 13.4668 17.9999 12.5V6.125H19.3749C19.4438 6.125 19.4999 6.18114 19.4999 6.25V15.625C19.4999 15.6939 19.4438 15.75 19.3749 15.75H17.4999H16.9999V16.25V18.75C16.9999 18.7972 16.974 18.8393 16.9336 18.8604C16.8877 18.8834 16.8393 18.8777 16.8033 18.8519L16.8024 18.8512L12.5905 15.8431Z" fill="#3A5868" stroke="black"/>
+											<path d="M3.625 12.5V12H3.125H0.625C0.555517 12 0.5 11.9445 0.5 11.875V1.25C0.5 1.18052 0.555517 1.125 0.625 1.125H15.625C15.6945 1.125 15.75 1.18052 15.75 1.25V11.875C15.75 11.9445 15.6945 12 15.625 12H8.985H8.79714L8.65576 12.1237L3.83254 16.3439C3.83248 16.3439 3.83243 16.344 3.83237 16.344C3.79471 16.3768 3.74136 16.3831 3.70034 16.3643L3.69801 16.3632C3.65319 16.3429 3.625 16.2993 3.625 16.25V12.5Z" fill="#3A5868" stroke="black"/>
+											</svg>								
+										</label>
 											</Badge>
-										</IconButton>
+										
 									</Tooltip>
 									{this.state.current_page_view !== 'map' ? // Return to map
 										<Tooltip id="tooltip-icon" title="Return to map" placement="bottom">
@@ -1659,35 +1885,13 @@ class Dashboard extends Component {
 										</Tooltip> : null}
 
 									
-								</span> : null}
-							{this.state.user && this.state.user.user_type === 'agent' ? // Agent can go off duty
-								<FormControlLabel
-									control={
-										<Switch
-											checked={this.state.agent_active}
-											onChange={() => this.toggleAgentActive()}
-											value={this.state.agent_active}
-										/>
-									}
-									label="On duty"
-								/> : null}
+								</span> : null}								
 
-							
-							{this.state.user && this.state.user.user_type ?
-								<Tooltip id="tooltip-icon" title="Profile" placement="bottom">
-										<IconButton className={classes.rights}
-											onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })}
-										>
-											<AccountCircleIcon />
-										</IconButton>
-									</Tooltip> : null }
-
-								<label onClick={this.state.services.length > 0?() => this.launchSearchMenu():null} class="search__icon">
-									<svg width="20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 32 32">
-									    <path d="M13.151 1.251c6.65.127 12.435 6.619 11.485 13.389-.778 5.545-6.013 10.11-11.636 10.11-5.582 0-10.848-4.498-11.636-10.11C.45 8.126 5.826 1.385 12.849 1.251h.302zm-.258 3.5c-5.437.103-9.884 6.527-7.329 11.822 1.807 3.742 6.698 5.644 10.551 4.067 4.178-1.71 6.376-7.21 4.232-11.391-1.365-2.661-4.21-4.441-7.24-4.498h-.214z"/>
-									    <path d="M23.083 21.252c.406.029.782.186 1.089.449 2.074 1.972 4.048 4.045 6.072 6.068 1.161 1.221-.438 4.229-2.417 2.53-2.074-1.972-4.048-4.045-6.072-6.068-.967-1.017-.5-3.023 1.328-2.979z"/>
-									</svg>
-								</label>
+							<label onClick={this.state.services.length > 0?() => this.launchSearchMenu():null} class="search__icon">
+								<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M18.5689 16.9194L18.5694 16.9198C18.6985 17.0486 18.6996 17.2591 18.5681 17.3906L17.3898 18.5689L17.3893 18.5694C17.26 18.6991 17.0494 18.6998 16.9186 18.569C16.9186 18.569 16.9186 18.569 16.9186 18.5689L13.2778 14.9273L12.9886 14.6381L12.6477 14.8642C11.4089 15.6861 9.92701 16.1667 8.33333 16.1667C4.01448 16.1667 0.5 12.6522 0.5 8.33333C0.5 4.01448 4.01448 0.5 8.33333 0.5C12.6522 0.5 16.1667 4.01448 16.1667 8.33333C16.1667 9.92701 15.6861 11.4089 14.8642 12.6477L14.6381 12.9885L14.9273 13.2777L18.5689 16.9194ZM8.33333 1.16667C4.38136 1.16667 1.16667 4.38136 1.16667 8.33333C1.16667 12.2853 4.38136 15.5 8.33333 15.5C12.2853 15.5 15.5 12.2853 15.5 8.33333C15.5 4.38136 12.2853 1.16667 8.33333 1.16667Z" fill="#3A5868" stroke="black"/>
+								</svg>									
+							</label>
 							{this.state.search ?
 							<AppSearch
 								open={this.state.search}
@@ -1701,14 +1905,7 @@ class Dashboard extends Component {
 								close={() => this.setState({ search: false})}
 							/>:null}
 
-							{this.state.user && this.state.user.user_type &&
-								this.state.user.user_type === 'provider' ? // Provider option to manually create task
-								<Tooltip id="tooltip-icon" title="Create Order" placement="bottom">
-										<Fab onClick={() => this.setState({ content_drawer: true, content_drawer_screen: 'createtask', current_page_view: 'map' })} className={classes.fabs} color="primary" aria-label="Add">
-					            			<AddIcon />
-					          			</Fab>
-									</Tooltip>
-								: null}
+
 						</div>
 					</Toolbar>
 				</AppBar>
@@ -1721,7 +1918,7 @@ class Dashboard extends Component {
 						<div className={classes.toolbar} />
 						<List disablePadding>
 							{this.state.user && this.state.user.user_type !== 'administrator' ?
-								<ListItem button onClick={() => this.setState({ current_page_view: 'profile', tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })} className={classes.nested}>
+								<ListItem button onClick={() => this.setState({ current_page_view: 'profile', tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })} className={classes.nested}>
 									<Tooltip id="tooltip-icon" title="Profile" placement="bottom">
 										<ListItemIcon className={classes.sidebarList}>
 											<AccountCircleIcon />
@@ -1729,7 +1926,7 @@ class Dashboard extends Component {
 									</Tooltip>
 									<ListItemText primary="Profile" classes={{ root: classNames(classes.sidebarList) }} disableTypography={true} />
 								</ListItem> : null}
-							<ListItem button onClick={() => this.setState({ current_page_view: 'account', tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })} className={classes.nested}>
+							<ListItem button onClick={() => this.setState({ current_page_view: 'account', tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })} className={classes.nested}>
 								<Tooltip id="tooltip-icon" title="Account" placement="bottom">
 									<ListItemIcon className={classes.sidebarList}>
 										<SecurityIcon />
@@ -1892,7 +2089,7 @@ class Dashboard extends Component {
 								this.state.user.services.length > 0 ? // Services each have their own list item
 								<div>
 									{this.state.user.services.map(service => {
-										return <ListItem button className={classes.nested} onClick={() => this.setState({ profile_service: serviceLookup[service], current_page_view: 'profile_service', tasks_drawer: false, agent_drawer: false })}>
+										return <ListItem button className={classes.nested} onClick={() => this.setState({ profile_service: serviceLookup[service], current_page_view: 'profile_service', tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false })}>
 											<Tooltip id="tooltip-icon" title={serviceLookup[service] ? serviceLookup[service].title : ''} placement="bottom">
 												<ListItemIcon className={classes.sidebarList}>
 													<QuestionAnswerIcon />
@@ -2182,12 +2379,13 @@ class Dashboard extends Component {
 							goto={this.handleGoTo}
 							chat={(user) => this.setState({ chat_user: user, content_drawer: true, content_drawer_screen: 'chat' })}
 							navigate={this.handleNavigate}
-							profile={(agent) => this.setState({ current_page_view: 'profile', tasks_drawer: false, agent_drawer: false, agent_profile_edit: true, agent_profile_user: agent })}
+							profile={(agent) => this.setState({ current_page_view: 'profile', tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, agent_profile_edit: true, agent_profile_user: agent })}
 							close={() => { this.setState({ agent_drawer: false }) }}
+							opencustomer={() => { this.setState({ agent_drawer: false, consumer_drawer:true }) }}
 							addAgent={() => this.setState({ agent_edit_dialog_open: true })}
 							setAgentFilter={(filter) => { this.setState({ agent_filter: filter }) }}
 							editAgentStatus={(e, data) => this.editAgentStatus(data, e.currentTarget)}
-							goToAgentList={() => { this.setState({ agent_drawer: false, tasks_drawer: false, consumer_drawer: false, current_page_view: 'agents' }) }}
+							goToAgentList={() => { this.setState({ agent_drawer: false, tasks_drawer: false, client_tasks_drawer: false, consumer_drawer: false, current_page_view: 'agents' }) }}
 						/>
 					</Drawer> : null}
 				{this.state.user && (this.state.user.user_type === 'provider' || this.state.user.user_type === 'agent')
@@ -2206,15 +2404,16 @@ class Dashboard extends Component {
 							chat={(user) => this.setState({ chat_user: user, content_drawer: true, content_drawer_screen: 'chat' })}
 							navigate={this.handleNavigate}
 							close={() => { this.setState({ consumer_drawer: false }) }}
+							openagents={() => { this.setState({ agent_drawer: true, consumer_drawer:false }) }}
 							broadcast={((action, receivers) => this.setState({ broadcast_dialog_open: true, broadcast_type: action, broadcast_receivers: receivers }))}
-							goToConsumerList={() => this.setState({ agent_drawer: false, consumer_drawer: false, tasks_drawer: false, current_page_view: 'consumers' })}
+							goToConsumerList={() => this.setState({ agent_drawer: false, consumer_drawer: false, tasks_drawer: false, client_tasks_drawer: false, current_page_view: 'consumers' })}
 						/>
 					</Drawer> : null}
-				{this.state.user && this.state.user.user_type === 'provider' && this.state.tasks_drawer ? // Task drawer on the left hand side
+				 {this.state.user && this.state.user.user_type === 'provider' && this.state.client_tasks_drawer ? // Task drawer on the left hand side
 					<Drawer
-						anchor="left"
+						anchor="right"
 						variant="persistent"
-						open={this.state.tasks_drawer}
+						open={this.state.client_tasks_drawer}
 						ModalProps={{ elevation: 0, BackdropProps: { invisible: true } }}
 						classes={{ paper: classNames(classes.contentDrawerPaper, classes.leftDrawer) }}>
 						<div className={classes.toolbar} />
@@ -2230,15 +2429,16 @@ class Dashboard extends Component {
 							chat={(user) => this.setState({ chat_user: user, content_drawer: true, content_drawer_screen: 'chat' })}
 							manualtask={() => this.setState({ content_drawer: true, content_drawer_screen: 'createtask' })}
 							navigate={this.handleNavigate}
-							close={() => { this.setState({ tasks_drawer: false }) }}
+							close={() => { this.setState({ client_tasks_drawer: false }) }}
 							setAgentFilter={(filter) => { this.setState({ agent_filter: filter }) }}
 							viewTask={(data) => this.viewTask(data)}
 							editTaskAgent={(e, data) => this.editTaskAgent(data, e.currentTarget)}
 							editTaskStatus={(e, data) => this.editTaskStatus(data, e.currentTarget)}
-							goToTaskList={() => { this.setState({ tasks_drawer: false, agent_drawer: false, consumer_drawer: false, current_page_view: 'tasks' }) }}
+							goToTaskList={() => { this.setState({ tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, consumer_drawer: false, current_page_view: 'tasks' }) }}
+							goToCreateOrder={() => { this.setState({ client_tasks_drawer: false, content_drawer: true, content_drawer_screen: 'createtask', current_page_view: 'map' })}}
 						/>
-					</Drawer> : null}
-				{this.state.user && this.state.user.user_type === 'provider' && this.state.posts_drawer ? // Posts drawer on the right hand side
+					</Drawer> : null} 
+				{this.state.user && this.state.user.user_type === 'agent' && this.state.posts_drawer ? // Posts drawer on the right hand side
 					<Drawer
 						anchor="left"
 						variant="persistent"
@@ -2248,9 +2448,9 @@ class Dashboard extends Component {
 						<div className={classes.toolbar} />
 						<PostSidebarProvider
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return (task.provider_id === '0' || !task.provider_id) })}
-							providers={this.state.providers}
+							tasks={this.state.tasks}
 							consumers={this.state.consumers}
+							agents={this.state.agents}
 							categories={this.state.categories.filter(category => { return category.status === 'Active' })}
 							goto={this.handleGoTo}
 							chat={(user) => this.setState({ chat_user: user, content_drawer: true, content_drawer_screen: 'chat' })}
@@ -2270,7 +2470,7 @@ class Dashboard extends Component {
 						<div className={classes.toolbar} />
 						<TaskSidebarAgent
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return true; })}
+							tasks={this.state.tasks.filter(task => { return (task.agent_id && task.agent_id == this.state.user.id); })}
 							agents={this.state.agents.filter(agent => { return agent.status === 'Active' })}
 							agent_filter={this.state.agent_filter}
 							providers={this.state.providers}
@@ -2284,10 +2484,10 @@ class Dashboard extends Component {
 							viewTask={(data) => this.viewTask(data)}
 							editTaskAgent={(e, data) => this.editTaskAgent(data, e.currentTarget)}
 							editTaskStatus={(e, data) => this.editTaskStatus(data, e.currentTarget)}
-							goToTaskList={() => { this.setState({ tasks_drawer: false, agent_drawer: false, consumer_drawer: false, current_page_view: 'tasks' }) }}
+							goToTaskList={() => { this.setState({ tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, consumer_drawer: false, current_page_view: 'tasks' }) }}
 						/>
 					</Drawer> : null}
-				{this.state.user && (this.state.user.user_type === 'consumer' || this.state.user.user_type === 'agent' ) && this.state.posts_drawer ? // Posts drawer on the right hand side
+				{!this.state.user.user_type || ( this.state.user && (this.state.user.user_type === 'consumer' || this.state.user.user_type === 'provider' ) )&& this.state.posts_drawer ? // Posts drawer on the right hand side
 					<Drawer
 						anchor="left"
 						variant="persistent"
@@ -2297,8 +2497,8 @@ class Dashboard extends Component {
 						<div className={classes.toolbar} />
 						<PostSidebarConsumer
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return (task.provider_id === '0' || !task.provider_id) })}
-							providers={this.state.providers}
+							tasks={this.state.tasks}
+							agents={this.state.agents}
 							consumers={this.state.consumers}
 							categories={this.state.categories.filter(category => { return category.status === 'Active' })}
 							goto={this.handleGoTo}
@@ -2311,7 +2511,7 @@ class Dashboard extends Component {
 							chooseTaskProvider={(task_id, provider_id, price) => { this.editTaskProvider(task_id, provider_id, price); this.setState({ task_notification: true }) }}
 						/>
 					</Drawer> : null}
-				{this.state.user && (this.state.user.user_type === 'consumer') && this.state.tasks_drawer ? // Orders drawer on the left hand side for consumers
+				{this.state.user && (this.state.user.user_type === 'consumer' || this.state.user.user_type === 'provider') && this.state.tasks_drawer ? // Orders drawer on the left hand side for consumers
 					<Drawer
 						anchor="left"
 						variant="persistent"
@@ -2321,7 +2521,7 @@ class Dashboard extends Component {
 						<div className={classes.toolbar} />
 						<TaskSidebarConsumer
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return task.provider_id && task.provider_id !== '' && task.provider_id !== '0'; })}
+							tasks={this.state.tasks.filter(task => { return (task.consumer_id && task.consumer_id == this.state.user.id)})}
 							agents={this.state.agents}
 							agent_filter={this.state.agent_filter}
 							providers={this.state.providers}
@@ -2333,8 +2533,9 @@ class Dashboard extends Component {
 							close={() => { this.setState({ tasks_drawer: false }) }}
 							viewTask={(data) => this.viewTask(data)}
 							editTaskAgent={(e, data) => this.editTaskAgent(data, e.currentTarget)}
-							editTaskStatus={(e, data) => this.editTaskStatus(data, e.currentTarget)}
-							goToTaskList={() => { this.setState({ tasks_drawer: false, agent_drawer: false, current_page_view: 'tasks' }) }}
+							editTaskStatus={(e, data, type) => this.editTaskStatusFromConsumer(data, e.currentTarget,type)}
+							goToTaskList={() => { this.setState({ tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, current_page_view: 'tasks' }) }}
+							chooseTaskProvider={(task_id, provider_id, price) => { this.editTaskProvider(task_id, provider_id, price); this.setState({ task_notification: true }) }}
 						/>
 					</Drawer> : null}
 				{this.state.task_view_drawer ?
@@ -2523,7 +2724,7 @@ class Dashboard extends Component {
 					anchorEl={this.state.profile_menu_anchor}
 					open={this.state.profile_menu_open}
 					onClose={() => this.setState({ profile_menu_open: false })}>
-					<MenuItem className={classes.menuItem} onClick={() => this.setState({ current_page_view: 'profile', tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })}>
+					<MenuItem className={classes.menuItem} onClick={() => this.setState({ current_page_view: 'profile', tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, profile_menu_open: false, profile_menu_anchor: null })}>
 						<ListItemIcon className={classes.icon}>
 							<AccountCircleIcon />
 						</ListItemIcon>
@@ -2544,18 +2745,18 @@ class Dashboard extends Component {
 				>
 					<ListSubheader>Available statuses</ListSubheader>
 					<Divider />
-					{this.isValidStatus('Cancelled') && this.state.user.user_type === 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Cancelled</MenuItem> : null}
-					{this.isValidStatus('Accepted') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Accepted</MenuItem> : null}
-					{this.isValidStatus('Preparing') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Preparing</MenuItem> : null}
-					{this.isValidStatus('On the road') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>On the road</MenuItem> : null}
-					{this.isValidStatus('Arrived') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Arrived</MenuItem> : null}
-					{this.isValidStatus('Delivered') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Delivered</MenuItem> : null}
-					{this.isValidStatus('Awaiting payment') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Awaiting payment</MenuItem> : null}
-					{this.isValidStatus('Paid') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Paid</MenuItem> : null}
-					{this.isValidStatus('Completed') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Completed</MenuItem> : null}
-					{this.isValidStatus('Declined') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Declined</MenuItem> : null}
-					{this.isValidStatus('Failed') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Failed</MenuItem> : null}
-					{this.isValidStatus('Cancelled') && this.state.user.user_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Cancelled</MenuItem> : null}
+					{this.isValidStatus('Cancelled') && this.state.user.user_type === 'consumer' || this.state.menu_type == 'consumer'? <MenuItem onClick={this.handleSetTaskStatus}>Cancelled</MenuItem> : null}
+					{this.isValidStatus('Accepted') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Accepted</MenuItem> : null}
+					{this.isValidStatus('Preparing') && this.state.user.user_type !== 'consumer'  && this.state.menu_type !== 'consumer'? <MenuItem onClick={this.handleSetTaskStatus}>Preparing</MenuItem> : null}
+					{this.isValidStatus('On the road') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>On the road</MenuItem> : null}
+					{this.isValidStatus('Arrived') && this.state.user.user_type !== 'consumer'  && this.state.menu_type !== 'consumer'? <MenuItem onClick={this.handleSetTaskStatus}>Arrived</MenuItem> : null}
+					{this.isValidStatus('Delivered') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Delivered</MenuItem> : null}
+					{this.isValidStatus('Awaiting payment') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Awaiting payment</MenuItem> : null}
+					{this.isValidStatus('Paid') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Paid</MenuItem> : null}
+					{this.isValidStatus('Completed') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Completed</MenuItem> : null}
+					{this.isValidStatus('Declined') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Declined</MenuItem> : null}
+					{this.isValidStatus('Failed') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Failed</MenuItem> : null}
+					{this.isValidStatus('Cancelled') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Cancelled</MenuItem> : null}
 					{this.state.referencedata
 						.filter(dataitem => {
 							return dataitem.type === 'task_status'

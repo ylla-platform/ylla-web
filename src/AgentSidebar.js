@@ -44,7 +44,32 @@ const styles = theme => ({
 		backgroundColor: '#F9F9F9',
 		padding: '10px',
 		top: 62
-	},
+	},cus: {
+    backgroundColor: 'white',
+    "&:hover": {
+        backgroundColor:"white"
+    },
+    color: 'black',
+    borderColor: 'black',
+    borderTopRightRadius: '0px',
+    borderBottomRightRadius: '0px',
+    borderTopLeftRadius: '0px',
+    borderBottomLeftRadius: '0px',
+    width: '150px'
+  },
+  agents: {
+    backgroundColor: '#FF7F50',
+    "&:hover": {
+        backgroundColor:"#FF7F50"
+    },
+    color: 'white',
+    borderColor: 'black',
+    borderTopRightRadius: '0px',
+    borderBottomRightRadius: '0px',
+    borderTopLeftRadius: '0px',
+    borderBottomLeftRadius: '0px',
+    width: '150px'
+  },
 	title: {
 		fontSize: '1.2rem',
 		fontFamily: "'Montserrat', sans-serif",
@@ -138,7 +163,15 @@ class AgentSidebar extends Component {
 				</Menu>
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
-						<Typography variant="title" color="inherit" className={classes.title}>Agents</Typography>
+					  
+					<Button variant="outlined" className={classes.agents} >
+			          Agents
+					 </Button>
+			        <Button onClick={() => this.props.opencustomer()} variant="outlined"  className={classes.cus} >
+			          Customers
+					</Button>
+
+						{/* <Typography variant="title" color="inherit" className={classes.title}>Agents</Typography> */ } 
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={() => this.props.close()}>
 							<svg width='20'
 								fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 28 28">

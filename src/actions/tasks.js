@@ -192,16 +192,17 @@ export function setTasksDataList(tasks, agents, providers, services, consumers) 
 }
 
 // convertBidsToDisplayFormat: 
-export function convertBidsToDisplayFormat(task, providers) {
+export function convertBidsToDisplayFormat(task, agents) {
 	let bids = [];
 	if (task.bids) {
 		task.bids.forEach(bid => {
-			providers.forEach(provider => {
-				if (provider.id === bid.provider_id) {
-					bid.provider_name = provider.name;
+			agents.forEach(agent => {
+				if (agent.id === bid.provider_id.toString()) {
+					bid.agent_name = agent.first_name;
+					bids.push({'provider_id':bid.provider_id, 'agent_name':agent.first_name, 'amount':bid.amount});
 				}
 			});
-			bids.push(bid);
+			
 		});
 	}
 	return bids;

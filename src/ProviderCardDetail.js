@@ -66,15 +66,16 @@ class ProviderCardDetail extends Component {
 	render() {
 		const { classes, provider } = this.props;
 		return (
-			{Object.keys(provider).length > 0 ?
+			
 			<Card className={classes.card} key={provider.id} elevation={0}>
+				{Object.keys(provider).length?
 				<CardHeader
 					classes={{
 						title: classes.title
 					}}
 					avatar={
 						<div>
-							{provider.logo ?
+							{provider.logo?
 								<Avatar src={provider.logo.id && provider.logo.id !== '' ? '/api/images/getimage?id=' + provider.logo.id : provider.logo.datauri} className={classes.avatar}></Avatar>
 								: 
 								<Avatar aria-label={provider.name} className={classes.avatar}>{provider.name.substring(0, 1)}</Avatar>
@@ -84,13 +85,13 @@ class ProviderCardDetail extends Component {
 					}
 					title={provider.name}
 					subheader={(provider.description && provider.description !== '' ? provider.description + '.' : '')}
-				/>
+				/>: null}
 				{this.props.selectMoreInfo ?
 					<CardActions className={classes.actions} disableActionSpacing>
 						{this.props.user && this.props.user.user_type ? <Button size="large" disabled={this.state.preferred_location == ""} className={classes.orderButton} onClick={this.props.selectProvider.bind(this, provider.id)}>Order</Button> : null}
 						<Button size="large" colour="default" variant="outlined" onClick={this.props.selectMoreInfo.bind(this, provider.id)}>More info</Button>
 					</CardActions> : null}
-			</Card>:null}
+			</Card>
 		);
 	}
 }

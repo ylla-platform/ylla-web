@@ -7,7 +7,8 @@
   cursor: pointer;
   float: right;
   display: inline-block;
-  padding: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   vertical-align: middle;
 }
 
@@ -31,7 +32,7 @@
   position: relative;
   display: inline;
   padding-bottom: 1rem; 
-  margin-left: 10px;
+  margin-left: 100px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 14px;
@@ -40,6 +41,7 @@
 }
 .menu__box {
   text-align:left;
+  /*margin-left: 500px;*/
   width:750px;
   background: #F9F9F9;
   border-bottom: 10px solid #FBEA22;
