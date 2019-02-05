@@ -195,12 +195,30 @@ const styles = theme => ({
 	    width: '180px',
 	    marginLeft: "-35px"
   	},
+  	onduty: {
+	    color: 'white',
+	    borderColor: '#649F55',
+	    backgroundColor: '#649F55',
+	    "&:hover": {
+        	backgroundColor:"#649F55"
+    	},	    
+	    borderTopRightRadius: "18px",
+	    borderBottomRightRadius: "18px",
+	    borderTopLeftRadius: "18px",
+	    borderBottomLeftRadius: "18px",
+	    width: '180px',
+	    marginLeft: "-35px"
+  	},
  	hirearunner: {
 	    color: 'white',
 	    borderColor: '#7F4095',
 	    backgroundColor: '#7F4095',
 	    "&:hover": {
         	backgroundColor:"#7F4095"
+    	},
+    	"&:disabled": {
+		      color: "white",
+		      backgroundColor: "#B68CC5"
     	},    
 	 	borderTopRightRadius: "18px",
 	    borderBottomRightRadius: "18px",
@@ -217,9 +235,13 @@ const styles = theme => ({
   	}, 
   	findapro: {
 	    color: 'white',
-	    backgroundColor: '#FF7F50',
+	    backgroundColor: '#30769C',
 	    "&:hover": {
-        	backgroundColor:"#FF7F50"
+        	backgroundColor:"#30769C"
+    	},
+    	"&:disabled": {
+	      	color: "white",
+	      	backgroundColor: "#5D92AF"
     	},    
 	    width: '180px',
 	    borderTopRightRadius: "18px",
@@ -253,7 +275,7 @@ const styles = theme => ({
 	    width: "180px",
 	    marginLeft: "-35px"
   	},
-  	numberCircle1: {
+  	myTasksCount: {
 	    borderRadius: "50%",
 	    behavior: "url(PIE.htc)" /* remove if you don't care about IE8 */,
 	    width: "35px",
@@ -268,7 +290,7 @@ const styles = theme => ({
 	    position: 'relative',
 	    zIndex: 1
   	},
-   	numberCircle2: {
+   	exploreCount: {
 	    borderRadius: "50%",
 	    behavior: "url(PIE.htc)" /* remove if you don't care about IE8 */,
 	    width: "35px",
@@ -807,6 +829,12 @@ class Dashboard extends Component {
 		this.state.consumers.forEach(consumer => {
 			if (user.indexOf(consumer.id) !== -1) this.setState({ chat_user: consumer, content_drawer: true, content_drawer_screen: 'chat' });
 		});
+	}
+
+	isRunner = (task) => {
+	 	var isRunner = false ;
+	 	isRunner = task.provider_id == 0 || !task.provider_id  || task.provider_id == null ;
+	 	return isRunner;
 	}
 
 	// getUserConversations: Gets the current user conversations (messages waiting).
@@ -1562,6 +1590,19 @@ class Dashboard extends Component {
 		});
 	}
 
+		// editTaskStatuses:
+	editSingleTaskStatus = (task, status) => {
+		// For this call we need to pass a set of task ids and statuses
+		var statuses = [];
+		var self = this;
+		var status_update = { id: task.id, status: status };
+		statuses.push(status_update);
+		tasks.editTaskStatuses(statuses, response => {
+			self.getTasks();
+			self.setState({ snackbar_open: true, snackbar_message: 'Task status updated' });
+		});
+	}
+
 	// editTaskRating:
 	editTaskRating = (rating) => {
 		var self = this;
@@ -1682,7 +1723,20 @@ class Dashboard extends Component {
 	handleOpen = () => {
 		var uid = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
 	 	this.state.services.length > 0 && !this.state.request_progress? this.setState({mega_menu: true, menu_enter: uid }): this.setState({ mega_menu: false }) ; 
-	 }
+	}
+
+	getMyTasks = () => {
+
+		var tasks = [];
+		if(this.state.user.user_type === 'provider')
+			tasks = this.state.tasks.filter(task => { return task.consumer_id && task.consumer_id == this.state.user.id && task.status != "Cancelled"});
+		if(this.state.user.user_type === 'agent')
+			tasks = this.state.tasks.filter(task => {return task.agent_id && task.agent_id == this.state.user.id && task.status != "Cancelled" && task.status != 'Requested' && task.status != 'Bidding' && task.status != 'BidChoosen'});
+		if(this.state.user.user_type === 'consumer')
+			tasks = this.state.tasks.filter(task => { return task.consumer_id && task.consumer_id == this.state.user.id  && task.status != "Cancelled"})
+		return tasks; 
+
+	}
 
 	// render()
 	render() {
@@ -1748,57 +1802,33 @@ class Dashboard extends Component {
 							        <Button onClick={(e) => this.setState({ profile_menu_open: true, profile_menu_anchor: e.currentTarget })} variant="outlined" className={classes.hello} >
 							             {this.state.user.user_type == "provider" ? this.state.user.name.substring(0, 8) : 'Hello, '+this.state.user.first_name.substring(0, 8)  }
 									</Button>
-							        
-										{this.state.user.user_type === 'provider' ?
-												<div className={classes.leftmargin}>
-													<div className={classes.numberCircle1}>{this.state.tasks.filter(task => { return task.consumer_id && task.consumer_id == this.state.user.id }).length}</div>
-													<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
-								        				My Tasks
-													</Button>
-													
-												</div>
-											: null}
-											{ this.state.user.user_type === 'agent' ?
-												<div className={classes.leftmargin}>
-													<div className={classes.numberCircle1}>{this.state.tasks.filter(task => { return task.agent_id && task.agent_id == this.state.user.id }).length}</div>
-													<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
-								        				Client Orders
-													</Button>
-													
-												</div>
-											: null}
-									{ this.state.user.user_type === 'consumer' ? // Show consumers a badge of their orders.
-												<div className={classes.leftmargin}>
-													<div className={classes.numberCircle1}>{this.state.tasks.filter(task => { return task.consumer_id && task.consumer_id == this.state.user.id }).length}</div>
-													<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ order_notification: false, tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
-								        				My Tasks
-													</Button>
 										
-												</div>: null}	
+									<div className={classes.leftmargin}>
+										<div className={classes.myTasksCount}>{this.getMyTasks().length}</div>
+										<Button variant="contained" color="primary" className={classes.mytasks} onClick={() => this.setState({ tasks_drawer: true, posts_drawer: false, current_page_view: 'map' })} >
+								        	My Tasks
+										</Button>
+									</div>
+											
 							    </div>: null }
 
 								<span className={classes.cfloat}>
 							     	<div>
 
-							     	<div className={classes.numberCircle2}> {this.state.tasks
-													.filter(task => {
-														if (task.status !== 'Cancelled') return true;
-														if (task.status !== 'Cancelled' && this.state.user.categories && this.state.user.categories.indexOf(task.category) !== -1) return true;
-														return false;
-													})
-													.length }</div>
-
-
+							     	<div className={classes.exploreCount}> {this.state.tasks.length - this.getMyTasks().length }
+									</div>
 											<Button onClick={(e) => this.setState({ posts_drawer: true, tasks_drawer: false, client_tasks_drawer: false, current_page_view: 'map' })} variant="outlined" className={classes.explore} >
 								        	EXPLORE
 											</Button>
 								
 
-								        <Button disabled={this.state.request_progress} onClick={() => this.hireRunner()} variant="contained" color="primary" className={classes.hirearunner} >
+								       { this.state.user.user_type != 'agent' ?   <Button disabled={this.state.request_progress } onClick={() => this.hireRunner()} variant="contained" color="primary" className={classes.hirearunner} >
 								        	HIRE A RUNNER
-										</Button>	
-								  	</div>							
-								 	<div className={classes.search} class="menu">
+										</Button>:''}
+
+								  	</div>
+
+								 	 { this.state.user.user_type != 'agent' ?   <div className={classes.search} class="menu">
        									<Button 
        										disabled={this.state.request_progress} variant="contained" color="primary" className={classes.findapro} 
        										onClick={this.state.services.length > 0?() => this.launchRequestProcess('findapro', 'Find A Pro'):null} 
@@ -1816,7 +1846,7 @@ class Dashboard extends Component {
 												close={() => this.setState({ mega_menu: false, mega_menu_request_function: '' })}
 											/> : null
 										}
-									</div>
+									</div>:''}
 								</span> 
 
 								{ this.state.user && this.state.user.user_type && this.state.user.user_type === 'provider' ? 
@@ -1840,16 +1870,9 @@ class Dashboard extends Component {
 								 	<Button onClick={() => this.setState({ consumer_drawer: true, agent_drawer: false,  current_page_view: 'map' })} variant="outlined" className={classes.hirearunner}>
 						          		Customers
 						        	</Button>
-						        	<Button variant="outlined" color="primary" className={classes.explore} >  On Duty </Button>
+						        	{ this.state.agent_active ? <Button onClick={() => this.toggleAgentActive()} variant="outlined" color="primary" className={classes.onduty} >  On Duty </Button> : 
+						        	 <Button onClick={() => this.toggleAgentActive()} variant="outlined" color="primary" className={classes.explore} >  Off Duty </Button> } 
 						        	</span>: null}
-
-								{ this.state.user && this.state.user.user_type &&  this.state.user.user_type === 'agent' ? 
-						        	
-						        <Switch className={classes.switchs}
-									hecked={this.state.agent_active}
-									onChange={() => this.toggleAgentActive()}
-									value={this.state.agent_active}
-								/>	: null}
 
 
 							{this.state.route_legs && this.state.route_legs.length > 0 ? // Navigation notification
@@ -2417,9 +2440,10 @@ class Dashboard extends Component {
 						ModalProps={{ elevation: 0, BackdropProps: { invisible: true } }}
 						classes={{ paper: classNames(classes.contentDrawerPaper, classes.leftDrawer) }}>
 						<div className={classes.toolbar} />
-						<TaskSidebarProvider
+						<PostSidebarProvider
+							view='provider_tasks'
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return task.provider_id === this.state.user.id; })}
+							tasks={this.state.tasks.filter(task => { return task.provider_id === this.state.user.id && task.status!= "Cancelled"; })}
 							agents={this.state.agents}
 							agent_filter={this.state.agent_filter}
 							providers={this.state.providers}
@@ -2447,8 +2471,21 @@ class Dashboard extends Component {
 						classes={{ paper: classNames(classes.contentDrawerPaper, classes.leftDrawer) }}>
 						<div className={classes.toolbar} />
 						<PostSidebarProvider
+							view='runner_view'
 							user={this.state.user}
-							tasks={this.state.tasks}
+							tasks={this.state.tasks.filter(task => { 
+
+								var live = task.status != "Cancelled"; 
+								var isatask = false; 
+								if(task.status != 'Requested' && task.status != 'Bidding' && task.status != 'BidChoosen' ){
+									if(this.state.user.id == task.agent_id){
+										isatask = true; 
+									}
+								}
+
+								return live && !isatask ;  
+							})
+							}
 							consumers={this.state.consumers}
 							agents={this.state.agents}
 							categories={this.state.categories.filter(category => { return category.status === 'Active' })}
@@ -2458,6 +2495,7 @@ class Dashboard extends Component {
 							close={() => { this.setState({ posts_drawer: false }) }}
 							viewTask={(data) => this.viewTask(data)}
 							makeBid={this.makeBid}
+							editSingleTaskStatus={(task,status) => this.editSingleTaskStatus(task,status)}
 						/>
 					</Drawer> : null}
 				{this.state.user && this.state.user.user_type === 'agent' && this.state.tasks_drawer ? // Task drawer on the left hand side
@@ -2468,9 +2506,10 @@ class Dashboard extends Component {
 						ModalProps={{ elevation: 0, BackdropProps: { invisible: true } }}
 						classes={{ paper: classNames(classes.contentDrawerPaper, classes.leftDrawer) }}>
 						<div className={classes.toolbar} />
-						<TaskSidebarAgent
+						<PostSidebarProvider
+							view='runner_tasks'
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return (task.agent_id && task.agent_id == this.state.user.id); })}
+							tasks={this.state.tasks.filter(task => { return task.agent_id && task.agent_id == this.state.user.id && task.status != 'Requested' && task.status != 'Bidding' && task.status != 'BidChoosen' } )}
 							agents={this.state.agents.filter(agent => { return agent.status === 'Active' })}
 							agent_filter={this.state.agent_filter}
 							providers={this.state.providers}
@@ -2485,6 +2524,7 @@ class Dashboard extends Component {
 							editTaskAgent={(e, data) => this.editTaskAgent(data, e.currentTarget)}
 							editTaskStatus={(e, data) => this.editTaskStatus(data, e.currentTarget)}
 							goToTaskList={() => { this.setState({ tasks_drawer: false, client_tasks_drawer: false, agent_drawer: false, consumer_drawer: false, current_page_view: 'tasks' }) }}
+							editSingleTaskStatus={(task,status) => this.editSingleTaskStatus(task,status)}
 						/>
 					</Drawer> : null}
 				{!this.state.user.user_type || ( this.state.user && (this.state.user.user_type === 'consumer' || this.state.user.user_type === 'provider' ) )&& this.state.posts_drawer ? // Posts drawer on the right hand side
@@ -2495,9 +2535,10 @@ class Dashboard extends Component {
 						ModalProps={{ elevation: 0, BackdropProps: { invisible: true } }}
 						classes={{ paper: classNames(classes.contentDrawerPaper, classes.leftDrawer) }}>
 						<div className={classes.toolbar} />
-						<PostSidebarConsumer
+						<PostSidebarProvider
+							view='consumer_view'
 							user={this.state.user}
-							tasks={this.state.tasks}
+							tasks={this.state.tasks.filter(task => { return task.status!= "Cancelled" && this.state.user.id != task.consumer_id && this.isRunner(task) })}
 							agents={this.state.agents}
 							consumers={this.state.consumers}
 							categories={this.state.categories.filter(category => { return category.status === 'Active' })}
@@ -2519,9 +2560,10 @@ class Dashboard extends Component {
 						ModalProps={{ elevation: 0, BackdropProps: { invisible: true } }}
 						classes={{ paper: classNames(classes.contentDrawerPaper, classes.leftDrawer) }}>
 						<div className={classes.toolbar} />
-						<TaskSidebarConsumer
+						<PostSidebarProvider
+							view='consumer_tasks'
 							user={this.state.user}
-							tasks={this.state.tasks.filter(task => { return (task.consumer_id && task.consumer_id == this.state.user.id)})}
+							tasks={this.state.tasks.filter(task => { return (task.status!= "Cancelled" && task.consumer_id && task.consumer_id == this.state.user.id)})}
 							agents={this.state.agents}
 							agent_filter={this.state.agent_filter}
 							providers={this.state.providers}
@@ -2746,7 +2788,7 @@ class Dashboard extends Component {
 					<ListSubheader>Available statuses</ListSubheader>
 					<Divider />
 					{this.isValidStatus('Cancelled') && this.state.user.user_type === 'consumer' || this.state.menu_type == 'consumer'? <MenuItem onClick={this.handleSetTaskStatus}>Cancelled</MenuItem> : null}
-					{this.isValidStatus('Accepted') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Accepted</MenuItem> : null}
+					{ /* this.isValidStatus('Accepted') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>Accepted</MenuItem> : null */ }
 					{this.isValidStatus('Preparing') && this.state.user.user_type !== 'consumer'  && this.state.menu_type !== 'consumer'? <MenuItem onClick={this.handleSetTaskStatus}>Preparing</MenuItem> : null}
 					{this.isValidStatus('On the road') && this.state.user.user_type !== 'consumer' && this.state.menu_type !== 'consumer' ? <MenuItem onClick={this.handleSetTaskStatus}>On the road</MenuItem> : null}
 					{this.isValidStatus('Arrived') && this.state.user.user_type !== 'consumer'  && this.state.menu_type !== 'consumer'? <MenuItem onClick={this.handleSetTaskStatus}>Arrived</MenuItem> : null}

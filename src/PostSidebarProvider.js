@@ -22,14 +22,17 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CardActions from "@material-ui/core/CardActions";
 import Divider from "@material-ui/core/Divider";
-
-
+import Badge from '@material-ui/core/Badge';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import AddIcon from '@material-ui/icons/Add';
 // Icons
 import CreateIcon from '@material-ui/icons/Create';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import SortIcon from '@material-ui/icons/Sort';
+import Fab from '@material-ui/core/Fab';
 
 // Task actions
 import * as taskActions from './actions/tasks';
@@ -52,17 +55,20 @@ const styles = theme => ({
 		padding: 10,
 		top: 62
 	},
-	flex: {
-		display:'inline-flex'
+	upperhalf: {
+		display:'inline-flex',
+		width: '100%',
+		cursor: 'pointer',
+		marginBottom: '5px'
 	},
 	tab: {
-		minWidth: 30
+		minWidth: 40
 	},
 	margin: {
 		margin: theme.spacing.unit * 2,
 	},
 	padding: {
-		padding: `0 ${theme.spacing.unit * 2}px`,
+		padding: `0 ${theme.spacing.unit + 2}px`,
 	},
 	leftIcon: {
 		marginRight: theme.spacing.unit,
@@ -86,52 +92,86 @@ const styles = theme => ({
 		margin: 'auto', 
 		color:'black'
 	},
-	flex1: {
-	    display: "inline-flex",
-	    width: "100%"
-	  },
+	justifyc: {
+	    display: "flex",
+	    justifyContent: 'space-between'
+	},
   bigAvatar: {
     width: 40,
-    height: 40
+    height: 40,
+    marginLeft: '5px',
+    // marginBottom: '5px'
   },
-  leftm: {
-    marginLeft: 15,
-    width: '160px'
+  fullheight: {
+ 	height: '84%',
+  }, 
+  titledateloc: {
+    marginLeft: 10,
+    width: '200px'
   },
-  	topm: {
-	marginTop: 5,
-	display: "inline-flex",
-    textTransform: 'uppercase',
-    fontSize: 'smaller',
-    fontWeight: 'bold'
-
+  status: {
+	marginTop: 10,
+	// color: 'green',
+    textTransform: 'capitalize',
+    fontSize: '15px',
+    // fontWeight: 'bold',
+    display: 'inline-flex',
+    // cursor: 'pointer'
+  }
+  	,
+  offers: {
+	// marginTop: 10,
+	color: 'black',
+    fontSize: '13.5px',
+    // fontWeight: 'bold',
+    marginTop: '5px'
+    // display: 'inline-flex'
   	},
-  topm1: {
+  bids1: {
     marginTop: 5,
     marginRight: 10
   },
+  price:{
+	display: "flex",
+  }, 
   bids: {
-    // marginTop: 5,
+    marginTop: 	5,
     display: "inline-flex",
     flexWrap: "wrap"
   },
-  leftma: {
-    marginLeft: 15
+  upperscript: {
+    fontSize: '10px',
+    marginTop: 'auto'
   },
   moreoptions: {
-    marginLeft: 0,
-    padding: '0px'
+  	padding:0,
+  	marginLeft: '35px'
+  },
+  runner: {
+  	// fontSize: '12px',
+    width: "50px",
+    height: "5px",
+    borderTopRightRadius: "15px",
+    borderBottomRightRadius: "15px",
+    borderTopLeftRadius: "15px",
+    borderBottomLeftRadius: "15px",
+    backgroundColor: "#FF0000",
+    // color: "white",
+    // textAlign: "center",
+    // verticalAlign: "middle",
+    display: "table-cell"
+    // letterSpacing: '1px'
   },
   
-  type1: {
+  greenbid: {
   	fontSize: 'smaller',
-    width: "100px",
+    width: "120px",
     height: "25px",
     borderTopRightRadius: "18px",
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
-    backgroundColor: "#7F4095",
+    backgroundColor: "#649F55",
     color: "white",
     textAlign: "center",
     verticalAlign: "middle",
@@ -139,11 +179,12 @@ const styles = theme => ({
     display: "table-cell",
     marginTop: "10px",
     marginLeft: "10px",
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    cursor: 'pointer'
   },
-   type2: {
+   greybid: {
 	  	fontSize: 'smaller',
-	    width: "100px",
+	    width: "120px",
 	    height: "25px",
 	    borderTopRightRadius: "18px",
 	    borderBottomRightRadius: "18px",
@@ -157,27 +198,124 @@ const styles = theme => ({
 	    display: "table-cell",
 	    marginTop: "10px",
 	    marginLeft: "10px",
-	    textTransform: 'capitalize'
+	    textTransform: 'capitalize',
+	    cursor: 'pointer'
   },
-   type3: {
+   whitebid: {
 	  	fontSize: 'smaller',
-	    width: "100px",
+	    width: "120px",
 	    height: "25px",
 	    borderTopRightRadius: "18px",
 	    borderBottomRightRadius: "18px",
 	    borderTopLeftRadius: "18px",
 	    borderBottomLeftRadius: "18px",
-	    backgroundColor: "#F2994A",
-	    color: "white",
+	    backgroundColor: "white",
+	    border: "1px solid",
+	    color: "#7F4095",
 	    textAlign: "center",
 	    verticalAlign: "middle",
 	    fontWeight: "bold",
 	    display: "table-cell",
 	    marginTop: "10px",
 	    marginLeft: "10px",
-	    textTransform: 'capitalize'
+	    textTransform: 'capitalize',
+	    cursor: 'pointer'
   },
-  approved: {
+   provider: {
+	  	// fontSize: '12px',
+	    width: "50px",
+	    height: "5px",
+	    borderTopRightRadius: "15px",
+	    borderBottomRightRadius: "15px",
+	    borderTopLeftRadius: "15px",
+	    borderBottomLeftRadius: "15px",
+	    backgroundColor: "#30769C",
+	    // color: "white",
+	    // textAlign: "center",
+	    // verticalAlign: "middle",
+	    display: "table-cell"
+	    // letterSpacing: '1px'
+  },  
+  whitebutton: {
+    fontSize: '12px',
+    color: "#7F4095",
+    borderColor: "#7F4095",
+    backgroundColor: "white",
+    "&:hover": {
+      backgroundColor: "white"
+    },
+    borderTopRightRadius: "18px",
+    borderBottomRightRadius: "18px",
+    borderTopLeftRadius: "18px",
+    borderBottomLeftRadius: "18px",
+ 	width: "180px",
+    height:'28px',
+    'minHeight': '25px',
+    marginTop: "5px",
+    // float:'right'
+    border: '1px solid'
+  }
+  ,  
+  providerbutton: {
+    fontSize: '12px',
+    color: "white",
+    borderColor: "#30769C",
+    backgroundColor: "#30769C",
+    "&:hover": {
+      backgroundColor: "#30769C"
+    },
+    borderTopRightRadius: "18px",
+    borderBottomRightRadius: "18px",
+    borderTopLeftRadius: "18px",
+    borderBottomLeftRadius: "18px",
+ 	width: "180px",
+    height:'28px',
+    'minHeight': '25px',
+    marginTop: "5px",
+    // float:'right'
+    border: '1px solid'
+  },
+  progressbutton: {
+    fontSize: '12px',
+    color: "white",
+    borderColor: "#FF7F50",
+    backgroundColor: "#FF7F50",
+    "&:hover": {
+      backgroundColor: "#FF7F50"
+    },
+    borderTopRightRadius: "18px",
+    borderBottomRightRadius: "18px",
+    borderTopLeftRadius: "18px",
+    borderBottomLeftRadius: "18px",
+ 	width: "180px",
+    height:'28px',
+    'minHeight': '25px',
+    marginTop: "5px",
+    // float:'right'
+    border: '1px solid'
+  },
+
+  completedbutton: {
+    fontSize: '12px',
+    color: "white",
+    borderColor: "#2D9CDB",
+    backgroundColor: "#2D9CDB",
+    "&:hover": {
+      backgroundColor: "#2D9CDB"
+    },
+    borderTopRightRadius: "18px",
+    borderBottomRightRadius: "18px",
+    borderTopLeftRadius: "18px",
+    borderBottomLeftRadius: "18px",
+ 	width: "180px",
+    height:'28px',
+    'minHeight': '25px',
+    marginTop: "5px",
+    // float:'right'
+    border: '1px solid'
+  },
+  greybutton: {
+    fontSize: '12px',
     color: "white",
     borderColor: "#60707C",
     backgroundColor: "#60707C",
@@ -188,12 +326,33 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
-    width: "160px",
+ 	width: "180px",
     height:'28px',
-    marginLeft: "75px",
-    marginTop: "10px"
+    'minHeight': '25px',
+    marginTop: "5px"
+    // float:'right'
   },
-  makeanoffer: {
+  greenbutton: {
+    fontSize: '12px',
+    color: "white",
+    borderColor: "#649F55",
+    backgroundColor: "#649F55",
+    "&:hover": {
+      backgroundColor: "#649F55"
+    },
+    borderTopRightRadius: "18px",
+    borderBottomRightRadius: "18px",
+    borderTopLeftRadius: "18px",
+    borderBottomLeftRadius: "18px",
+ 	width: "180px",
+    height:'28px',
+    'minHeight': '25px',
+    marginTop: "5px"
+
+    // float:'right'
+  },
+  purplebutton: {
+  	fontSize: '12px',
     color: "white",
     borderColor: "#7F4095",
     backgroundColor: "#7F4095",
@@ -201,50 +360,93 @@ const styles = theme => ({
       backgroundColor: "#7F4095"
     },
     "&:disabled": {
-      color: "white"
+      color: "white",
+      backgroundColor: "#B68CC5"
     },
     borderTopRightRadius: "18px",
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
-    width: "160px",
+    width: "180px",
     height:'28px',
-    marginLeft: "75px",
-    marginTop: "10px"
+    'minHeight': '25px',
+    marginTop: "5px",
+    // float:'right'
   }, 
   card: {
   	minWidth: 200,
-    width: 350,
+    width: 343,
     backgroundColor: "#F9F9F9",
-    marginTop: 5,
+    marginTop: 15,
     display:'flex'
   }, 
+  cardcontent: {
+  	padding: '10px',
+  	width: '100%',
+  	"&:last-child": {
+      paddingBottom: 10
+    }
+  },
   location: { 
     marginTop: "25px",
     marginLeft:"40px",
     cursor: 'pointer'
   },
   cardtitle:{
-  	fontSize: '16px',
+  	fontSize: '15px',
   	fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-  	textTransform: 'capitalize'
+  	textTransform: 'capitalize',
+  	fontWeight: 'bold'
+  },
+  subtitle: { 
+  	fontSize: '15px'
   },
   pinkline: {
-    borderLeft: '5px solid #7F4095'
+    borderLeft: '5px solid #7F4095',
+    marginLeft: '4px'
   },
   grayline: {
-    borderLeft: '5px solid #60707C'
-  }
+    borderLeft: '5px solid #30769C',
+    marginLeft: '4px'
+  },fab: {
+    margin: theme.spacing.unit,
+  	},
+  	cardupperright:{
+  		display: 'grid'
+  	},
+  	pricetext:{
+  		fontSize:'2rem',
+  		lineHeight:'1',
+  		marginTop:'auto'
+  	}
 });
 
 // CLass: PostSidebarProvider
 class PostSidebarProvider extends Component {
 
+	// getAgentName: 
+	getAgentName = (agents, id) => {
+		let name = 'All agents'
+		agents.forEach(agent => {
+			if (agent.id === id) name = agent.first_name + ' ' + agent.last_name;
+		});
+		return name;
+	}
+
 	// constructor: 
 	constructor(props) {
 		super(props);
+
+		var tks = {} 
+		if(this.props.view == 'runner_view' || this.props.view == 'consumer_view'){
+			tks = taskActions.convertTasksToDisplayFormat(this.props.tasks, [], [], [], this.props.consumers);
+		}
+		if(this.props.view == 'provider_tasks' || this.props.view == 'runner_tasks' || this.props.view == 'consumer_tasks'){
+			tks = taskActions.convertTasksToDisplayFormat(this.props.tasks, this.props.agents, this.props.providers, this.props.services, this.props.consumers);
+		}
+		
 		this.state = {
-			tasks: taskActions.convertTasksToDisplayFormat(this.props.tasks, [], [], [], this.props.consumers),
+			tasks: tks,
 			tab_index: 0,
 			task_sort_menu: false,
 			task_sort_menu_anchor: null,
@@ -258,31 +460,103 @@ class PostSidebarProvider extends Component {
 			bid_dialog_open: false,
 			bid_amount: '',
 			tag_filter: '',
-			profilter: false
+			profilter: false,
+
+			agent_filter_menu: false,
+			agent_filter_menu_anchor: null,
+			agent_filter: this.props.agent_filter || '',
+
+			agent_filter_name: this.getAgentName(this.props.agents, this.props.agent_filter),
+
+			//  will be seen on consumer
+			task_provider_menu: false,
+			task_provider_menu_anchor: null,
+			selected_runner_id: '',
+			selected_runner_name: '',
+
+			runner_view: this.props.view == 'runner_view'?true:false,
+			consumer_view: this.props.view == 'consumer_view'?true:false,
+			runner_tasks: this.props.view == 'runner_tasks'?true:false, 
+			consumer_tasks: this.props.view == 'consumer_tasks'?true:false, 
+			provider_tasks: this.props.view == 'provider_tasks'?true:false, 
+
+			heading : this.props.view == 'runner_view' || this.props.view == 'consumer_view' ? 'POSTS':'Tasks'
+
+
 		};
 	}
 
 	// componentWillReceiveProps: set the tasks from the parent state
 	componentWillReceiveProps = (nextProps) => {
-		this.setState({
-			tasks: taskActions.convertTasksToDisplayFormat(nextProps.tasks, [], [], [], nextProps.consumers)
+		
+		if(this.state.runner_tasks || this.state.consumer_tasks){
+			this.setState({
+			tasks: taskActions.convertTasksToDisplayFormat(nextProps.tasks, nextProps.agents, nextProps.providers, nextProps.services, nextProps.consumers),
+			agent_filter: nextProps.agent_filter
 		});
+		}
+		if(this.state.provider_tasks){
+			this.setState({
+						tasks: taskActions.convertTasksToDisplayFormat(nextProps.tasks, nextProps.agents, nextProps.providers, nextProps.services, nextProps.consumers),
+						agent_filter: nextProps.agent_filter,
+						agent_filter_name: this.getAgentName(nextProps.agents, nextProps.agent_filter)
+					});
+		}
+		else{
+
+			this.setState({
+				tasks: taskActions.convertTasksToDisplayFormat(nextProps.tasks, [], [], [], nextProps.consumers)
+			});
 	}
+	}
+
+// handleGoToTaskList: 
+	handleGoToTaskList = () => {
+		this.props.goToTaskList();
+	}
+
+	// handleChangeTab: 
+	handleChangeTab = (event, value) => {
+		this.setState({ tab_index: value });
+	}
+
 
 	// handleSortMenu: 
 	handleSortMenu = (sort, event) => {
 		this.setState({ task_sort_menu: false, task_sort: sort })
 	}
 
-	// handleSortMenu: 
-	disabled = (bids) => {
-		var alreadyBidded  = false;
+	getCurrentUserBid = (bids) => {
+		var bidValue  = '';
 		bids.forEach(bid => {
 			if(bid.provider_id.toString() == this.props.user.id){
-				alreadyBidded = true; 
+				bidValue = bid.amount; 
 			}		
 		});
-		return alreadyBidded;
+		return bidValue;
+	}
+	isRunner = (task) => {
+	 	var isRunner = false ;
+	 	isRunner = task.provider_id == 0 || !task.provider_id  || task.provider_id == null ;
+	 	return isRunner;
+	}
+
+	getSortOrder = (status,tab) => {
+	 	var map; 
+	 	if(tab == 'To Do'){
+	 		map = {"Completed": 11, 'Paid': 10, 'Awaiting payment': 9, 'Delivered':8, 'Arrived':7, 'On the road':6, 'Preparing':5, 'Accepted':4, 'BidChoosen':3, 'Bidding':2, 'Requested':1, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	if(tab == 'Done'){
+	 		map = {"Completed": 1, 'Paid': 2, 'Awaiting payment': 3, 'Delivered':4, 'Arrived':5, 'On the road':6, 'Preparing':7, 'Accepted':8, 'BidChoosen':9, 'Bidding':10, 'Requested':11, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	if(tab == 'Unassigned'){
+	 		map = {"Completed": 11, 'Paid': 10, 'Awaiting payment': 9, 'Delivered':8, 'Arrived':7, 'On the road':6, 'Preparing':5, 'Accepted':4, 'BidChoosen':1, 'Bidding':2, 'Requested':3, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	if(tab == 'Assigned'){
+	 		map = {"Completed": 11, 'Paid': 1, 'Awaiting payment': 2, 'Delivered':3, 'Arrived':4, 'On the road':5, 'Preparing':6, 'Accepted':7, 'BidChoosen':8, 'Bidding':9, 'Requested':10, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	return map[status];
+ 	
 	}
 
 	//
@@ -295,9 +569,232 @@ class PostSidebarProvider extends Component {
 			}
 			this.props.chat(chat, event);
 		}
+		if (action === 'chat_agent') {
+			let chat = {
+				name: (this.state.selected_task.agent ? (this.state.selected_task.agent.first_name + ' ' + this.state.selected_task.agent.last_name) : ''),
+				id: this.state.selected_task.agent ? this.state.selected_task.agent.id : null
+			}
+			this.props.chat(chat, event);
+		}
+		if (action === 'task_details') this.props.viewTask([this.state.selected_task.id]);
+		if (action === 'navigate') this.props.navigate(this.state.selected_task.location);
 		if (action === 'task_details') this.props.viewTask([this.state.selected_task.id]);
 		if (action === 'navigate') this.props.navigate(this.state.selected_task.location);
 	}
+
+	openTaskMenu = (e,task,bid) => {
+		if( task.consumer_id == this.props.user.id && task.status === "Bidding" ) {
+			this.setState({ task_provider_menu: true, task_provider_menu_anchor: e.currentTarget, selected_task: task, selected_runner_name: bid.agent_name, selected_runner_id: bid.provider_id, selected_provider_price: bid.amount })
+		}
+	}
+
+		//
+	handleCloseAgentFilterMenu = () => {
+		this.setState({ agent_filter_menu: false })
+	}
+
+	//
+	handleAgentFilterMenu = (filter, event) => {
+		this.setState({ agent_filter_menu: false, agent_filter: filter });
+		this.props.setAgentFilter(filter);
+	}
+
+	viewTask = (task) => {
+		this.props.viewTask([task.id]);
+		this.props.navigate(task.location);
+	}
+
+	getAgoTime = (task) => {
+
+		var agotime = moment(task.date_created).fromNow(); 
+		agotime = agotime.toLowerCase().replace('seconds','sec').replace('minutes','min').replace('a few seconds ago','now');
+		return agotime;
+	}
+
+	getButtonText = (task, bids) => {
+
+		if(!this.isRunner(task)) return task.status; 
+
+		var didIbid =false; 
+		var buttonText = task.status; 
+
+		bids.forEach(bid => {
+			if(bid.provider_id.toString() == this.props.user.id){
+				didIbid =true ; 
+			}		
+		});
+
+		if(task.status == "Requested" ){
+			if(task.consumer_id == this.props.user.id){
+				buttonText =  'Awaiting Offers';
+			}
+			else {
+				buttonText = 'Make an Offer';
+			}
+		}
+		else if(task.status == "Bidding" ){
+			if(task.consumer_id == this.props.user.id ){
+				buttonText = 'Select an offer'; 
+			}
+			else if(didIbid){
+				buttonText = 'Awaiting Selection'; 
+			}
+			else{
+				buttonText = 'Make an Offer';
+			}
+		}
+		else if(task.status == "BidChoosen" ){
+			if( task.consumer_id == this.props.user.id ){
+				buttonText = 'Awaiting Confirmation';
+			}
+			else if(task.agent_id == this.props.user.id){
+				buttonText = 'Tap to confirm';
+			}
+			else {
+				buttonText = 'In Progress';
+			}
+		}
+		else if(task.status == "Accepted" ){
+			if( task.consumer_id == this.props.user.id ){
+				buttonText = 'Hired';
+			}
+			else if(task.agent_id == this.props.user.id){
+				buttonText = 'Hired';
+			}
+			else {
+				buttonText = 'Assigned';
+			}
+		}
+		else
+		{
+			if(task.consumer_id != this.props.user.id && task.agent_id != this.props.user.id ) 
+				{
+				 	buttonText = 'Assigned';
+				}
+		}
+		return buttonText ;
+	}
+
+	getBidStyle = (task, bid) => {
+
+		var bidStyle = this.props.classes.whitebid; 
+
+		if( (bid.provider_id && bid.provider_id.toString() == this.props.user.id ) || ( task.agent_id && task.agent_id == bid.provider_id.toString()))  {
+			bidStyle = this.props.classes.greybid; 
+		}
+		if(task.status !== 'Requested' && task.status !== 'Bidding' && task.status !== 'BidChoosen' && task.agent_id && task.agent_id == bid.provider_id.toString()) {
+			bidStyle = this.props.classes.greenbid; 
+		}
+
+		return bidStyle; 
+
+	}
+
+	getButtonStyle = (task, bids) => {
+
+		
+		var buttonStyle = this.props.classes.purplebutton;
+		var stats = ['Preparing' ,'On the road', 'Arrived', 'Delivered', 'Awaiting payment', 'Paid'];
+		var greystats = ['Declined' , 'Failed' , 'Cancelled'];
+		
+		if(stats.includes(task.status) && (task.consumer_id == this.props.user.id || task.agent_id == this.props.user.id ) ){
+			buttonStyle = this.props.classes.progressbutton; 
+			return buttonStyle; 
+		}
+		if(task.status == 'Completed' && (task.consumer_id == this.props.user.id || task.agent_id == this.props.user.id )){
+			buttonStyle = this.props.classes.completedbutton; 
+			return buttonStyle; 
+		}
+		if(greystats.includes(task.status)){
+			buttonStyle = this.props.classes.greybutton; 
+			return buttonStyle; 
+		}
+
+		if(!this.isRunner(task)) return this.props.classes.providerbutton; 
+
+		var didIbid =false; 
+		
+		bids.forEach(bid => {
+			if(bid.provider_id.toString() == this.props.user.id){
+				didIbid =true ; 
+			}		
+		});
+
+		if(task.status == "Requested" ){
+			if(task.consumer_id == this.props.user.id){
+				buttonStyle= this.props.classes.greybutton;
+			}
+			else {
+				buttonStyle= this.props.classes.purplebutton;
+			}
+		}
+		else if(task.status == "Bidding" ){
+			if(task.consumer_id == this.props.user.id ){
+				buttonStyle= this.props.classes.whitebutton;
+			}
+			else if(didIbid){
+				buttonStyle= this.props.classes.greybutton;
+			}
+			else{
+				buttonStyle= this.props.classes.purplebutton; 
+			}
+		}
+		else if(task.status == "BidChoosen" ){
+			if( task.consumer_id == this.props.user.id ){
+				buttonStyle= this.props.classes.greybutton;
+			}
+			else if(task.agent_id == this.props.user.id){
+				buttonStyle= this.props.classes.whitebutton;
+			}
+			else {
+				buttonStyle= this.props.classes.greybutton;
+			}
+		}
+		else {
+			buttonStyle= this.props.classes.greenbutton;
+		}
+		
+		return buttonStyle ;
+	}
+
+	handleButtonClick = (e, task, bids) => {
+
+		var didIbid =false; 
+		bids.forEach(bid => {
+			if(bid.provider_id.toString() == this.props.user.id){
+				didIbid =true ; 
+			}		
+		});
+
+		if(task.status == "Requested" && this.state.runner_view ){
+			this.setState({ bid_dialog_open: true, selected_task: task }); 
+			e.stopPropagation();
+		}
+		if(task.status == "Bidding" && !didIbid && this.state.runner_view ){
+			this.setState({ bid_dialog_open: true, selected_task: task }); 
+			e.stopPropagation();
+		}
+		if(task.status == "BidChoosen" ){
+			if(task.agent_id == this.props.user.id)
+				this.props.editSingleTaskStatus(task,"Accepted");
+		}
+
+		if( this.state.provider_tasks && task.status !== 'Completed' && task.status !== 'Cancelled' && task.status !== 'Declined' && task.status !== 'Failed' ){
+			this.props.editTaskStatus(e, [task.id]); 
+			e.stopPropagation(); 
+		}
+		if( this.state.runner_tasks  && task.agent_id && task.agent_id != null && task.agent_id != 0 && task.status !== 'Completed' && task.status !== 'Cancelled'  && task.status !== 'Declined' && task.status !== 'Failed' ){
+			this.props.editTaskStatus(e, [task.id]); 
+			e.stopPropagation(); 
+		}
+
+		if( this.state.consumer_tasks  && (task.status === 'Requested' || task.status === 'Bidding')){
+			this.props.editTaskStatus(e, [task.id],'consumer'); 
+			e.stopPropagation();
+		}			
+
+	}
+	
 
 	// render: 
 	render() {
@@ -310,9 +807,16 @@ class PostSidebarProvider extends Component {
 					open={this.state.task_sort_menu}
 					onClose={() => this.setState({ task_sort_menu: false })}
 				>
-					<MenuItem onClick={this.handleSortMenu.bind(this, 'customer_name')}>Customer name</MenuItem>
-					<MenuItem onClick={this.handleSortMenu.bind(this, 'price')}>Price</MenuItem>
-					<MenuItem onClick={this.handleSortMenu.bind(this, 'neighbourhood')}>Neighbourhood</MenuItem>
+					
+					{ this.state.runner_view || this.state.runner_tasks || this.state.provider_tasks  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'customer_name')}>Customer name</MenuItem>:''}
+					{ this.state.runner_view  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'price')}>Price</MenuItem>:''}
+					{ this.state.runner_tasks || this.state.provider_tasks  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'agent_name')}>Agent name</MenuItem>:''}
+					{ this.state.runner_tasks || this.state.provider_tasks  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'due_date')}>Due date</MenuItem>:''}
+					{ this.state.consumer_tasks  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'due_date')}>Due date</MenuItem>:''}
+					{ this.state.consumer_tasks  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'provider_name')}>Provider name</MenuItem>:''}
+				
+					{ !this.state.consumer_tasks  ? <MenuItem onClick={this.handleSortMenu.bind(this, 'neighbourhood')}>Near By</MenuItem>:''}
+
 				</Menu>
 				{ /* <Menu // Menu used to filter tasks
 					id="menu-taskfilter"
@@ -330,14 +834,50 @@ class PostSidebarProvider extends Component {
 					onClose={() => this.setState({ task_actions_menu: false })}
 				>
 					<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'task_details')}>View details</MenuItem>
-					<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'chat_consumer')}>Chat with customer</MenuItem>
-					<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'phone_customer')}>Phone customer</MenuItem>
-					<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'map')}>View on Map</MenuItem>
+					{ this.state.runner_view || this.state.runner_tasks || this.state.provider_tasks  ? <MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'chat_consumer')}>Chat with customer</MenuItem>:''}
+					{ this.state.runner_view || this.state.runner_tasks || this.state.provider_tasks  ? <MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'phone_customer')}>Phone customer</MenuItem>:''}
+					{ this.state.runner_view ?<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'map')}>View on Map</MenuItem>:''}
 					<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'navigate')}>Navigate to task</MenuItem>
+					{ ( this.state.consumer_tasks || this.state.provider_tasks  ) && this.state.selected_task && this.state.selected_task.agent ? <MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'chat_agent')}>Chat with agent</MenuItem> : null}
+					{ ( this.state.consumer_tasks || this.state.provider_tasks )  && this.state.selected_task && this.state.selected_task.agent ? <MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'phone_agent')}>Phone agent</MenuItem> : null}
+					{ this.state.consumer_tasks  ? <MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'chat_provider')}>Chat with provider</MenuItem>: null}
+					{ this.state.consumer_tasks  ?	<MenuItem onClick={this.handleTaskActionsMenu.bind(this, 'phone_provider')}>Phone provider</MenuItem>: null}
 				</Menu>
+				
+				{ this.state.consumer_view || this.state.consumer_tasks ? 
+				<Menu // Menu used for actions
+					id="menu-taskproviders"
+					anchorEl={this.state.task_provider_menu_anchor}
+					open={this.state.task_provider_menu}
+					onClose={(e) => this.setState({ task_provider_menu: false, task_provider_menu_anchor: null })}
+				>
+					<MenuItem onClick={() => { this.props.viewProvider(this.state.selected_runner_id.toString()); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>View {this.state.selected_runner_name}</MenuItem>
+					<MenuItem onClick={(e) => { this.props.chat({ name: this.state.selected_runner_name, id: this.state.selected_runner_id }, e); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>Chat with {this.state.selected_runner_name}</MenuItem>
+					<MenuItem onClick={() => { this.props.chooseTaskProvider(this.state.selected_task.id, this.state.selected_runner_id, this.state.selected_provider_price); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>Accept bid from {this.state.selected_runner_name}</MenuItem>
+				</Menu>:''}
+
+				{ this.state.runner_tasks ||  this.state.provider_tasks ? 
+				<Menu // Menu used for actions on the agent list items
+					id="menu-agentfilter"
+					anchorEl={this.state.agent_filter_menu_anchor}
+					open={this.state.agent_filter_menu}
+					onClose={this.handleCloseAgentFilterMenu}
+				>
+					<MenuItem onClick={this.handleAgentFilterMenu.bind(this, '')}>All agents</MenuItem>
+					{this.props.agents
+						.map(agent => {
+							return <MenuItem onClick={this.handleAgentFilterMenu.bind(this, agent.id)}>{agent.first_name + ' ' + agent.last_name}</MenuItem>
+						})}
+				</Menu>:''}
+
+
+
 				<AppBar position="sticky" elevation={0} className={classes.appBar}>
 					<Toolbar disableGutters={true}>
-						<Typography variant="title" className={classes.title} color="inherit">Posts</Typography>
+					{this.state.provider_tasks ? <Fab onClick={() => this.props.goToCreateOrder()} color="primary" aria-label="Add" className={classes.fab}>
+				        <AddIcon />
+				     </Fab>: '' }
+						<Typography variant="title" className={classes.title} color="inherit">{this.state.heading}</Typography>
 
 						<IconButton
 							color="inherit"
@@ -352,9 +892,56 @@ class PostSidebarProvider extends Component {
 						</IconButton>
 					</Toolbar>
 				</AppBar>
+
+				{ this.state.runner_tasks || this.state.consumer_tasks || this.state.provider_tasks ? 
+				<Tabs
+					value={this.state.tab_index}
+					onChange={this.handleChangeTab}
+					indicatorColor="primary"
+					textColor="primary"
+					fullWidth
+				>
+					{  !this.state.runner_tasks ? <Tab
+						label={<Badge className={classes.padding} badgeContent={
+							this.state.tasks
+								.filter(task => {
+									if (task.status == "Requested" || task.status == "Bidding" || task.status == "BidChoosen" ) return true;
+									return false;
+								}).length
+						}>Unassigned</Badge>}
+						classes={{
+							root: classes.tab
+						}}
+					/>: ''}
+					<Tab
+						label={<Badge className={classes.padding} badgeContent={
+							this.state.tasks
+								.filter(task => {
+									if (task.status !== "Requested" && task.status != "Bidding" && task.status != "BidChoosen" && !task.date_completed) return true;
+									return false;
+								}).length
+						}>{this.state.runner_tasks ? 'To Do': 'Assigned'}</Badge>}
+						classes={{
+							root: classes.tab
+						}}
+					/>
+					<Tab
+						label={<Badge className={classes.padding} badgeContent={
+							this.state.tasks
+								.filter(task => {
+									if (task.date_completed) return true;
+									return false;
+								}).length
+						}>Done</Badge>}
+						classes={{
+							root: classes.tab
+						}}
+					/>
+				</Tabs>:null}
+
 				{this.state.tasks ?
 					<div>
-						<Button   className={classes.button} onClick={(e) => this.setState({ task_sort_menu: true, task_sort_menu_anchor: e.currentTarget })}>
+						<Button  className={classes.button} onClick={(e) => this.setState({ task_sort_menu: true, task_sort_menu_anchor: e.currentTarget })}>
 							<SortIcon className={classes.leftIcon} />Sort
 						</Button>
 						{ /* <Button   className={classes.button} onClick={(e) => this.setState({ task_filter_menu: true, task_filter_menu_anchor: e.currentTarget })}>
@@ -362,110 +949,110 @@ class PostSidebarProvider extends Component {
 						</Button> */}
 						{this.state.tasks
 							.sort((a, b) => {
-								if (this.state.task_sort === 'due_date' && a.date_created > b.date_created ) return -1 ;
-								if (this.state.task_sort === 'customer_name') return ((a.customer.first_name || '') < (b.customer.first_name || ''));
-								if (this.state.task_sort === 'neighbourhood') return (a.address < b.address);
-								if (this.state.task_sort === 'price') return (a.price < b.price);
-								return false;
-							})
-							.filter(task => {
 								
-								if (this.state.task_filter === 'All') return true;
-								if (this.props.user.categories.indexOf(task.category) !== -1) return true;
+								if ( ( this.state.runner_view || this.state.consumer_view )  && (a.date_created > b.date_created )  )  return -1 ; 
+
+								if (!this.state.runner_tasks && this.state.tab_index === 0 ) return this.getSortOrder(a.status,'Unassigned')-this.getSortOrder(b.status,'Unassigned');
+								if (!this.state.runner_tasks &&  this.state.tab_index === 1 ) return this.getSortOrder(a.status,'Assigned')-this.getSortOrder(b.status,'Assigned');
+								if (this.state.runner_tasks && this.state.tab_index === 0 ) return this.getSortOrder(a.status,'To Do')-this.getSortOrder(b.status,'To Do');
+								if (this.state.tab_index === 2 )  return this.getSortOrder(a.status,'Done')-this.getSortOrder(b.status,'Done');
+								if (this.state.runner_tasks && this.state.tab_index === 1 ) return this.getSortOrder(a.status,'Done')-this.getSortOrder(b.status,'Done');
+								
+
 								return false;
-							})
-							.filter(task => {
-								if (this.state.tag_filter !== '' && task.tags.indexOf(this.state.tag_filter) === -1) return false;
-								return true;
-							})
-							.map(task => {
+							}).map(task => {
 								let bids = taskActions.convertBidsToDisplayFormat(task, this.props.agents);
 								return (
 
 									    <Card key={task.id} className={classes.card}>
-									     { task.agent_id && task.agent_id !== 0 ?  <div className={classes.grayline}></div>:<div className={classes.pinkline}></div> } 
-									      <CardContent >
-									        <div className={classes.flex}>
-									          <Avatar className={classes.bigAvatar}
-									          >DR</Avatar>
-									          <div className={classes.leftm}>
-									            <a className={classes.cardtitle} onClick={() => this.props.viewTask([task.id])}>{task.answers && task.answers['Title'] ? task.answers['Title']: 'Posted By '+task.username}</a>
-									            {task.provider && task.provider.name ?  <a className={classes.cardtitle} >{'Provider : '+task.provider.name}</a>: ''}
+									     { task.provider_id &&  task.provider_id != 0 ?   <div className={classes.grayline}></div>:<div className={classes.pinkline}></div> } 
+									      <CardContent className={classes.cardcontent}>
+									        <div className={classes.upperhalf} >
+									        <div>
+									        { this.state.provider_tasks ? 
 
-									            <Typography variant="h8" color="textSecondary">
-									              { task.start_date_time ? moment(task.start_date_time).format('ddd, DD MMM'): ''}
-									            </Typography>
-									            <Typography variant="h8" color="textSecondary" gutterBottom>
+									        	<div className={classes.fullheight}><Avatar className={classes.bigAvatar}
+													onClick={(e) => { this.props.editTaskAgent(e, [task.id]); e.stopPropagation() }} 
+													aria-label="agent initials" 
+													src={(task.agent  && task.agent_id && task.agent.avatar && task.agent.avatar.id !== '' ) ? '/api/images/getimage?id=' + task.agent.avatar.id : null}
+													>
+													{ (task.agent_id && task.agent) ? (task.agent.avatar ? '':(task.agent.first_name ? task.agent.first_name.substring(0, 1) : '') + (task.agent.last_name ? task.agent.last_name.substring(0, 1):'')) : <AddIcon />  } 
+													</Avatar>{!task.provider_id ||  task.provider_id == 0 ? 
+									        	<div style={{marginTop:'auto'}}><a style={{fontSize:'12px'}}>URGENT</a><br /><div className={classes.runner}></div></div>:''} </div>  : 
+
+									          <div className={classes.fullheight}><Avatar className={classes.bigAvatar}
+									          >
+									          		{task.provider_name ? task.provider_name.substring(0, 2) : ''}
+													{task.agent_name ? task.agent_name.substring(0, 2) : ''}
+
+									          </Avatar> {!task.provider_id ||  task.provider_id == 0 ? 
+									        	<div style={{marginTop:'auto'}}><a style={{fontSize:'12px'}}>URGENT</a><br /><div className={classes.runner}></div></div>:''} </div>   } 
+
+									          { /* !task.provider_id ||  task.provider_id == 0 ? 
+									           <div className={classes.runner}></div> : <a style={{fontSize:'12.5px'}}>{this.getAgoTime(task)}</a>  <div className={classes.provider}></div> */ }
+									        </div>   
+									          <div className={classes.titledateloc} onClick={() => this.viewTask(task)}>
+									            { task.answers && task.answers['Title'] ?<a className={classes.cardtitle} >{ task.answers['Title']}</a>: ''}
+									            { task.answers && task.answers['Title'] ?<br />: ''}
+									            {  task.provider && task.username ?  <a className={classes.cardtitle} >{'Ordered By : '+task.username}</a>: '' }
+									            {  task.provider && task.username ?  <br />: ''}
+
+									            <a className={classes.subtitle} style={{fontWeight:'bold'}}>
+									              DUE:
+									            </a>
+ 												<a className={classes.subtitle}>
+									             { task.start_date_time ? moment(task.start_date_time).format('ddd, DD MMM'): ''}
+									            </a><br />
+									            <a className={classes.subtitle}>
 									               { task.neighbourhood ? task.neighbourhood : "No Location found" } 
-									            </Typography>
+									            </a>
 									          </div>
-									          <div className={classes.leftma}>
-									            
-									          	{!task.provider_id ||  task.provider_id == 0 ? 
-									            <div className={classes.type1}>RUNNER</div> : <div className={classes.type3}>PROVIDER</div>}
-									            <div className={classes.topm}>
-									              <Typography variant="h6">{task.price ? ('KD ' + task.price) : '?'}</Typography>
-									              {!task.provider_id ||  task.provider_id == 0 ? 
-									              <Tooltip className={classes.moreoptions} id="tooltip-icon" title="More options" placement="bottom">
-															<IconButton aria-label="More options" onClick={(e) => { this.setState({ task_actions_menu: true, task_actions_menu_anchor: e.currentTarget, selected_task: task }); e.stopPropagation(); }}>
+
+
+									          <div className={classes.cardupperright}>
+
+									           { (this.state.runner_view  && (!task.provider_id ||  task.provider_id == 0 )) || this.state.provider_tasks || this.state.runner_tasks || this.state.consumer_tasks  || this.state.consumer_view ? 
+															<IconButton disabled={!this.props.user.id} className={classes.moreoptions}  aria-label="More options" onClick={(e) => { this.setState({ task_actions_menu: true, task_actions_menu_anchor: e.currentTarget, selected_task: task }); e.stopPropagation(); }}>
 																<MoreVertIcon />
 															</IconButton>
-													</Tooltip>:null}
-									    
-									            </div>
+													:null}
+
+									            <div className={classes.price}>
+									              <Typography variant="h6" className={classes.pricetext} >{task.price ? ("0" + task.price).slice(-2) : '?'}</Typography>
+									              <a className={classes.upperscript}>KD</a>
+									              </div>
 									          </div>
+
 									        </div>
 									        <Divider />
-									        {!task.provider_id ||  task.provider_id == 0 ? 
-									        <div className={classes.flex}>
-									          {task.agent_id && task.agent_id !== 0 ? <Button  className={classes.approved}>Assigned</Button> : '' } 
-									          {(!task.agent_id || task.agent_id === 0) && !this.disabled(bids) ?
-									          	 <Button  
-										          	 onClick={(e) => { this.setState({ bid_dialog_open: true, selected_task: task }); e.stopPropagation(); }} 
-										          	 className={classes.makeanoffer}>
-										          	 Make an Offer
-									          	 </Button>: '' } 
-									          {(!task.agent_id || task.agent_id === 0) && this.disabled(bids) ?
-									          	 <Button
-										          	 className={classes.makeanoffer}>
-										          	 You offered
-									          	 </Button>: '' } 
-									                   <label className={classes.location} >
-												            <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-												              <path d="M13 6C13 2.69 10.31 0 7 0C3.69 0 1 2.69 1 6C1 10.5 7 17 7 17C7 17 13 10.5 13 6ZM5 6C5 4.9 5.9 4 7 4C8.1 4 9 4.9 9 6C9 7.1 8.11 8 7 8C5.9 8 5 7.1 5 6ZM0 18V20H14V18H0Z" fill="#60707C" />
-												            </svg>
-          												</label>
-									        </div>:''}
-
-									       {!task.provider_id ||  task.provider_id == 0 ?  <div className={classes.topm}>{task.status+' : '+bids.length+' Offers'}</div> :null }
-									       {!task.provider_id ||  task.provider_id == 0 ?  <br /> :null }
-									       {!task.provider_id ||  task.provider_id == 0 ? 
+									        
+									        <div className={classes.justifyc}>
+									   
+									        	<div  className={classes.offers}> Left :</div>
+									        	
+									        	
+									          	<Button
+										          	 onClick={(e) => this.handleButtonClick(e,task,bids)} 
+										          	 className={this.getButtonStyle(task,bids)}>
+										          	 {this.getButtonText(task,bids)}
+									          	 </Button>
+									        </div>
+									       { this.getButtonText(task,bids)!= 'Assigned' && (task.status == "Bidding" || task.status == "BidChoosen" ) && !task.provider_id ||  task.provider_id == 0 ? 
 									        <div className={classes.bids}>
 									        		{bids.map(bid => {
 														return (
-															<div className={classes.topm1}>
-																{ task.agent_id && task.agent_id == bid.provider_id.toString() ? 
-																	<div className={classes.type2}>
+															<div className={classes.bids1}>
+																<div onClick={(e) => this.openTaskMenu(e,task,bid)} className={this.getBidStyle(task,bid)}>
 																	{bid.provider_id.toString() != this.props.user.id? 
 																	<a>
-																	{'KD ' + bid.amount + ': ' + bid.agent_name}
+																	{'KD ' + bid.amount + ' : ' + bid.agent_name}
 																	</a>:
 																	<a>
-																	{'KD ' + bid.amount + ': ME' }
+																	{'KD ' + bid.amount + ' : ME' }
 																	</a>}
-																	</div> : 
-																	<div className={classes.type1}>
-																	{bid.provider_id.toString() != this.props.user.id? 
-																	<a>
-																	{'KD ' + bid.amount + ': ' + bid.agent_name}
-																	</a>:
-																	<a>
-																	{'KD ' + bid.amount + ': ME' }
-																	</a>}
-																	</div>
-																}
-																
-															</div> )
+																</div>
+															</div> 
+															)
 														})}
 									        </div>:null}
 									      </CardContent>

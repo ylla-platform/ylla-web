@@ -384,7 +384,7 @@ class PostSidebarConsumer extends Component {
 																{ task.agent_id && task.agent_id == bid.provider_id.toString() ? 
 																<div className={classes.type2}>{'KD ' + bid.amount + ': ' + bid.agent_name}</div> : 
 																<div 
-																onClick={(e) => this.openTaskMenu(e,task,bid)}
+																
 																className={classes.type1}>
 																{'KD ' + bid.amount + ': ' + bid.agent_name}
 																</div>
