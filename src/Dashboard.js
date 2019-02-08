@@ -1502,8 +1502,8 @@ class Dashboard extends Component {
 	}
 
 	// makeBid
-	makeBid = (task_id, amount) => {
-		let bid = { task_id: task_id, amount: amount, provider_id: this.state.user.id }
+	makeBid = (task_id, amount,comment) => {
+		let bid = { task_id: task_id, amount: amount, provider_id: this.state.user.id, comment:comment }
 		const self = this;
 		tasks.addTaskBid(bid, response => {
 			self.getTasks();
@@ -1750,8 +1750,8 @@ class Dashboard extends Component {
 		}
 		return (
 			<div className={classes.root}>
-				<AppBar position="absolute"   className={classes.appBar} elevation={0}>
-					<Toolbar variant="dense" className={classes.appBarToolbar}>
+				<AppBar  position="absolute"   className={classes.appBar} elevation={0}>
+					<Toolbar   className={classes.appBarToolbar}>
 						
 						{this.state.user && this.state.user.user_type ? // If we have any user we show the application menu.
 							<IconButton className={classes.menuButton}   aria-label="Menu" onClick={(e) => this.setState({ menu_drawer: !this.state.menu_drawer })}>
@@ -1764,7 +1764,7 @@ class Dashboard extends Component {
 								<path d="M3 12h18M3 6h18M3 18h18" />
 							</svg>
 						</Button>
-						<div className={classNames(classes.headerInternal, (this.state.show_menu ? classes.headerInternalActive : null))}>
+						<div className={classNames(classes.headerInternal, (this.state.show_menu ? classes.headerInternalActive : null))} >
 							
 						    {!this.state.user.user_type ? 
 						    	<div className={classes.cfloat}>
@@ -2591,6 +2591,7 @@ class Dashboard extends Component {
 						<div className={classes.toolbar} />
 						<TaskView
 							title={this.state.user.user_type === 'consumer' ? 'Order' : 'Task'}
+							user={this.state.user}
 							tasks={this.state.current_selected_tasks}
 							agents={this.state.agents}
 							providers={this.state.providers}
@@ -2598,11 +2599,15 @@ class Dashboard extends Component {
 							consumers={this.state.consumers}
 							referencedata={this.state.referencedata}
 							cancelTask={(data) => this.cancelTasks(data)}
-							editTaskStatus={(e, data) => this.editTaskStatus(data, e.currentTarget)}
+							editTaskStatus={this.state.user.user_type === 'consumer' ? (e, data, type) =>this.editTaskStatusFromConsumer(data, e.currentTarget,type):(e, data) => this.editTaskStatus(data, e.currentTarget) }
+							editSingleTaskStatus={(task,status) => this.editSingleTaskStatus(task,status)}
 							editTaskRating={(data) => this.editTaskRating(data)}
 							chat={(user) => this.setState({ chat_user: user, content_drawer: true, content_drawer_screen: 'chat' })}
 							goto={this.handleGoTo}
 							navigate={this.handleNavigate}
+							makeBid={this.makeBid}
+							chooseTaskProvider={(task_id, provider_id, price) => { this.editTaskProvider(task_id, provider_id, price); this.setState({ task_notification: true }) }}
+							viewProvider={(data) => this.viewProvider(data, false)}
 							close={() => this.setState({ task_view_drawer: false })} />
 					</Drawer> : null}
 				{this.state.task_request_drawer ? // The main task request process drawer

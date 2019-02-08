@@ -100,7 +100,6 @@ const styles = theme => ({
     width: 40,
     height: 40,
     marginLeft: '5px',
-    // marginBottom: '5px'
   },
   fullheight: {
  	height: '84%',
@@ -111,21 +110,15 @@ const styles = theme => ({
   },
   status: {
 	marginTop: 10,
-	// color: 'green',
     textTransform: 'capitalize',
     fontSize: '15px',
-    // fontWeight: 'bold',
     display: 'inline-flex',
-    // cursor: 'pointer'
   }
   	,
   offers: {
-	// marginTop: 10,
 	color: 'black',
     fontSize: '13.5px',
-    // fontWeight: 'bold',
     marginTop: '5px'
-    // display: 'inline-flex'
   	},
   bids1: {
     marginTop: 5,
@@ -148,7 +141,6 @@ const styles = theme => ({
   	marginLeft: '35px'
   },
   runner: {
-  	// fontSize: '12px',
     width: "50px",
     height: "5px",
     borderTopRightRadius: "15px",
@@ -156,13 +148,19 @@ const styles = theme => ({
     borderTopLeftRadius: "15px",
     borderBottomLeftRadius: "15px",
     backgroundColor: "#FF0000",
-    // color: "white",
-    // textAlign: "center",
-    // verticalAlign: "middle",
     display: "table-cell"
-    // letterSpacing: '1px'
   },
-  
+   provider: {
+	  	fontSize: '12px',
+	    width: "50px",
+	    height: "5px",
+	    borderTopRightRadius: "15px",
+	    borderBottomRightRadius: "15px",
+	    borderTopLeftRadius: "15px",
+	    borderBottomLeftRadius: "15px",
+	    backgroundColor: "#30769C",
+	    display: "table-cell"
+  },
   greenbid: {
   	fontSize: 'smaller',
     width: "120px",
@@ -220,21 +218,6 @@ const styles = theme => ({
 	    marginLeft: "10px",
 	    textTransform: 'capitalize',
 	    cursor: 'pointer'
-  },
-   provider: {
-	  	// fontSize: '12px',
-	    width: "50px",
-	    height: "5px",
-	    borderTopRightRadius: "15px",
-	    borderBottomRightRadius: "15px",
-	    borderTopLeftRadius: "15px",
-	    borderBottomLeftRadius: "15px",
-	    backgroundColor: "#30769C",
-	    // color: "white",
-	    // textAlign: "center",
-	    // verticalAlign: "middle",
-	    display: "table-cell"
-	    // letterSpacing: '1px'
   },  
   whitebutton: {
     fontSize: '12px',
@@ -252,10 +235,8 @@ const styles = theme => ({
     height:'28px',
     'minHeight': '25px',
     marginTop: "5px",
-    // float:'right'
     border: '1px solid'
-  }
-  ,  
+  },  
   providerbutton: {
     fontSize: '12px',
     color: "white",
@@ -272,7 +253,6 @@ const styles = theme => ({
     height:'28px',
     'minHeight': '25px',
     marginTop: "5px",
-    // float:'right'
     border: '1px solid'
   },
   progressbutton: {
@@ -291,7 +271,6 @@ const styles = theme => ({
     height:'28px',
     'minHeight': '25px',
     marginTop: "5px",
-    // float:'right'
     border: '1px solid'
   },
 
@@ -309,9 +288,8 @@ const styles = theme => ({
     borderBottomLeftRadius: "18px",
  	width: "180px",
     height:'28px',
-    'minHeight': '25px',
+    minHeight: '25px',
     marginTop: "5px",
-    // float:'right'
     border: '1px solid'
   },
   greybutton: {
@@ -330,7 +308,6 @@ const styles = theme => ({
     height:'28px',
     'minHeight': '25px',
     marginTop: "5px"
-    // float:'right'
   },
   greenbutton: {
     fontSize: '12px',
@@ -348,8 +325,6 @@ const styles = theme => ({
     height:'28px',
     'minHeight': '25px',
     marginTop: "5px"
-
-    // float:'right'
   },
   purplebutton: {
   	fontSize: '12px',
@@ -370,8 +345,7 @@ const styles = theme => ({
     width: "180px",
     height:'28px',
     'minHeight': '25px',
-    marginTop: "5px",
-    // float:'right'
+    marginTop: "5px"
   }, 
   card: {
   	minWidth: 200,
@@ -447,7 +421,7 @@ class PostSidebarProvider extends Component {
 		
 		this.state = {
 			tasks: tks,
-			tab_index: 0,
+			
 			task_sort_menu: false,
 			task_sort_menu_anchor: null,
 			task_sort: 'due_date',
@@ -459,6 +433,7 @@ class PostSidebarProvider extends Component {
 			selected_task: {},
 			bid_dialog_open: false,
 			bid_amount: '',
+			bid_comment:'',
 			tag_filter: '',
 			profilter: false,
 
@@ -473,9 +448,11 @@ class PostSidebarProvider extends Component {
 			task_provider_menu_anchor: null,
 			selected_runner_id: '',
 			selected_runner_name: '',
+			selected_runner_price: 0,
 
 			runner_view: this.props.view == 'runner_view'?true:false,
 			consumer_view: this.props.view == 'consumer_view'?true:false,
+			tab_index: this.props.view == 'runner_view' || this.props.view == 'consumer_view'?-1:0,
 			runner_tasks: this.props.view == 'runner_tasks'?true:false, 
 			consumer_tasks: this.props.view == 'consumer_tasks'?true:false, 
 			provider_tasks: this.props.view == 'provider_tasks'?true:false, 
@@ -535,30 +512,6 @@ class PostSidebarProvider extends Component {
 		});
 		return bidValue;
 	}
-	isRunner = (task) => {
-	 	var isRunner = false ;
-	 	isRunner = task.provider_id == 0 || !task.provider_id  || task.provider_id == null ;
-	 	return isRunner;
-	}
-
-	getSortOrder = (status,tab) => {
-	 	var map; 
-	 	if(tab == 'To Do'){
-	 		map = {"Completed": 11, 'Paid': 10, 'Awaiting payment': 9, 'Delivered':8, 'Arrived':7, 'On the road':6, 'Preparing':5, 'Accepted':4, 'BidChoosen':3, 'Bidding':2, 'Requested':1, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
-	 	}
-	 	if(tab == 'Done'){
-	 		map = {"Completed": 1, 'Paid': 2, 'Awaiting payment': 3, 'Delivered':4, 'Arrived':5, 'On the road':6, 'Preparing':7, 'Accepted':8, 'BidChoosen':9, 'Bidding':10, 'Requested':11, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
-	 	}
-	 	if(tab == 'Unassigned'){
-	 		map = {"Completed": 11, 'Paid': 10, 'Awaiting payment': 9, 'Delivered':8, 'Arrived':7, 'On the road':6, 'Preparing':5, 'Accepted':4, 'BidChoosen':1, 'Bidding':2, 'Requested':3, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
-	 	}
-	 	if(tab == 'Assigned'){
-	 		map = {"Completed": 11, 'Paid': 1, 'Awaiting payment': 2, 'Delivered':3, 'Arrived':4, 'On the road':5, 'Preparing':6, 'Accepted':7, 'BidChoosen':8, 'Bidding':9, 'Requested':10, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
-	 	}
-	 	return map[status];
- 	
-	}
-
 	//
 	handleTaskActionsMenu = (action, event) => {
 		this.setState({ task_actions_menu: false })
@@ -582,9 +535,9 @@ class PostSidebarProvider extends Component {
 		if (action === 'navigate') this.props.navigate(this.state.selected_task.location);
 	}
 
-	openTaskMenu = (e,task,bid) => {
+	openBidMenu = (e,task,bid) => {
 		if( task.consumer_id == this.props.user.id && task.status === "Bidding" ) {
-			this.setState({ task_provider_menu: true, task_provider_menu_anchor: e.currentTarget, selected_task: task, selected_runner_name: bid.agent_name, selected_runner_id: bid.provider_id, selected_provider_price: bid.amount })
+			this.setState({ task_provider_menu: true, task_provider_menu_anchor: e.currentTarget, selected_task: task, selected_runner_name: bid.agent_name, selected_runner_id: bid.provider_id, selected_runner_price: bid.amount })
 		}
 	}
 
@@ -602,77 +555,6 @@ class PostSidebarProvider extends Component {
 	viewTask = (task) => {
 		this.props.viewTask([task.id]);
 		this.props.navigate(task.location);
-	}
-
-	getAgoTime = (task) => {
-
-		var agotime = moment(task.date_created).fromNow(); 
-		agotime = agotime.toLowerCase().replace('seconds','sec').replace('minutes','min').replace('a few seconds ago','now');
-		return agotime;
-	}
-
-	getButtonText = (task, bids) => {
-
-		if(!this.isRunner(task)) return task.status; 
-
-		var didIbid =false; 
-		var buttonText = task.status; 
-
-		bids.forEach(bid => {
-			if(bid.provider_id.toString() == this.props.user.id){
-				didIbid =true ; 
-			}		
-		});
-
-		if(task.status == "Requested" ){
-			if(task.consumer_id == this.props.user.id){
-				buttonText =  'Awaiting Offers';
-			}
-			else {
-				buttonText = 'Make an Offer';
-			}
-		}
-		else if(task.status == "Bidding" ){
-			if(task.consumer_id == this.props.user.id ){
-				buttonText = 'Select an offer'; 
-			}
-			else if(didIbid){
-				buttonText = 'Awaiting Selection'; 
-			}
-			else{
-				buttonText = 'Make an Offer';
-			}
-		}
-		else if(task.status == "BidChoosen" ){
-			if( task.consumer_id == this.props.user.id ){
-				buttonText = 'Awaiting Confirmation';
-			}
-			else if(task.agent_id == this.props.user.id){
-				buttonText = 'Tap to confirm';
-			}
-			else {
-				buttonText = 'In Progress';
-			}
-		}
-		else if(task.status == "Accepted" ){
-			if( task.consumer_id == this.props.user.id ){
-				buttonText = 'Hired';
-			}
-			else if(task.agent_id == this.props.user.id){
-				buttonText = 'Hired';
-			}
-			else {
-				buttonText = 'Assigned';
-			}
-		}
-		else
-		{
-			if(task.consumer_id != this.props.user.id && task.agent_id != this.props.user.id ) 
-				{
-				 	buttonText = 'Assigned';
-				}
-		}
-		return buttonText ;
 	}
 
 	getBidStyle = (task, bid) => {
@@ -710,7 +592,7 @@ class PostSidebarProvider extends Component {
 			return buttonStyle; 
 		}
 
-		if(!this.isRunner(task)) return this.props.classes.providerbutton; 
+		if(!taskActions.isRunner(task)) return this.props.classes.providerbutton; 
 
 		var didIbid =false; 
 		
@@ -788,7 +670,7 @@ class PostSidebarProvider extends Component {
 			e.stopPropagation(); 
 		}
 
-		if( this.state.consumer_tasks  && (task.status === 'Requested' || task.status === 'Bidding')){
+		if( this.state.consumer_tasks  && task.consumer_id == this.props.user.id && (task.status === 'Requested' || task.status === 'Bidding')){
 			this.props.editTaskStatus(e, [task.id],'consumer'); 
 			e.stopPropagation();
 		}			
@@ -853,7 +735,7 @@ class PostSidebarProvider extends Component {
 				>
 					<MenuItem onClick={() => { this.props.viewProvider(this.state.selected_runner_id.toString()); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>View {this.state.selected_runner_name}</MenuItem>
 					<MenuItem onClick={(e) => { this.props.chat({ name: this.state.selected_runner_name, id: this.state.selected_runner_id }, e); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>Chat with {this.state.selected_runner_name}</MenuItem>
-					<MenuItem onClick={() => { this.props.chooseTaskProvider(this.state.selected_task.id, this.state.selected_runner_id, this.state.selected_provider_price); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>Accept bid from {this.state.selected_runner_name}</MenuItem>
+					<MenuItem onClick={() => { this.props.chooseTaskProvider(this.state.selected_task.id, this.state.selected_runner_id, this.state.selected_runner_price); this.setState({ task_provider_menu: false, task_provider_menu_anchor: null }); }}>Accept bid from {this.state.selected_runner_name}</MenuItem>
 				</Menu>:''}
 
 				{ this.state.runner_tasks ||  this.state.provider_tasks ? 
@@ -952,11 +834,11 @@ class PostSidebarProvider extends Component {
 								
 								if ( ( this.state.runner_view || this.state.consumer_view )  && (a.date_created > b.date_created )  )  return -1 ; 
 
-								if (!this.state.runner_tasks && this.state.tab_index === 0 ) return this.getSortOrder(a.status,'Unassigned')-this.getSortOrder(b.status,'Unassigned');
-								if (!this.state.runner_tasks &&  this.state.tab_index === 1 ) return this.getSortOrder(a.status,'Assigned')-this.getSortOrder(b.status,'Assigned');
-								if (this.state.runner_tasks && this.state.tab_index === 0 ) return this.getSortOrder(a.status,'To Do')-this.getSortOrder(b.status,'To Do');
-								if (this.state.tab_index === 2 )  return this.getSortOrder(a.status,'Done')-this.getSortOrder(b.status,'Done');
-								if (this.state.runner_tasks && this.state.tab_index === 1 ) return this.getSortOrder(a.status,'Done')-this.getSortOrder(b.status,'Done');
+								if (!this.state.runner_tasks && this.state.tab_index === 0 ) return taskActions.getSortOrder(a.status,'Unassigned')-taskActions.getSortOrder(b.status,'Unassigned');
+								if (!this.state.runner_tasks &&  this.state.tab_index === 1 ) return taskActions.getSortOrder(a.status,'Assigned')-taskActions.getSortOrder(b.status,'Assigned');
+								if (this.state.runner_tasks && this.state.tab_index === 0 ) return taskActions.getSortOrder(a.status,'To Do')-taskActions.getSortOrder(b.status,'To Do');
+								if (this.state.tab_index === 2 )  return taskActions.getSortOrder(a.status,'Done')-taskActions.getSortOrder(b.status,'Done');
+								if (this.state.runner_tasks && this.state.tab_index === 1 ) return taskActions.getSortOrder(a.status,'Done')-taskActions.getSortOrder(b.status,'Done');
 								
 
 								return false;
@@ -1034,15 +916,15 @@ class PostSidebarProvider extends Component {
 									          	<Button
 										          	 onClick={(e) => this.handleButtonClick(e,task,bids)} 
 										          	 className={this.getButtonStyle(task,bids)}>
-										          	 {this.getButtonText(task,bids)}
+										          	 {taskActions.getHumanReadableStatusText(task, bids, this.props.user.id)}
 									          	 </Button>
 									        </div>
-									       { this.getButtonText(task,bids)!= 'Assigned' && (task.status == "Bidding" || task.status == "BidChoosen" ) && !task.provider_id ||  task.provider_id == 0 ? 
+									       {(task.status == "Bidding" || task.status == "BidChoosen" ) && !task.provider_id ||  task.provider_id == 0 ? 
 									        <div className={classes.bids}>
 									        		{bids.map(bid => {
 														return (
 															<div className={classes.bids1}>
-																<div onClick={(e) => this.openTaskMenu(e,task,bid)} className={this.getBidStyle(task,bid)}>
+																<div onClick={(e) => this.openBidMenu(e,task,bid)} className={this.getBidStyle(task,bid)}>
 																	{bid.provider_id.toString() != this.props.user.id? 
 																	<a>
 																	{'KD ' + bid.amount + ' : ' + bid.agent_name}
@@ -1086,10 +968,21 @@ class PostSidebarProvider extends Component {
 							onChange={(e) => this.setState({ bid_amount: e.currentTarget.value })}
 							fullWidth
 						/>
+						<TextField
+							placeholder="Message to Customer"
+          					multiline
+							margin="dense"
+							id="bid-comment"
+							// label="Message"
+							value={this.state.bid_comment}
+							// type="text"
+							onChange={(e) => this.setState({ bid_comment: e.currentTarget.value })}
+							fullWidth
+						/>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={(e) => this.setState({ bid_dialog_open: false })}  >Cancel</Button>
-						<Button onClick={(e) => { this.props.makeBid(this.state.selected_task.id, this.state.bid_amount); this.setState({ bid_dialog_open: false, bid_amount: '' }) }}  >Bid</Button>
+						<Button onClick={(e) => { this.props.makeBid(this.state.selected_task.id, this.state.bid_amount, this.state.bid_comment); this.setState({ bid_dialog_open: false, bid_amount: '' }) }}  >Bid</Button>
 					</DialogActions>
 				</Dialog>
 

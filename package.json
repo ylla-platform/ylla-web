@@ -30,6 +30,7 @@
     "react-moment": "^0.8.4",
     "react-popper": "^1.x",
     "react-scripts": "^1.x",
+    "react-star-rating-component": "^1.4.1",
     "talkjs": "^0.6.1",
     "typeface-roboto": "^0.x",
     "uuid": "^3.3.2"

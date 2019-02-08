@@ -199,7 +199,7 @@ export function convertBidsToDisplayFormat(task, agents) {
 			agents.forEach(agent => {
 				if (agent.id === bid.provider_id.toString()) {
 					bid.agent_name = agent.first_name;
-					bids.push({'provider_id':bid.provider_id, 'agent_name':agent.first_name, 'amount':bid.amount});
+					bids.push({'provider_id':bid.provider_id, 'agent_name':agent.first_name, 'amount':bid.amount, 'comment':bid.comment});
 				}
 			});
 			
@@ -207,3 +207,91 @@ export function convertBidsToDisplayFormat(task, agents) {
 	}
 	return bids;
 }
+
+export function getSortOrder(status,tab) {
+	 	var map; 
+	 	if(tab == 'To Do'){
+	 		map = {"Completed": 11, 'Paid': 10, 'Awaiting payment': 9, 'Delivered':8, 'Arrived':7, 'On the road':6, 'Preparing':5, 'Accepted':4, 'BidChoosen':3, 'Bidding':2, 'Requested':1, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	if(tab == 'Done'){
+	 		map = {"Completed": 1, 'Paid': 2, 'Awaiting payment': 3, 'Delivered':4, 'Arrived':5, 'On the road':6, 'Preparing':7, 'Accepted':8, 'BidChoosen':9, 'Bidding':10, 'Requested':11, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	if(tab == 'Unassigned'){
+	 		map = {"Completed": 11, 'Paid': 10, 'Awaiting payment': 9, 'Delivered':8, 'Arrived':7, 'On the road':6, 'Preparing':5, 'Accepted':4, 'BidChoosen':1, 'Bidding':2, 'Requested':3, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	if(tab == 'Assigned'){
+	 		map = {"Completed": 11, 'Paid': 1, 'Awaiting payment': 2, 'Delivered':3, 'Arrived':4, 'On the road':5, 'Preparing':6, 'Accepted':7, 'BidChoosen':8, 'Bidding':9, 'Requested':10, 'Declined':12,'Failed':13 , 'Cancelled':14 }; 
+	 	}
+	 	return map[status];
+ 	
+}
+
+export function getHumanReadableStatusText (task, bids, userid) {
+
+		if(!isRunner(task)) return task.status; 
+
+		var didIbid =false; 
+		var buttonText = task.status; 
+
+		bids.forEach(bid => {
+			if(bid.provider_id.toString() == userid){
+				didIbid =true ; 
+			}		
+		});
+
+		if(task.status == "Requested" ){
+			if(task.consumer_id == userid){
+				buttonText =  'Awaiting Offers';
+			}
+			else {
+				buttonText = 'Make an Offer';
+			}
+		}
+		else if(task.status == "Bidding" ){
+			if(task.consumer_id == userid ){
+				buttonText = 'Select an offer'; 
+			}
+			else if(didIbid){
+				buttonText = 'Awaiting Selection'; 
+			}
+			else{
+				buttonText = 'Make an Offer';
+			}
+		}
+		else if(task.status == "BidChoosen" ){
+			if( task.consumer_id == userid ){
+				buttonText = 'Awaiting Confirmation';
+			}
+			else if(task.agent_id == userid){
+				buttonText = 'Tap to confirm';
+			}
+			else {
+				buttonText = 'In Progress';
+			}
+		}
+		else if(task.status == "Accepted" ){
+			if( task.consumer_id == userid ){
+				buttonText = 'Hired';
+			}
+			else if(task.agent_id == userid){
+				buttonText = 'Hired';
+			}
+			else {
+				buttonText = 'Assigned';
+			}
+		}
+		else
+		{
+			if(task.consumer_id != userid && task.agent_id != userid ) 
+				{
+				 	buttonText = 'Assigned';
+				}
+		}
+		return buttonText ;
+	}
+
+export function isRunner (task) {
+	 	var isRunner = false ;
+	 	isRunner = task.provider_id == 0 || !task.provider_id  || task.provider_id == null ;
+	 	return isRunner;
+	}

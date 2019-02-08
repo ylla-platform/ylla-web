@@ -249,7 +249,7 @@ class TaskMap extends Component {
 				bearing={this.state.bearing}
 				maxBounds={this.state.maxBounds}
 				fitBounds={this.state.bounds}
-				containerStyle={{ top: 57, bottom: 0, right: 0, left: 0, position: 'absolute' }}
+				containerStyle={{ top: 56, bottom: 0, right: 0, left: 0, position: 'absolute' }}
 				onClick={this.handleMapClick}
 			>
 				<Source
