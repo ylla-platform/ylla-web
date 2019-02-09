@@ -33,6 +33,12 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
 import SortIcon from '@material-ui/icons/Sort';
 import Fab from '@material-ui/core/Fab';
+import StarRatingComponent from 'react-star-rating-component';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // Task actions
 import * as taskActions from './actions/tasks';
@@ -459,7 +465,6 @@ class PostSidebarProvider extends Component {
 
 			heading : this.props.view == 'runner_view' || this.props.view == 'consumer_view' ? 'POSTS':'Tasks'
 
-
 		};
 	}
 
@@ -676,6 +681,9 @@ class PostSidebarProvider extends Component {
 		}			
 
 	}
+
+
+
 	
 
 	// render: 
@@ -879,7 +887,7 @@ class PostSidebarProvider extends Component {
 									            {  task.provider && task.username ?  <a className={classes.cardtitle} >{'Ordered By : '+task.username}</a>: '' }
 									            {  task.provider && task.username ?  <br />: ''}
 
-									            <a className={classes.subtitle} style={{fontWeight:'bold'}}>
+									            <a className={classes.subtitle} style={{fontSize:'13.5px', fontWeight:'bold'}}>
 									              DUE:
 									            </a>
  												<a className={classes.subtitle}>
@@ -919,6 +927,7 @@ class PostSidebarProvider extends Component {
 										          	 {taskActions.getHumanReadableStatusText(task, bids, this.props.user.id)}
 									          	 </Button>
 									        </div>
+									       
 									       {(task.status == "Bidding" || task.status == "BidChoosen" ) && !task.provider_id ||  task.provider_id == 0 ? 
 									        <div className={classes.bids}>
 									        		{bids.map(bid => {
@@ -937,6 +946,7 @@ class PostSidebarProvider extends Component {
 															)
 														})}
 									        </div>:null}
+
 									      </CardContent>
 
 									    </Card>

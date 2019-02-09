@@ -165,7 +165,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
-    width: "180px",
+    width: "185px",
     height: "40px",
     marginLeft: "35px"
   },
@@ -181,7 +181,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
- 	width: "180px",
+ 	width: "185px",
     height:'40px',
    	marginLeft: "35px",
     border: '1px solid'
@@ -198,7 +198,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
- 	width: "180px",
+ 	width: "185px",
     height:'40px',
 	marginLeft: "35px",
     border: '1px solid'
@@ -215,7 +215,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
- 	width: "180px",
+ 	width: "185px",
     height:'40px',
 	marginLeft: "35px",
     border: '1px solid'
@@ -232,7 +232,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
- 	width: "180px",
+ 	width: "185px",
     height:'40px',
 	marginLeft: "35px",
     border: '1px solid'
@@ -249,7 +249,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
- 	width: "180px",
+ 	width: "185px",
     height:'40px',
 	marginLeft: "35px"
   },
@@ -265,7 +265,7 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
- 	width: "180px",
+ 	width: "185px",
     height:'40px',
 	marginLeft: "35px"
   }
@@ -292,7 +292,8 @@ class TaskView extends Component {
 			task_provider_menu_anchor: null,
 			selected_runner_id: '',
 			selected_runner_name: '',
-			selected_runner_price:0
+			selected_runner_price:0,
+			rating: 0
 
 		};
 	}
@@ -429,6 +430,18 @@ class TaskView extends Component {
 
 	}
 
+	showReviewForm = (task, bid) => {
+		var properagent = this.props.user.id == task.consumer_id || this.props.user.id == task.agent_id; 
+		var taskstat = (task.status == "Completed" || task.status == "Failed" || task.status == "Declined"); 
+		var properbid = task.agent_id && bid.provider_id == task.agent_id ; 
+		return properagent && taskstat && properbid ; 
+	}
+
+	onStarClick = (nextValue, prevValue, name, task) => {
+    	task.rating = nextValue; 
+    	this.setState({rating: nextValue});
+  	}
+
 	openBidMenu = (e,task,bid) => {
 		if( task.consumer_id == this.props.user.id && task.status === "Bidding" ) {
 			this.setState({ task_provider_menu: true, task_provider_menu_anchor: e.currentTarget, selected_task: task, selected_runner_name: bid.agent_name, selected_runner_id: bid.provider_id, selected_runner_price: bid.amount })
@@ -486,14 +499,14 @@ class TaskView extends Component {
 					      </AppBar>
 					      <div style={{ marginTop:'40px',fontWeight: 300,  lineHeight:1.4,  color:'#545a77', fontSize: "12px", height: "100%", padding: "20px" }}>
 							
-							<a style={{ lineHeight:1.2, textTransform: 'capitalize', color: "#7F4095", fontSize: "30px", fontWeight: 300 }}>
+							<a style={{ lineHeight:1.2, textTransform: 'capitalize', color: "#7F4095", fontSize: "28px", fontWeight: 300 }}>
 					         { task.answers && task.answers['Title'] ?task.answers['Title']: ''}
 					        </a>
 					        <br />
 					        <br />
 					        <a style={{fontWeight: 700 }} > DETAILS </a>
 					        <br />
-					        <a style={{ color: "#000000", fontSize: "14px"}}>
+					        <a style={{ color: "#000000", fontSize: "16px"}}>
 					           { task.answers && task.answers['Description'] ?task.answers['Description']: ''}
 					        </a>
 
@@ -507,9 +520,9 @@ class TaskView extends Component {
 					            <br />
 					            <a style={{ fontSize: "14px",color: "#000000" }}> { task.answers && task.answers['Name'] ?task.answers['Name']: ''}</a>
 					          </div>
-					          <div >
+					          <div style={{ textAlign:'right', color: "black", width: "60%" }} >
 					            <br />
-					            <a style={{ marginLeft:'30px', color: "black", width: "60px" }}>{moment(task.date_created).fromNow()}</a>
+					            <a >{moment(task.date_created).fromNow()}</a>
 					          </div>
 					        </div>
 
@@ -548,6 +561,7 @@ class TaskView extends Component {
 					        {bids.map(bid => {
 							return (
 
+							        <div> 
 							        <div style={{ display: "flex" }} className={classes.avatar}>
 							          <Avatar
 							            alt="Remy Sharp"
@@ -582,7 +596,40 @@ class TaskView extends Component {
 							              { bid.comment ? bid.comment : ''}
 							            </div>
 							          </div>
-							        </div> 
+							         </div><br />
+
+							        {  this.showReviewForm(task,bid) ? 
+							       <div> 
+							       		<div style={{ display:'flex',fontSize:'22px' }}>
+											            <a style={{fontSize: '15px',marginTop: '5px', marginRight:10}}> Tap to Rate : </a>
+											            <StarRatingComponent
+													          name="rate2" 
+													          starCount={5}
+													          value={task.rating? task.rating: 0}
+													          starColor="#7F4095"
+													          emptyStarColor="#d3d3d3"
+													          onStarClick={(nextValue, prevValue, name) => {this.onStarClick(nextValue, prevValue, name, task)}}
+	        											/>			
+										</div>
+										<div style={{fontSize: '14px'}}>
+											           <TextField
+																		placeholder="Write A Review"
+											          					multiline
+																		margin="dense"
+																		id="review-comment"
+																		fullWidth
+															/>
+										</div>
+										<div style={{ width:'100%', display:'flex',justifyContent: 'flex-end'}}>
+											<Button style={{ float:'right'}}  size="small">Save</Button>
+										 	<Button style={{ float:'right'}} size="small">Cancel</Button>
+										</div>
+									</div> : ''}
+
+
+							         </div> 
+
+
 
 					        )})} </div> : '' }
 

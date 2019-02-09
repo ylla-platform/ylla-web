@@ -2592,7 +2592,7 @@ class Dashboard extends Component {
 						<TaskView
 							title={this.state.user.user_type === 'consumer' ? 'Order' : 'Task'}
 							user={this.state.user}
-							tasks={this.state.current_selected_tasks}
+							tasks={this.state.tasks.filter(task => { return (this.state.current_selected_tasks[0].id === task.id )})}
 							agents={this.state.agents}
 							providers={this.state.providers}
 							services={this.state.services}
