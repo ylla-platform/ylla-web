@@ -292,8 +292,7 @@ class TaskView extends Component {
 			task_provider_menu_anchor: null,
 			selected_runner_id: '',
 			selected_runner_name: '',
-			selected_runner_price:0,
-			rating: 0
+			selected_runner_price:0
 
 		};
 	}
@@ -302,8 +301,17 @@ class TaskView extends Component {
 	// componentWillReceiveProps: set the tasks from the parent state
 	componentWillReceiveProps = (nextProps) => {
 
+		var tks = taskActions.convertTasksToDisplayFormat(nextProps.tasks, nextProps.agents, nextProps.providers, nextProps.services, nextProps.consumers);
+		var i;
+		for (i = 0; i < tks.length; i++) { 
+		  if(tks[i].id == this.props.tasks[i].id){
+		  	 tks[i].review = this.props.tasks[i].review;
+		  	 tks[i].rating = this.props.tasks[i].rating;
+		  }
+		} 
+
 		this.setState({
-			tasks: taskActions.convertTasksToDisplayFormat(nextProps.tasks, nextProps.agents, nextProps.providers, nextProps.services, nextProps.consumers)
+			tasks: tks
 		});
 	}
 
@@ -312,8 +320,14 @@ class TaskView extends Component {
 		this.props.cancelTask(id);
 	}
 	// handleSubmitRating: 
-	handleSubmitRating = (id, event) => {
-		this.props.editTaskRating({ id: id, rating: this.state.rating, review: this.state.review });
+	handleSubmitRating = (task) => {
+		if(this.props.user.user_type =='agent'){
+			this.props.editTaskRating({ id: task.id, rating: task.rating, review: task.review, rater:task.agent_id, rater_type:'agent'  });
+		}
+		if(this.props.user.user_type =='consumer'){
+			this.props.editTaskRating({ id: task.id, rating: task.rating, review: task.review, rater:task.consumer_id, rater_type:'consumer'  });
+		}
+		
 	}
 
 	getBidStyle = (task, bid) => {
@@ -431,22 +445,33 @@ class TaskView extends Component {
 	}
 
 	showReviewForm = (task, bid) => {
+		
 		var properagent = this.props.user.id == task.consumer_id || this.props.user.id == task.agent_id; 
 		var taskstat = (task.status == "Completed" || task.status == "Failed" || task.status == "Declined"); 
 		var properbid = task.agent_id && bid.provider_id == task.agent_id ; 
-		return properagent && taskstat && properbid ; 
-	}
+		var usertype = this.props.user.user_type; 
+		var id = task.agent_id; 
+		if(usertype == 'agent' )
+			id = task.consumer_id; 
+		if(usertype == 'consumer')
+			id = task.agent_id; 
+		var alreadyRated = false;
+		taskActions.getRatingStatus(task.id, id ,response => {
+			alreadyRated =  response.data.rated; 
+		});
+		return properagent && properbid && !alreadyRated ;
 
-	onStarClick = (nextValue, prevValue, name, task) => {
-    	task.rating = nextValue; 
-    	this.setState({rating: nextValue});
-  	}
+	}
 
 	openBidMenu = (e,task,bid) => {
 		if( task.consumer_id == this.props.user.id && task.status === "Bidding" ) {
 			this.setState({ task_provider_menu: true, task_provider_menu_anchor: e.currentTarget, selected_task: task, selected_runner_name: bid.agent_name, selected_runner_id: bid.provider_id, selected_runner_price: bid.amount })
 		}
 	}
+
+	// calculateAvgRating = (task) => {
+	// 	task.
+	// }
 
 	// render: 
 	render() {
@@ -574,9 +599,9 @@ class TaskView extends Component {
 							            </div>
 							            <div style={{ paddingTop: 5, fontSize:'20px' }}>
 								            <StarRatingComponent 
-									          name="rate1" 
+									          name={bid.agent_name}
 									          starCount={5}
-									          value={2}
+									          value={bid.agent_rating}
 									          starColor="#7F4095"
 									          emptyStarColor="#d3d3d3"
 	        								/>
@@ -605,23 +630,23 @@ class TaskView extends Component {
 											            <StarRatingComponent
 													          name="rate2" 
 													          starCount={5}
-													          value={task.rating? task.rating: 0}
 													          starColor="#7F4095"
 													          emptyStarColor="#d3d3d3"
-													          onStarClick={(nextValue, prevValue, name) => {this.onStarClick(nextValue, prevValue, name, task)}}
+													          onStarClick={(nextValue, prevValue, name) => task.rating = nextValue}
 	        											/>			
 										</div>
 										<div style={{fontSize: '14px'}}>
-											           <TextField
-																		placeholder="Write A Review"
-											          					multiline
-																		margin="dense"
-																		id="review-comment"
-																		fullWidth
-															/>
+											        <TextField
+														placeholder="Write A Review"
+											          	multiline
+														margin="dense"
+														id="review-comment"
+														fullWidth
+														onChange={(e) => task.review = e.currentTarget.value}		
+													/>
 										</div>
 										<div style={{ width:'100%', display:'flex',justifyContent: 'flex-end'}}>
-											<Button style={{ float:'right'}}  size="small">Save</Button>
+											<Button onClick={(e) => {this.handleSubmitRating(task)} } style={{ float:'right'}}  size="small">Save</Button>
 										 	<Button style={{ float:'right'}} size="small">Cancel</Button>
 										</div>
 									</div> : ''}

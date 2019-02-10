@@ -1607,7 +1607,8 @@ class Dashboard extends Component {
 	editTaskRating = (rating) => {
 		var self = this;
 		tasks.editTaskRating(rating, response => {
-			self.getTasks();
+			// self.getTasks();
+			self.getAgents();
 			self.setState({ snackbar_open: true, snackbar_message: 'Task rating submitted' });
 		});
 	}
@@ -1737,7 +1738,6 @@ class Dashboard extends Component {
 		return tasks; 
 
 	}
-
 	// render()
 	render() {
 		const { classes } = this.props;

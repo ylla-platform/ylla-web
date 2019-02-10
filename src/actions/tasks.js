@@ -100,6 +100,17 @@ export function getTasks(user, callback) {
 		});
 }
 
+// getTaskRatingStatus: 
+export function getRatingStatus(taskid, userid, callback) {
+	axios.get('/api/tasks/getratingstatus?task_id='+taskid+'&user_id=' + userid)
+		.then(response => {
+			callback(response);
+		})
+		.catch(error => {
+			callback(null);
+		});
+}
+
 // addTask: 
 export function addTask(task, callback) {
 	axios.post('/api/tasks/addtask', task)
@@ -199,7 +210,14 @@ export function convertBidsToDisplayFormat(task, agents) {
 			agents.forEach(agent => {
 				if (agent.id === bid.provider_id.toString()) {
 					bid.agent_name = agent.first_name;
-					bids.push({'provider_id':bid.provider_id, 'agent_name':agent.first_name, 'amount':bid.amount, 'comment':bid.comment});
+					if(agent.ratings){
+						bid.agent_rating = agent.avgRating; 
+						bid.ratings = agent.ratings.length;  
+					}else{
+						bid.agent_rating = 0;
+						bid.ratings = 0;  
+					}
+					bids.push(bid);
 				}
 			});
 			
