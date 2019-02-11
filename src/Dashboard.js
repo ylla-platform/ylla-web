@@ -109,7 +109,8 @@ import TaskSidebarAgent from './TaskSidebarAgent';
 import TaskSidebarConsumer from './TaskSidebarConsumer';
 import TaskView from './TaskView';
 import Avatar from '@material-ui/core/Avatar';
-
+//import NotificationList from './NotificationList';
+import AdminNotifications from './AdminNotifications'; //changed::11-feb
 // actions
 import * as administrators from './actions/administrators';
 import * as authentication from './actions/authentication';
@@ -123,7 +124,7 @@ import * as services from './actions/services';
 import * as tasks from './actions/tasks';
 import * as talk from './actions/talk';
 import './components/app-search/app-search.css'
-
+import * as notifications from './actions/notifications';
 
 const menu_drawer_width = 190;
 
@@ -717,6 +718,7 @@ class Dashboard extends Component {
 				show_password2: false,
 				show_menu: false,
 				// Notifications
+				adminnotifications: [],   //changed::11-feb
 				task_notification: false,
 				search: false,
 				menu_type: ''
@@ -751,6 +753,7 @@ class Dashboard extends Component {
 		this.setState({ location_interval_id: location_interval_id });
 
 		// Get all our data. These are all open services.
+		this.getNotifications(); //changed 11-feb	
 		this.getAgents();
 		this.getCategories();
 		this.getReferenceData();
@@ -890,7 +893,9 @@ class Dashboard extends Component {
 			this.setState({ services: response.data.services || [], service_functions: service_functions || [] });
 		});
 	}
-
+    // getNotifications:
+	getNotifications = () => notifications.getNotifications(notifications => this.setState({ adminnotifications: notifications || [] })) //changed 11-feb
+	
 	// getQuestions: gets the list of questions
 	getQuestions = () => services.getQuestions(questions => this.setState({ questions: questions }))
 
@@ -2080,6 +2085,14 @@ class Dashboard extends Component {
 										</Tooltip>
 										<ListItemText primary="Text" classes={{ root: classNames(classes.sidebarList) }} disableTypography={true} />
 									</ListItem>
+									<ListItem button onClick={() => this.setState({ current_page_view: 'admin_notifications' })} className={classes.nested}>
+										<Tooltip id="tooltip-icon" title="Notifications" placement="bottom">
+											<ListItemIcon className={classes.sidebarList}>
+												<NotificationsIcon/>
+											</ListItemIcon>
+										</Tooltip>
+										<ListItemText primary="Notifications" classes={{ root: classNames(classes.sidebarList) }} disableTypography={true} />
+									</ListItem>
 									<Divider />
 								</div> : null}
 							<Divider />
@@ -2164,6 +2177,8 @@ class Dashboard extends Component {
 							tasks={this.state.tasks}
 							services={this.state.services}
 							categories={this.state.categories}
+							notifications={this.state.notifications}  
+							adminnotifications={this.state.adminnotifications}//changed 11-feb
 							consumers={this.state.consumers}
 							agents={this.state.agents}
 							providers={this.state.providers}
@@ -2303,7 +2318,17 @@ class Dashboard extends Component {
 							deleteCategory={(data) => this.deleteCategory(data)}
 							categories={this.state.categories}
 						/> : null}
-					{this.state.user && this.state.user.user_type === 'administrator'
+						{this.state.user && this.state.user.user_type === 'administrator'
+						&& this.state.current_page_view === 'admin_notifications' ? //changed::11-feb
+						<AdminNotifications
+							key="page-adminnotifications"
+							//editCategoryStatus={(e, data) => this.editCategoryStatus(data, e.currentTarget)}
+							//addCategory={(data) => this.addCategory()}
+							//editCategory={(data) => this.editCategory(data)}
+							//deleteCategory={(data) => this.deleteCategory(data)}
+							adminnotifications={this.state.adminnotifications}
+						/> : null}
+						{this.state.user && this.state.user.user_type === 'administrator'
 						&& this.state.current_page_view === 'referencedata' ? // Admin reference data list
 						<ReferenceDataList
 							key="cst-referencedatalist"
