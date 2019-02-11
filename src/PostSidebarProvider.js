@@ -175,7 +175,8 @@ const styles = theme => ({
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
-    backgroundColor: "#649F55",
+    // backgroundColor: "#649F55", chnaged to purple
+    backgroundColor: "#7F4095", 
     color: "white",
     textAlign: "center",
     verticalAlign: "middle",
@@ -566,9 +567,9 @@ class PostSidebarProvider extends Component {
 
 		var bidStyle = this.props.classes.whitebid; 
 
-		if( (bid.provider_id && bid.provider_id.toString() == this.props.user.id ) || ( task.agent_id && task.agent_id == bid.provider_id.toString()))  {
-			bidStyle = this.props.classes.greybid; 
-		}
+		// if( (bid.provider_id && bid.provider_id.toString() == this.props.user.id ) || ( task.agent_id && task.agent_id == bid.provider_id.toString()))  {
+		// 	bidStyle = this.props.classes.greybid; 
+		// }
 		if(task.status !== 'Requested' && task.status !== 'Bidding' && task.status !== 'BidChoosen' && task.agent_id && task.agent_id == bid.provider_id.toString()) {
 			bidStyle = this.props.classes.greenbid; 
 		}

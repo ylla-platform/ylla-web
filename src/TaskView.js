@@ -45,7 +45,6 @@ import ProviderPaymentTerms from './ProviderPaymentTerms';
 
 // Supporting actions
 import * as taskActions from './actions/tasks';
-
 import moment from 'moment';
 
 // Styles: 
@@ -123,7 +122,7 @@ const styles = theme => ({
   whitebid: {
 	  	fontSize: '13.5px',
 	    height: "25px",
-	    width: '120px',
+	    width: '150px',
 	    borderTopRightRadius: "18px",
 	    borderBottomRightRadius: "18px",
 	    borderTopLeftRadius: "18px",
@@ -131,7 +130,7 @@ const styles = theme => ({
 	    backgroundColor: "white",
 	    border: "1px solid",
 	    color: "#7F4095",
-	    textAlign: "center",
+	    // textAlign: "center",
 	    verticalAlign: "middle",
 	    fontWeight: "bold",
 	    textTransform: 'capitalize',
@@ -140,14 +139,15 @@ const styles = theme => ({
   greenbid: {
   	fontSize: '13.5px',
     height: "25px",
-    width: '120px',
+    width: '150px',
     borderTopRightRadius: "18px",
     borderBottomRightRadius: "18px",
     borderTopLeftRadius: "18px",
     borderBottomLeftRadius: "18px",
-    backgroundColor: "#649F55",
+    // backgroundColor: "#649F55",
+    backgroundColor: "#7F4095",
     color: "white",
-    textAlign: "center",
+    // textAlign: "center",
     verticalAlign: "middle",
     fontWeight: "bold",
     textTransform: 'capitalize',
@@ -333,9 +333,10 @@ class TaskView extends Component {
 	getBidStyle = (task, bid) => {
 
 		var bidStyle = this.props.classes.whitebid; 
-		if( (bid.provider_id && bid.provider_id.toString() == this.props.user.id ) || ( task.agent_id && task.agent_id == bid.provider_id.toString()))  {
-			bidStyle = this.props.classes.greybid; 
-		}if(task.status !== 'Requested' && task.status !== 'Bidding' && task.status !== 'BidChoosen' && task.agent_id && task.agent_id == bid.provider_id.toString()) {
+		// if( (bid.provider_id && bid.provider_id.toString() == this.props.user.id ) || ( task.agent_id && task.agent_id == bid.provider_id.toString()))  {
+		// 	bidStyle = this.props.classes.greybid; 
+		// }
+		if(task.status !== 'Requested' && task.status !== 'Bidding' && task.status !== 'BidChoosen' && task.agent_id && task.agent_id == bid.provider_id.toString()) {
 			bidStyle = this.props.classes.greenbid; 
 		}
 		return bidStyle; 
@@ -448,18 +449,31 @@ class TaskView extends Component {
 		
 		var properagent = this.props.user.id == task.consumer_id || this.props.user.id == task.agent_id; 
 		var taskstat = (task.status == "Completed" || task.status == "Failed" || task.status == "Declined"); 
-		var properbid = task.agent_id && bid.provider_id == task.agent_id ; 
+		var properbid = true; 
+		
+		if(bid != null){
+			properbid = task.agent_id && bid.provider_id == task.agent_id ; 
+		}
+
+		if(!properbid || !taskstat || !properagent) return false;
+		
+		var alreadyRated = false; 
+		
 		var usertype = this.props.user.user_type; 
-		var id = task.agent_id; 
+		var res_user ;
 		if(usertype == 'agent' )
-			id = task.consumer_id; 
+			res_user = task.consumer; 
 		if(usertype == 'consumer')
-			id = task.agent_id; 
-		var alreadyRated = false;
-		taskActions.getRatingStatus(task.id, id ,response => {
-			alreadyRated =  response.data.rated; 
-		});
-		return properagent && properbid && !alreadyRated ;
+			res_user = task.agent; 
+
+			if(res_user.ratings){
+				res_user.ratings.forEach(rating => {
+					if(rating.taskid == task.id ){
+						alreadyRated = true;
+					}
+				});
+			}
+		return !alreadyRated;
 
 	}
 
@@ -467,6 +481,54 @@ class TaskView extends Component {
 		if( task.consumer_id == this.props.user.id && task.status === "Bidding" ) {
 			this.setState({ task_provider_menu: true, task_provider_menu_anchor: e.currentTarget, selected_task: task, selected_runner_name: bid.agent_name, selected_runner_id: bid.provider_id, selected_runner_price: bid.amount })
 		}
+	}
+
+	getConsumerAvgRating = (task) => {
+
+		let ratings ; 
+		if(this.props.user.user_type == 'agent' && task.consumer){
+			ratings = task.consumer.ratings; 
+		}
+		if(this.props.user.user_type == 'consumer' && this.props.user.ratings){
+			ratings = this.props.user.ratings;
+		}
+		let avgRating = 0;
+		if (ratings && ratings.length > 0) {
+			ratings.forEach(rating => {
+				avgRating = avgRating + rating.stars;
+			});
+			avgRating = avgRating / ratings.length;
+		}
+		return avgRating; 
+	}
+
+	getConsumerRatingLength  = (task) => {
+
+		let ratings ; 
+		if(this.props.user.user_type == 'agent' && task.consumer){
+			ratings = task.consumer.ratings; 
+		}
+		if(this.props.user.user_type == 'consumer' && this.props.user.ratings){
+			ratings = this.props.user.ratings;
+		}
+		if (ratings) {
+			return ratings.length;
+		}
+		return 0; 
+
+	}
+
+
+	getPostedBy = (task) => {
+
+		let name = ''; 
+		if(task.answers && task.answers['Name']) 
+			name = task.answers['Name'];
+		else if(task.provider){
+			name = task.provider.first_name + task.provider.last_name ;
+		}
+		return name; 
+
 	}
 
 	// calculateAvgRating = (task) => {
@@ -540,14 +602,23 @@ class TaskView extends Component {
 					            alt="Remy Sharp"
 					            
 					          />
-					          <div style={{ width: "150px", marginLeft: 20 }}>
+					          <div style={{ width: "100%", marginLeft: 20 }}>
 					            <a style={{ letterSpacing: '.4px',fontWeight: 700}}> POSTED BY </a>
 					            <br />
-					            <a style={{ fontSize: "14px",color: "#000000" }}> { task.answers && task.answers['Name'] ?task.answers['Name']: ''}</a>
-					          </div>
-					          <div style={{ textAlign:'right', color: "black", width: "60%" }} >
-					            <br />
-					            <a >{moment(task.date_created).fromNow()}</a>
+						            <div style={{marginTop:1}} >
+						            <a style={{ fontSize: "14px",color: "#000000" }}> { this.getPostedBy(task)}</a>
+						            <a style={{ float: "right",color: "black"}} >{moment(task.date_created).fromNow()}</a>
+						            </div>
+					            <div style={{ fontSize:'18px', display:'flex' }}>
+								            <StarRatingComponent 
+									          name={task.consumer_id}
+									          starCount={5}
+									          value={this.getConsumerAvgRating()}
+									          starColor="#7F4095"
+									          emptyStarColor="#d3d3d3"
+	        								/>
+	        								<div style={{marginTop: '6px', marginLeft: '10px', color: 'black', fontSize:'13.5px' }}><a>{this.getConsumerRatingLength() +' Reviews'} </a></div>	
+        						</div>
 					          </div>
 					        </div>
 
@@ -575,9 +646,39 @@ class TaskView extends Component {
 					          </div>
 					        </div>
 
+					        { this.props.user.user_type && this.props.user.user_type == 'agent' &&  this.showReviewForm(task,null)? 
+							       <div className={classes.avatar} style = {{boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)', padding: 10}}> 
+							       		<div style={{ display:'flex',fontSize:'22px' }}>
+											            <a style={{fontSize: '15px',marginTop: '5px', marginRight:10}}> Tap to Rate Customer: </a>
+											            <StarRatingComponent
+													          name="rate2" 
+													          starCount={5}
+													          starColor="#7F4095"
+													          emptyStarColor="#d3d3d3"
+													          onStarClick={(nextValue, prevValue, name) => task.rating = nextValue}
+	        											/>			
+										</div>
+										<div style={{fontSize: '14px'}}>
+											        <TextField
+														placeholder="Write A Review"
+											          	multiline
+														margin="dense"
+														id="review-comment"
+														fullWidth
+														onChange={(e) => task.review = e.currentTarget.value}
+														style = {{height: '50px'}}		
+													/>
+										</div>
+										<div style={{ width:'100%', display:'flex',justifyContent: 'flex-end'}}>
+											<Button onClick={(e) => {this.handleSubmitRating(task)} } style={{ float:'right'}}  size="small">Save</Button>
+										 	<Button style={{ float:'right'}} size="small">Cancel</Button>
+										</div>
+									</div> : ''}
+
 
 					        <br />
 					        <br />
+
 					       { (!task.provider_id ||  task.provider_id == 0 )  ?  <a style={{ fontWeight: "bold" }}> {bids.length} OFFERS : </a> : '' }
 					        <br />
 
@@ -595,9 +696,12 @@ class TaskView extends Component {
 
 							          <div style={{ width: "100%", marginLeft: 20 }}>
 							            <div style={{ padding: 3 }} onClick={(e) => this.openBidMenu(e,task,bid)} className={this.getBidStyle(task,bid)}>
-							              <a>{'KD ' + bid.amount + ' : ' + bid.agent_name}</a>
+							              <a style={{ marginLeft: 5 }} >{'KD ' + bid.amount + ' : ' + bid.agent_name}</a>
+							              <svg style={{ marginRight: 5,marginTop:3, float:'right' }} width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M1.5 7L4.5 10L12.75 1.75" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+										  </svg>
 							            </div>
-							            <div style={{ paddingTop: 5, fontSize:'20px' }}>
+							            <div style={{ paddingTop: 5, fontSize:'20px', display:'flex' }}>
 								            <StarRatingComponent 
 									          name={bid.agent_name}
 									          starCount={5}
@@ -605,6 +709,7 @@ class TaskView extends Component {
 									          starColor="#7F4095"
 									          emptyStarColor="#d3d3d3"
 	        								/>
+	        								<div style={{marginTop: '6px', marginLeft: '10px', color: 'black', fontSize:'13.5px' }}><a>{bid.ratings +' Reviews'} </a></div>	
         								</div>
 							            <div
 							              style={{
@@ -623,8 +728,8 @@ class TaskView extends Component {
 							          </div>
 							         </div><br />
 
-							        {  this.showReviewForm(task,bid) ? 
-							       <div> 
+							        { this.props.user.user_type && this.props.user.user_type == 'consumer' && this.showReviewForm(task,bid)? 
+							       <div style = {{boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)', padding: 10}}> 
 							       		<div style={{ display:'flex',fontSize:'22px' }}>
 											            <a style={{fontSize: '15px',marginTop: '5px', marginRight:10}}> Tap to Rate : </a>
 											            <StarRatingComponent
@@ -642,7 +747,7 @@ class TaskView extends Component {
 														margin="dense"
 														id="review-comment"
 														fullWidth
-														onChange={(e) => task.review = e.currentTarget.value}		
+														onChange={(e) => task.review = e.currentTarget.value}
 													/>
 										</div>
 										<div style={{ width:'100%', display:'flex',justifyContent: 'flex-end'}}>
