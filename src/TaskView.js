@@ -626,7 +626,7 @@ class TaskView extends Component {
 									          starColor="#7F4095"
 									          emptyStarColor="#d3d3d3"
 	        								/>
-	        								<div style={{marginTop: '6px', marginLeft: '10px', color: 'black', fontSize:'13.5px' }}><a>{this.getConsumerRatingLength() +' Reviews'} </a></div>	
+	        								<div style={{marginTop: '6px', marginLeft: '10px', color: 'black', fontSize:'13.5px' }}><a>{this.getConsumerRatingLength(task) +' Reviews'} </a></div>	
         						</div>
 					          </div>
 					        </div>
