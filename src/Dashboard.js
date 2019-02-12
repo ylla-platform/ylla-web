@@ -1869,16 +1869,16 @@ class Dashboard extends Component {
 						          
 		            			 </span>: null }  
 		            			
-		            			{/* this.state.user && this.state.user.user_type &&  this.state.user.user_type === 'agent' ? 
+		            			{ this.state.user && this.state.user.user_type &&  this.state.user.user_type === 'agent' ? 
 
 		            			<span className={classes.cfloat}>
-									<div className={classes.numberCircle3}> {this.state.consumers.length} </div>
+									{ /*<div className={classes.numberCircle3}> {this.state.consumers.length} </div>
 								 	<Button onClick={() => this.setState({ consumer_drawer: true, agent_drawer: false,  current_page_view: 'map' })} variant="outlined" className={classes.hirearunner}>
 						          		Customers
-						        	</Button>
+						        	</Button> */}
 						        	{ this.state.agent_active ? <Button onClick={() => this.toggleAgentActive()} variant="outlined" color="primary" className={classes.onduty} >  On Duty </Button> : 
 						        	 <Button onClick={() => this.toggleAgentActive()} variant="outlined" color="primary" className={classes.explore} >  Off Duty </Button> } 
-						        	</span>: null */}
+						        	</span>: null }
 
 
 							{this.state.route_legs && this.state.route_legs.length > 0 ? // Navigation notification

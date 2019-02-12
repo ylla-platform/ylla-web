@@ -268,7 +268,12 @@ const styles = theme => ({
  	width: "185px",
     height:'40px',
 	marginLeft: "35px"
-  }
+  },
+   	selectedbid: {
+	  	boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)', 
+	  	padding: 10,
+	  	marginTop:10
+	}
 
 });
 
@@ -321,11 +326,15 @@ class TaskView extends Component {
 	}
 	// handleSubmitRating: 
 	handleSubmitRating = (task) => {
+		let stars = 0 ; 
+		if(task.rating){
+			stars = task.rating; 
+		}
 		if(this.props.user.user_type =='agent'){
-			this.props.editTaskRating({ id: task.id, rating: task.rating, review: task.review, rater:task.agent_id, rater_type:'agent'  });
+			this.props.editTaskRating({ id: task.id, rating: stars, review: task.review, rater:task.agent_id, rater_type:'agent'  });
 		}
 		if(this.props.user.user_type =='consumer'){
-			this.props.editTaskRating({ id: task.id, rating: task.rating, review: task.review, rater:task.consumer_id, rater_type:'consumer'  });
+			this.props.editTaskRating({ id: task.id, rating: stars, review: task.review, rater:task.consumer_id, rater_type:'consumer'  });
 		}
 		
 	}
@@ -494,10 +503,14 @@ class TaskView extends Component {
 		}
 		let avgRating = 0;
 		if (ratings && ratings.length > 0) {
+			let starcount = 0; 
 			ratings.forEach(rating => {
-				avgRating = avgRating + rating.stars;
+				if(rating.stars != 0){ // we dont count empty ratings
+					avgRating = avgRating + rating.stars;
+					starcount = starcount + 1 ;
+				}
 			});
-			avgRating = avgRating / ratings.length;
+			avgRating = avgRating / starcount;
 		}
 		return avgRating; 
 	}
@@ -530,10 +543,6 @@ class TaskView extends Component {
 		return name; 
 
 	}
-
-	// calculateAvgRating = (task) => {
-	// 	task.
-	// }
 
 	// render: 
 	render() {
@@ -613,7 +622,7 @@ class TaskView extends Component {
 								            <StarRatingComponent 
 									          name={task.consumer_id}
 									          starCount={5}
-									          value={this.getConsumerAvgRating()}
+									          value={this.getConsumerAvgRating(task)}
 									          starColor="#7F4095"
 									          emptyStarColor="#d3d3d3"
 	        								/>
@@ -662,7 +671,8 @@ class TaskView extends Component {
 											        <TextField
 														placeholder="Write A Review"
 											          	multiline
-														margin="dense"
+														margin="normal"
+														variant="outlined"
 														id="review-comment"
 														fullWidth
 														onChange={(e) => task.review = e.currentTarget.value}
@@ -680,14 +690,13 @@ class TaskView extends Component {
 					        <br />
 
 					       { (!task.provider_id ||  task.provider_id == 0 )  ?  <a style={{ fontWeight: "bold" }}> {bids.length} OFFERS : </a> : '' }
-					        <br />
-
+					        <br /> 
 						{ (!task.provider_id ||  task.provider_id == 0 )  ? 
 					        <div>
 					        {bids.map(bid => {
 							return (
 
-							        <div> 
+							        <div className={this.props.user.user_type && this.props.user.user_type == 'consumer' && this.showReviewForm(task,bid)? classes.selectedbid:''} > 
 							        <div style={{ display: "flex" }} className={classes.avatar}>
 							          <Avatar
 							            alt="Remy Sharp"
@@ -726,10 +735,10 @@ class TaskView extends Component {
 							              { bid.comment ? bid.comment : ''}
 							            </div>
 							          </div>
-							         </div><br />
+							         </div>
 
 							        { this.props.user.user_type && this.props.user.user_type == 'consumer' && this.showReviewForm(task,bid)? 
-							       <div style = {{boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)', padding: 10}}> 
+							       <div style = {{padding: 10}}> 
 							       		<div style={{ display:'flex',fontSize:'22px' }}>
 											            <a style={{fontSize: '15px',marginTop: '5px', marginRight:10}}> Tap to Rate : </a>
 											            <StarRatingComponent
@@ -744,7 +753,8 @@ class TaskView extends Component {
 											        <TextField
 														placeholder="Write A Review"
 											          	multiline
-														margin="dense"
+														margin="normal"
+														variant="outlined"
 														id="review-comment"
 														fullWidth
 														onChange={(e) => task.review = e.currentTarget.value}

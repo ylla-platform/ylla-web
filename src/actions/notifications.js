@@ -29,7 +29,7 @@ const notifications_columns = [
 ];
 
  
-export function getNotifications() {
+export function getNotifications(callback) {
 	axios.get('/api/administrators/gettemplatenames')
 		.then(response => {
 			if (response && response.data && response.data.notifications) {

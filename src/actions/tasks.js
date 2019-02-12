@@ -217,7 +217,10 @@ export function convertBidsToDisplayFormat(task, agents) {
 						bid.agent_rating = 0;
 						bid.ratings = 0;  
 					}
-					bids.push(bid);
+					if(task.agent_id && task.agent_id == bid.provider_id.toString()){
+						bids.unshift(bid);
+					}
+					else bids.push(bid);
 				}
 			});
 			
